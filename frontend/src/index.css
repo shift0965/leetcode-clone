@@ -96,3 +96,7 @@ code {
 .editor-nav-btn {
   @apply relative rounded-md px-3 py-1.5 flex justify-center items-center hover:bg-dark-fill-2;
 }
+
+.description p {
+  @apply mt-3;
+}

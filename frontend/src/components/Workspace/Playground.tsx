@@ -16,18 +16,24 @@ const Playground = () => {
   const [showTestcases, setShowTestcases] = useState(true);
   const [activeTestCaseId, setActiveTestCaseId] = useState(0);
 
-  const problem = {
-    examples: [
-      // { id: 0, inputs: { nums: [2, 7, 11, 15] }, outputText: {} },
-      {
-        id: 0,
-        inputs: [
-          { label: "nums", value: "[3,2,4]" },
-          { label: "target", value: "6" },
-        ],
-      },
-    ],
-  };
+  const examples = [
+    // { id: 0, inputs: { nums: [2, 7, 11, 15] }, outputText: {} },
+    {
+      input: [
+        { label: "nums", value: [2, 7, 11, 15] },
+        { label: "target", value: 9 },
+      ],
+      output: [0, 1],
+      explanation: "Because nums[0] + nums[1] == 9, we return [0, 1].",
+    },
+    {
+      input: [
+        { label: "nums", value: [3, 2, 4] },
+        { label: "target", value: 6 },
+      ],
+      output: [1, 2],
+    },
+  ];
 
   const handleFullScreen = () => {
     if (isFullScreen) {
@@ -113,10 +119,10 @@ const Playground = () => {
               </div>
             </div>
             <div className="flex">
-              {problem.examples.map((example, index) => (
+              {examples.map((example, index) => (
                 <div
                   className="mr-2 items-start mt-2 "
-                  key={example.id}
+                  key={index}
                   onClick={() => setActiveTestCaseId(index)}
                 >
                   <div className="flex flex-wrap items-center gap-y-4">
@@ -133,17 +139,19 @@ const Playground = () => {
             </div>
 
             <div className="my-4">
-              {problem.examples.map((example, idx) => (
-                <>
-                  {example.inputs.map(({ label, value }) => (
-                    <>
+              {examples.map((example, id) => (
+                <div
+                  className={`${id === activeTestCaseId ? "block" : "hidden"}`}
+                >
+                  {example.input.map(({ label, value }) => (
+                    <div key={label}>
                       <p className="text-sm mt-4 text-white">{label} =</p>
                       <div className="w-full cursor-text rounded-lg border px-3 py-[10px] bg-dark-fill-3 border-transparent text-white mt-2">
-                        {value}
+                        {JSON.stringify(value)}
                       </div>
-                    </>
+                    </div>
                   ))}
-                </>
+                </div>
               ))}
             </div>
           </div>

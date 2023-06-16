@@ -281,7 +281,7 @@ const Description = () => {
             )} */}
 
             {/* Problem Statement(paragraphs) */}
-            <div className="text-white text-sm">
+            <div className="text-white text-sm description">
               <p className="mt-3">
                 Given an array of integers <code>nums</code> and an{" "}
                 <code>integer</code>
