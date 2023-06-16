@@ -9,8 +9,7 @@ function App() {
     <RecoilRoot>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Auth />} />
-          <Route path="home" element={<ProblemList />} />
+          <Route path="/" element={<ProblemList />} />
           <Route path="problem" element={<Workspace />} />
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>

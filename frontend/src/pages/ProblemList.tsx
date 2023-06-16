@@ -16,8 +16,8 @@ const ProblemList = () => {
               <th className="px-1 py-3 w-0">status</th>
               <th className="px-1 py-3 w-0">Title</th>
               <th className="px-1 py-3 w-0">Difficulty</th>
-              <th className="px-1 py-3 w-0">Category</th>
-              <th className="px-1 py-3 w-0">Solution</th>
+              {/* <th className="px-1 py-3 w-0">Category</th>
+              <th className="px-1 py-3 w-0">Solution</th> */}
             </tr>
           </thead>
           <ProblemsTable />

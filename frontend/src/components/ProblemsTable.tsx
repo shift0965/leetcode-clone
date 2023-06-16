@@ -1,50 +1,68 @@
-import React from "react";
-import { problems } from "../mockProblems/problems";
+import React, { useEffect } from "react";
 import { BsCheckCircle } from "react-icons/bs";
 import { AiFillYoutube } from "react-icons/ai";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
 import { Link } from "react-router-dom";
+import { GET_ALL_PROBLEMS } from "../api.const";
 
 const ProblemsTable = () => {
+  const [loading, setLoading] = useState(true);
   const [youtubePlayer, setYoutubePlayer] = useState({
     isOpen: false,
     videoId: "",
   });
-
+  const [problems, setProblems] = useState([]);
   const closeModal = () => {
     setYoutubePlayer({ isOpen: false, videoId: "" });
   };
+  useEffect(() => {
+    fetch(GET_ALL_PROBLEMS, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((results) => {
+        setProblems(Array.from(results));
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <>
       <tbody className="text-white">
-        {problems.map((problem, id) => {
-          const difficulyColor =
-            problem.difficulty === "Easy"
-              ? "text-dark-green-s"
-              : problem.difficulty === "Medium"
-              ? "text-dark-yellow"
-              : "text-dark-pink";
+        {!loading &&
+          problems.map((problem, id) => {
+            const difficulyColor =
+              problem.difficulty === "Easy"
+                ? "text-dark-green-s"
+                : problem.difficulty === "Medium"
+                ? "text-dark-yellow"
+                : "text-dark-pink";
 
-          return (
-            <tr className={`${id % 2 === 1 ? "bg-dark-layer-1" : ""}`} key={id}>
-              <th className="px-2 py-4 whitespace-nowrap text-dark-green-s">
-                <BsCheckCircle width="18" />
-              </th>
-              <td className="px-6 py-4">
-                <Link
-                  className="hover:text-blue-600"
-                  to={`/problems/${problem.id}`}
-                >
-                  {problem.title}
-                </Link>
-              </td>
-              <td className={`px-6 py-4 ${difficulyColor}`}>
-                {problem.difficulty}
-              </td>
-              <td className={"px-6 py-4"}>{problem.category}</td>
+            return (
+              <tr
+                className={`${id % 2 === 1 ? "bg-dark-layer-1" : ""}`}
+                key={id}
+              >
+                <th className="px-2 py-4 whitespace-nowrap text-dark-green-s">
+                  <BsCheckCircle width="18" />
+                </th>
+
+                <td className="px-6 py-4">
+                  <Link
+                    className="hover:text-blue-600"
+                    to={`/problem?id=${problem.id}`}
+                  >
+                    {problem.title}
+                  </Link>
+                </td>
+
+                <td className={`px-6 py-4 ${difficulyColor}`}>
+                  {problem.difficulty}
+                </td>
+
+                {/* <td className={"px-6 py-4"}>{problem.category}</td>
               <td className={"px-6 py-4"}>
                 {problem.videoId ? (
                   <AiFillYoutube
@@ -60,10 +78,10 @@ const ProblemsTable = () => {
                 ) : (
                   <p className="text-gray-400">Coming soon</p>
                 )}
-              </td>
-            </tr>
-          );
-        })}
+              </td> */}
+              </tr>
+            );
+          })}
       </tbody>
       {youtubePlayer.isOpen && (
         <tfoot className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
@@ -92,4 +110,5 @@ const ProblemsTable = () => {
     </>
   );
 };
+
 export default ProblemsTable;
