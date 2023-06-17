@@ -10,14 +10,14 @@ const ProblemList = () => {
         Problems
       </h1>
       <div className="relative overflow-x-auto mx-auto px-6 mb-10">
-        <table className="text-gray-500 w-full md:w-7/12 max-w-7xl mx-auto">
-          <thead className=" text-gray-300 uppercase border-b">
+        <table className="w-full md:w-9/12 max-w-5xl mx-auto">
+          <thead className=" text-gray-300 uppercase border-b text-left">
             <tr>
-              <th className="px-1 py-3 w-0">status</th>
-              <th className="px-1 py-3 w-0">Title</th>
-              <th className="px-1 py-3 w-0">Difficulty</th>
-              {/* <th className="px-1 py-3 w-0">Category</th>
-              <th className="px-1 py-3 w-0">Solution</th> */}
+              <th className="px-3 py-3 w-[15%]">status</th>
+              <th className="px-3 py-3 w-[30%]">Title</th>
+              <th className="px-3 py-3 w-[30%]">Category</th>
+              <th className="px-3 py-3 w-[15%">Difficulty</th>
+              <th className="px-3 py-3 w-[10%]">Solution</th>
             </tr>
           </thead>
           <ProblemsTable />
