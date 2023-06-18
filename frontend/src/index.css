@@ -44,21 +44,25 @@
 }
 
 /* code editor */
+.cm-editor {
+  /* our container wrapper for Codemirror instance */
+  flex: 1; /* expand to the maximum */
+  height: 100%;
+  position: relative; /* needed for child component .cm-scroller */
+  background-color: #282828;
+}
 .cm-gutters {
   background-color: #282828 !important;
 }
-.cm-focused {
-  outline: none !important;
-}
-.cm-content {
-  background-color: #282828 !important;
-}
+/* .cm-selectionBackground {
+  background-color: lightblue !important;
+  opacity: 20%;
+} */
 .codeMirror {
-  background-color: #282828 !important;
-  padding-top: 5px !important;
-  height: 100% !important;
-  margin-bottom: 0px !important;
-  font-size: 16px !important;
+  padding-top: 5px;
+  height: 100%;
+  margin-bottom: 0px;
+  font-size: 14px;
 }
 
 /* code */

@@ -1,6 +1,3 @@
-import { javascript } from "@codemirror/lang-javascript";
-import { vscodeDark } from "@uiw/codemirror-theme-vscode";
-import ReactCodeMirror from "@uiw/react-codemirror";
 import { ProblemDetails } from "../../types.const";
 import { useState, useEffect } from "react";
 import {
@@ -14,6 +11,7 @@ import { RUN_EXAMPLE_CASES } from "../../api.const";
 import TestCasesArea from "./TestCasesArea";
 import ResultsArea from "./ResultsArea";
 import { RunResult, ExecutionError } from "../../types.const";
+import CodeMirror from "./CodeMirror";
 
 type PlaygroundProps = {
   problem: ProblemDetails | undefined;
@@ -23,7 +21,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
   const [language, setLanguage] = useState("Javascript");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [settings, setSettings] = useState({});
-  const [userCode, setUserCode] = useState<string>();
+  const [userCode, setUserCode] = useState<string>("");
   const [showTestcases, setShowTestcases] = useState(true);
 
   const [runResults, setRunResults] = useState<RunResult[]>([]);
@@ -133,15 +131,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
                 sizes={[60, 40]}
                 className="h-full"
               >
-                <div className="w-full overflow-auto h-full flex flex-col">
-                  <ReactCodeMirror
-                    className="codeMirror"
-                    value={userCode}
-                    onChange={(value: string) => setUserCode(value)}
-                    theme={vscodeDark}
-                    extensions={[javascript()]}
-                  />
-                </div>
+                <CodeMirror userCode={userCode} setUserCode={setUserCode} />
 
                 <div className="w-full px-5 overflow-auto relative">
                   <div className="flex h-12 sticky top-0 bg-dark-layer-1 z-10">
