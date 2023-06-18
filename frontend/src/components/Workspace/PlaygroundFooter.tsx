@@ -1,18 +1,36 @@
 import { BsChevronUp } from "react-icons/bs";
 
-type EditorFooterProps = {
+type PlaygroundFooterProps = {
   handleSubmit: () => void;
   handleRun: () => void;
+  splitRatio: number;
+  setSplitRatio: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const EditorFooter = ({ handleRun, handleSubmit }: EditorFooterProps) => {
+const PlaygroundFooter = ({
+  handleRun,
+  handleSubmit,
+  splitRatio,
+  setSplitRatio,
+}: PlaygroundFooterProps) => {
   return (
     <div className="flex bg-dark-layer-1 absolute bottom-0 z-10 w-full">
       <div className="mx-5 my-[10px] flex justify-between w-full">
         <div className="mr-2 flex flex-1 flex-nowrap items-center space-x-4">
-          <button className="px-3 py-1.5 font-medium items-center transition-all inline-flex bg-dark-fill-3 text-sm hover:bg-dark-fill-2 text-dark-label-2 rounded-lg pl-3 pr-2">
+          <button
+            className="px-3 py-1.5 font-medium items-center transition-all inline-flex bg-dark-fill-3 text-sm hover:bg-dark-fill-2 text-dark-label-2 rounded-lg pl-3 pr-2"
+            onClick={() => {
+              setSplitRatio((prev) => {
+                return prev > 90 ? 50 : 100;
+              });
+            }}
+          >
             Console
-            <div className="ml-1 transform transition flex items-center">
+            <div
+              className={`ml-1 transform transition duration-200 ease-in-out flex items-center ${
+                splitRatio > 90 ? "rotate-0" : "rotate-180"
+              }`}
+            >
               <BsChevronUp className="fill-gray-6 mx-1 fill-dark-gray-6" />
             </div>
           </button>
@@ -35,4 +53,4 @@ const EditorFooter = ({ handleRun, handleSubmit }: EditorFooterProps) => {
     </div>
   );
 };
-export default EditorFooter;
+export default PlaygroundFooter;

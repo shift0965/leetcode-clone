@@ -203,17 +203,17 @@ const Description = ({ problem }: DescriptionProps) => {
     <div className="bg-dark-layer-1">
       {problem && (
         <>
-          <div className="flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden">
+          <div className="flex h-10 w-full items-end bg-dark-layer-2 text-white overflow-x-hidden">
             <div
               className={
-                "bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-sm cursor-pointer"
+                "bg-dark-layer-1 rounded-t-[5px] px-5 py-[7px] text-sm cursor-pointer"
               }
             >
               Description
             </div>
           </div>
 
-          <div className="flex px-0 py-4 h-[calc(100vh-94px)] overflow-y-auto">
+          <div className="flex px-0 py-4 h-[calc(100vh-88px)] overflow-y-auto">
             <div className="px-5">
               {/* Problem heading */}
               <div className="w-full">

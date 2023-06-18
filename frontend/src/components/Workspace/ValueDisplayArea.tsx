@@ -12,7 +12,7 @@ const ValueDisplayArea = ({ value, label }: ValueDisplayAreaProps) => {
       : JSON.stringify(value);
 
   return (
-    <div key={label}>
+    <div>
       <p className="text-sm mt-4 text-white">{label} =</p>
       <div className="w-full cursor-text rounded-lg border px-3 py-[8px] bg-dark-fill-3 border-transparent text-white mt-2">
         <pre className="whitespace-pre-wrap text-sm leading-6">

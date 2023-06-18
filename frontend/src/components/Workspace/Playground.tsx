@@ -6,7 +6,7 @@ import {
   AiOutlineFullscreenExit,
 } from "react-icons/ai";
 import Split from "react-split";
-import EditorFooter from "./EditorFooter";
+import PlaygroundFooter from "./PlaygroundFooter";
 import { RUN_EXAMPLE_CASES } from "../../api.const";
 import TestCasesArea from "./TestCasesArea";
 import ResultsArea from "./ResultsArea";
@@ -26,6 +26,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
 
   const [runResults, setRunResults] = useState<RunResult[]>([]);
   const [execError, setExecError] = useState<ExecutionError>();
+  const [splitRatio, setSplitRatio] = useState<number>(50);
 
   const handleFullScreen = () => {
     if (isFullScreen) {
@@ -84,9 +85,9 @@ const Playground = ({ problem }: PlaygroundProps) => {
     <div className="w-full overflow-auto flex flex-col">
       {problem && (
         <>
-          <div className="flex items-center justify-between bg-dark-layer-2 h-11 w-full">
+          <div className="flex items-center justify-between bg-dark-layer-2 h-10 w-full">
             <div className="flex items-center text-white">
-              <button className="flex cursor-pointer items-center rounded-lg bg-dark-fill-3 text-dark-label-2 px-2 py-1.5 hover:bg-dark-fill-2">
+              <button className="flex cursor-pointer items-center rounded-lg bg-dark-fill-3 text-dark-label-2 px-2 py-1 hover:bg-dark-fill-2">
                 {language}
               </button>
             </div>
@@ -124,12 +125,16 @@ const Playground = ({ problem }: PlaygroundProps) => {
           </div>
 
           <div className=" bg-dark-layer-1 h-full relative">
-            <div className="flex flex-col h-[calc(100vh-150px)]">
+            <div className="flex flex-col h-[calc(100vh-140px)]">
               <Split
                 direction="vertical"
-                minSize={60}
-                sizes={[60, 40]}
+                minSize={0}
+                snapOffset={60}
+                sizes={[splitRatio, 100 - splitRatio]}
                 className="h-full"
+                onDragEnd={(size) => {
+                  setSplitRatio(size[0]);
+                }}
               >
                 <CodeMirror userCode={userCode} setUserCode={setUserCode} />
 
@@ -167,7 +172,12 @@ const Playground = ({ problem }: PlaygroundProps) => {
                 </div>
               </Split>
             </div>
-            <EditorFooter handleRun={handleRun} handleSubmit={handleSubmit} />
+            <PlaygroundFooter
+              handleRun={handleRun}
+              handleSubmit={handleSubmit}
+              splitRatio={splitRatio}
+              setSplitRatio={setSplitRatio}
+            />
           </div>
         </>
       )}

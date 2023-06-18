@@ -38,6 +38,7 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
         {problem.exampleCases.map((example, exampleId) => {
           return (
             <div
+              key={exampleId}
               className={`${
                 exampleId === activeTestCaseId ? "block" : "hidden"
               }`}
@@ -45,6 +46,7 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
               <div className="mt-4">
                 {problem.inputKeys.map((key, InputId) => (
                   <ValueDisplayArea
+                    key={InputId}
                     label={key}
                     value={
                       problem.exampleCases[activeTestCaseId]?.input[InputId]
