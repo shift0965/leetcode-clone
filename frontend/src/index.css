@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply bg-dark-layer-1;
+}
+
 .split {
   display: flex;
   flex-direction: row;

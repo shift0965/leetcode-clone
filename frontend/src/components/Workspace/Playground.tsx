@@ -1,10 +1,7 @@
 import { ProblemDetails } from "../../types.const";
 import { useState, useEffect } from "react";
-import {
-  AiOutlineSetting,
-  AiOutlineFullscreen,
-  AiOutlineFullscreenExit,
-} from "react-icons/ai";
+import { IoRefreshOutline } from "react-icons/io5";
+import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import Split from "react-split";
 import PlaygroundFooter from "./PlaygroundFooter";
 import { RUN_EXAMPLE_CASES } from "../../api.const";
@@ -71,13 +68,30 @@ const Playground = ({ problem }: PlaygroundProps) => {
         setShowTestcases(false);
       });
   };
+
   const handleSubmit = () => {
     console.log(userCode);
   };
 
+  const onChangeCode = (code: string) => {
+    localStorage.setItem(`leetclone/code?problem_id=${problem?.id}`, code);
+    setUserCode(code);
+  };
+
+  const resetUserCode = () => {
+    if (problem) setUserCode(problem.boilerplate.replace(/\n\s+/g, "\n"));
+  };
+
   useEffect(() => {
     if (problem) {
-      setUserCode(problem.boilerplate.replace(/\n\s+/g, "\n"));
+      const storedCode = localStorage.getItem(
+        `leetclone/code?problem_id=${problem.id}`
+      );
+      if (storedCode !== null) {
+        setUserCode(storedCode);
+      } else {
+        setUserCode(problem.boilerplate.replace(/\n\s+/g, "\n"));
+      }
     }
   }, [problem]);
 
@@ -91,19 +105,11 @@ const Playground = ({ problem }: PlaygroundProps) => {
                 {language}
               </button>
             </div>
-            <div className="flex items-center m-2">
-              <button
-                className="editor-nav-btn"
-                onClick={() =>
-                  setSettings({ ...settings, settingsModalIsOpen: true })
-                }
-              >
+            <div className="flex items-center m-2" onClick={resetUserCode}>
+              <button className="editor-nav-btn group">
                 <div className="text-dark-gray-6 font-bold text-lg">
-                  <AiOutlineSetting />
+                  <IoRefreshOutline />
                 </div>
-                {/* <div className="absolute p-2 right-0 top-5 group-hover:scale-100 scale-0 bg-gray-200 text-dark-layer-2 duration-100 translate-x-3">
-          Settings
-        </div> */}
               </button>
 
               <button
@@ -136,7 +142,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
                   setSplitRatio(size[0]);
                 }}
               >
-                <CodeMirror userCode={userCode} setUserCode={setUserCode} />
+                <CodeMirror userCode={userCode} onChangeCode={onChangeCode} />
 
                 {/* Result Header */}
                 <div className="w-full px-5 overflow-auto relative">

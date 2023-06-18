@@ -4,16 +4,16 @@ import ReactCodeMirror from "@uiw/react-codemirror";
 
 type CodeMirrorProps = {
   userCode: string;
-  setUserCode: (value: string) => void;
+  onChangeCode: (value: string) => void;
 };
 
-const CodeMirror = ({ userCode, setUserCode }: CodeMirrorProps) => {
+const CodeMirror = ({ userCode, onChangeCode }: CodeMirrorProps) => {
   return (
     <div className="w-full overflow-auto h-full flex flex-col">
       <ReactCodeMirror
         className="codeMirror"
         value={userCode}
-        onChange={(value: string) => setUserCode(value)}
+        onChange={(value: string) => onChangeCode(value)}
         theme={vscodeDark}
         extensions={[javascript()]}
         basicSetup={{ autocompletion: false }}
