@@ -10,7 +10,7 @@ interface TestCasesAreaProps {
 const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
   return (
-    <div className={`${showTestcases ? "block" : "hidden"}`}>
+    <div className={`${showTestcases ? "block" : "hidden"} py-3`}>
       <div className="flex">
         {problem.exampleCases.map((e, index) => (
           <div
@@ -18,10 +18,14 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
             key={index}
             onClick={() => setActiveTestCaseId(index)}
           >
-            <div className="flex flex-wrap items-center gap-y-4">
+            <div className="flex flex-wrap items-center">
               <div
-                className={`items-center transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
-                  ${activeTestCaseId === index ? "text-white" : "text-gray-500"}
+                className={`items-center text-sm font-semibold transition-all focus:outline-none inline-flex  hover:bg-dark-fill-2 relative rounded-lg px-4 py-1 cursor-pointer whitespace-nowrap
+                  ${
+                    activeTestCaseId === index
+                      ? "text-white bg-dark-fill-3"
+                      : "text-gray-400"
+                  }
                 `}
               >
                 Case {index + 1}

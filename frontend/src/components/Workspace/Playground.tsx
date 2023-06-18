@@ -133,8 +133,9 @@ const Playground = ({ problem }: PlaygroundProps) => {
               >
                 <CodeMirror userCode={userCode} setUserCode={setUserCode} />
 
+                {/* Result Header */}
                 <div className="w-full px-5 overflow-auto relative">
-                  <div className="flex h-12 sticky top-0 bg-dark-layer-1 z-10">
+                  <div className="flex h-11 sticky top-0 bg-dark-layer-1 z-10">
                     <div
                       className={`flex h-full items-center text-white mx-2 border-b-2 cursor-pointer ${
                         showTestcases ? "border-white" : "border-transparent"

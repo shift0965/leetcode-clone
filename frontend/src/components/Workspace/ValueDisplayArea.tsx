@@ -4,11 +4,12 @@ type ValueDisplayAreaProps = {
 };
 
 const ValueDisplayArea = ({ value, label }: ValueDisplayAreaProps) => {
-  const valueString = value
-    ? typeof value === "string"
+  const valueString =
+    value === undefined
+      ? "Undefined"
+      : typeof value === "string"
       ? value
-      : JSON.stringify(value)
-    : "Undefined";
+      : JSON.stringify(value);
 
   return (
     <div key={label}>

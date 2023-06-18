@@ -117,7 +117,9 @@ const ResultsArea = ({
           })}
         </>
       ) : (
-        <div className="text-white text-lg">Yout need to submit</div>
+        <div className=" text-dark-gray-7 text-md tracking-wide flex h-24 justify-center items-center">
+          You need to run you code first
+        </div>
       )}
     </div>
   );
