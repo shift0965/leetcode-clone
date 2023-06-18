@@ -7,7 +7,7 @@ const router = Router();
 router
   .route("/workspace/run")
   .post(
-    body("problemId").isString().trim(),
+    body("problemId").isNumeric(),
     body("language").isString().trim(),
     body("code").isString(),
     runExampleCases

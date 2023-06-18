@@ -47,10 +47,10 @@ export async function runExampleCases(
           });
         const equality = checkEquality(output, exampleCase.output);
         return {
-          Passed: equality,
-          Stdout: consoles,
-          Output: output,
-          Expected: exampleCase.output,
+          passed: equality,
+          stdout: consoles,
+          output: output,
+          expected: exampleCase.output,
         };
       })
     );

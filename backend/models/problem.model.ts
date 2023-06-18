@@ -44,7 +44,6 @@ export async function getAllProblems() {
   const results = await pool.query(
     "SELECT p.id, p.title, p.difficulty, p.solution_video, t.id AS tag_id, t.title AS tag FROM problem AS p LEFT JOIN problem_to_tag AS pt ON p.id = pt.problem_id LEFT JOIN tag AS t ON t.id = pt.tag_id"
   );
-  console.log(results[0]);
   const problems = z.array(ProblemSchema).parse(results[0]);
   const problemMap = new Map();
   problems.forEach((problem) => {
@@ -64,7 +63,7 @@ export async function getAllProblems() {
 
 export async function getProblemDetailsById(problemId: number) {
   const problemResults = await pool.query(
-    "SELECT p.id, p.title, p.description, p.difficulty, p.constraints, p.input_keys, p.boilerplate FROM problem AS p WHERE p.id = (?)",
+    "SELECT p.id, p.title, p.description, p.difficulty, p.constraints, p.solution_video, p.input_keys, p.boilerplate FROM problem AS p WHERE p.id = (?)",
     [problemId]
   );
 
@@ -77,22 +76,25 @@ export async function getProblemDetailsById(problemId: number) {
     [problemId]
   );
 
-  const problemDetails = z.array(ProblemDetailsSchema).parse(problemResults[0]);
+  const problemDetail = z
+    .array(ProblemDetailsSchema)
+    .parse(problemResults[0])[0];
+  if (!problemDetail) return null;
+
   const exampleCases = z
     .array(ProblemDetailsExampleCasesSchema)
     .parse(exampleCaseResults[0]);
   const tags = z.array(TagSchema).parse(tagResults[0]);
 
-  if (problemDetails.length === 0) return null;
-
   const problem = {
-    id: problemDetails[0].id,
-    title: problemDetails[0].title,
-    difficulty: problemDetails[0].difficulty,
-    description: problemDetails[0].description,
-    constraints: JSON.parse(problemDetails[0].constraints || "{}"),
-    input_keys: JSON.parse(problemDetails[0].input_keys || "{}"),
-    boilerplate: problemDetails[0].boilerplate,
+    id: problemDetail.id,
+    title: problemDetail.title,
+    difficulty: problemDetail.difficulty,
+    description: problemDetail.description,
+    solutionVideo: problemDetail.solution_video,
+    constraints: JSON.parse(problemDetail.constraints || "{}"),
+    inputKeys: JSON.parse(problemDetail.input_keys || "{}"),
+    boilerplate: problemDetail.boilerplate,
     exampleCases: exampleCases.map((exampleCase) => ({
       input: JSON.parse(exampleCase.input),
       output: JSON.parse(exampleCase.output),
@@ -122,6 +124,7 @@ const ProblemDetailsSchema = z.object({
   difficulty: DifficultySchema,
   description: z.string(),
   constraints: z.string().nullable(),
+  solution_video: z.string().nullable(),
   input_keys: z.string(),
   boilerplate: z.string(),
 });
