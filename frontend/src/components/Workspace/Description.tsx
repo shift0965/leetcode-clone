@@ -9,18 +9,18 @@ import {
 import { BsCheck2Circle } from "react-icons/bs";
 import { TiStarOutline } from "react-icons/ti";
 import { toast } from "react-toastify";
+import { ProblemDetails } from "../../types.const";
 
-// type ProblemDescriptionProps = {
-//   problem: Problem;
-//   _solved: boolean;
-// };
+type DescriptionProps = {
+  problem: ProblemDetails | undefined;
+  //_solved: boolean;
+};
 
-const Description = ({ problem, loading }) => {
+const Description = ({ problem }: DescriptionProps) => {
   //const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } = useGetCurrentProblem(problem.id);
   //   const { liked, disliked, solved, setData, starred } =
   //     useGetUsersDataOnProblem(problem.id);
 
-  const problemDifficultyClass = "bg-dark-pink";
   const starred = true;
   const liked = true;
   const disliked = false;
@@ -201,12 +201,12 @@ const Description = ({ problem, loading }) => {
 
   return (
     <div className="bg-dark-layer-1">
-      {!loading && (
+      {problem && (
         <>
           <div className="flex h-11 w-full items-center pt-2 bg-dark-layer-2 text-white overflow-x-hidden">
             <div
               className={
-                "bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-xs cursor-pointer"
+                "bg-dark-layer-1 rounded-t-[5px] px-5 py-[10px] text-sm cursor-pointer"
               }
             >
               Description
@@ -218,16 +218,22 @@ const Description = ({ problem, loading }) => {
               {/* Problem heading */}
               <div className="w-full">
                 <div className="flex space-x-4">
-                  <div className="flex-1 mr-2 text-lg text-white">
+                  <div className="flex-1 mr-2 text-lg font-semibold text-white">
                     {problem.id}. {problem.title}
                   </div>
                 </div>
 
-                <div className="flex items-center mt-3">
+                <div className="flex items-center mt-4">
                   <div
-                    className={`${problemDifficultyClass} inline-block rounded-[21px] bg-opacity-[.15] px-2.5 py-1 text-xs font-medium capitalize `}
+                    className={`${
+                      problem.difficulty === "Hard"
+                        ? "bg-dark-pink text-dark-pink"
+                        : problem.difficulty === "Medium"
+                        ? "bg-dark-yellow text-dark-yellow"
+                        : "bg-dark-green-s text-dark-green-s"
+                    } inline-block rounded-[21px] bg-opacity-[.20] px-2.5 py-1 text-xs font-semibold`}
                   >
-                    {currentProblem.difficulty}
+                    {problem.difficulty}
                   </div>
 
                   <div className="rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s">
@@ -283,21 +289,22 @@ const Description = ({ problem, loading }) => {
 
                 {/* Problem Statement(paragraphs) */}
                 <div
-                  className="text-white text-md description"
+                  className="text-white text-md description mt-5"
                   dangerouslySetInnerHTML={{ __html: problem.description }}
                 ></div>
 
                 {/* Examples */}
-                <div className="mt-4">
-                  {problem.exampleCases.map((example, index) => (
-                    <div key={index}>
-                      <p className="font-medium text-white">Example 1: </p>
-
+                <div className="mt-6">
+                  {problem.exampleCases.map((example, id) => (
+                    <div key={id}>
+                      <p className="font-medium text-white">
+                        Example {id + 1}:{" "}
+                      </p>
                       <div className="example-card">
-                        <pre>
+                        <pre className="text-sm">
                           <strong className="text-white">Input: </strong>
-                          {problem.input_keys.map((key, id) => (
-                            <span className="mr-4">
+                          {problem.inputKeys.map((key, id) => (
+                            <span className="mr-4" key={id}>
                               {key} = {JSON.stringify(example.input[id])}
                             </span>
                           ))}
@@ -306,7 +313,7 @@ const Description = ({ problem, loading }) => {
                           {JSON.stringify(example.output)} <br />
                           {example.explanation && (
                             <>
-                              <strong>Explanation:</strong>
+                              <strong>Explanation: </strong>
                               {example.explanation}
                             </>
                           )}
@@ -318,7 +325,7 @@ const Description = ({ problem, loading }) => {
 
                 {/* Constraints */}
                 <div className="my-8 pb-4">
-                  <div className="text-white text-sm font-medium">
+                  <div className="text-white text-md font-semibold">
                     Constraints:
                   </div>
                   {problem.constraints.map((constraint, id) => {
