@@ -1,26 +1,32 @@
-import { ExecutionError, ProblemDetails } from "../../types.const";
+import {
+  ExecutionError,
+  ProblemDetails,
+  SubmitResult,
+} from "../../types.const";
 import { useState, useEffect } from "react";
 import { RunResult } from "../../types.const";
 import ValueDisplayArea from "./ValueDisplayArea";
 
 interface ResultsAreaProps {
   problem: ProblemDetails;
-  runResults: RunResult[];
+  runResults: RunResult[] | undefined;
   showTestcases: boolean;
+  submitResult: SubmitResult | undefined;
   execError: ExecutionError | undefined;
 }
 
 const ResultsArea = ({
   problem,
-  runResults,
   showTestcases,
+  runResults,
   execError,
+  submitResult,
 }: ResultsAreaProps) => {
   const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
   const [accepted, setAccepted] = useState<boolean>(true);
 
   useEffect(() => {
-    runResults.forEach((res) => {
+    runResults?.forEach((res) => {
       if (!res.passed) {
         setAccepted(false);
       }
@@ -29,7 +35,7 @@ const ResultsArea = ({
 
   return (
     <div className={`${showTestcases ? "hidden" : "block"} py-4`}>
-      {execError ? (
+      {execError && (
         <>
           <h1 className="text-dark-pink font-semibold text-xl ml-1">
             {execError.name}
@@ -41,7 +47,8 @@ const ResultsArea = ({
             </pre>
           </div>
         </>
-      ) : runResults.length > 0 ? (
+      )}
+      {runResults && (
         <>
           <h1 className="text-dark-pink font-semibold text-xl ml-1">
             {accepted ? (
@@ -80,7 +87,7 @@ const ResultsArea = ({
               </div>
             ))}
           </div>
-          {problem.exampleCases.map((e, exampleId) => {
+          {problem.exampleCases.map((example, exampleId) => {
             return (
               <div
                 key={exampleId}
@@ -91,12 +98,8 @@ const ResultsArea = ({
                 <div className="mt-4">
                   <ValueDisplayArea
                     label="Input"
-                    value={problem.inputKeys
-                      .map((key, InputId) =>
-                        JSON.stringify(
-                          problem.exampleCases[activeTestCaseId]?.input[InputId]
-                        )
-                      )
+                    value={example.input
+                      .map((input) => JSON.stringify(input))
                       .join(", ")}
                   />
                 </div>
@@ -116,7 +119,40 @@ const ResultsArea = ({
             );
           })}
         </>
-      ) : (
+      )}
+
+      {submitResult && (
+        <>
+          <h1 className="text-dark-pink font-semibold text-xl ml-1">
+            {submitResult.passed ? (
+              <span className="text-dark-green-s">Passed</span>
+            ) : (
+              <span className="text-dark-pink">Failed</span>
+            )}
+          </h1>
+          <div>
+            <div className="mt-4">
+              <ValueDisplayArea
+                label="Input"
+                value={submitResult.input
+                  ?.map((value) => JSON.stringify(value))
+                  .join(", ")}
+              />
+            </div>
+            <div className="mt-4">
+              <ValueDisplayArea label="Output" value={submitResult.output} />
+            </div>
+            <div className="mt-4">
+              <ValueDisplayArea
+                label="Expected"
+                value={submitResult.expected}
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {!(runResults || execError || submitResult) && (
         <div className=" text-dark-gray-7 text-md tracking-wide flex h-24 justify-center items-center">
           You need to run you code first
         </div>

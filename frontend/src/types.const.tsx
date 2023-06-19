@@ -11,7 +11,7 @@ export interface Problem {
 }
 
 export interface ExampleCase {
-  input: any;
+  input: any[];
   output: any;
   explanation: string | null;
   image: string | null;
@@ -41,4 +41,11 @@ export interface ExecutionError {
   line: string | undefined;
   message: string;
   name: string;
+}
+
+export interface SubmitResult {
+  passed: boolean;
+  input: any[] | undefined;
+  output: any;
+  expected: any;
 }

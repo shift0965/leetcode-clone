@@ -1,35 +1,37 @@
 import pool from "./databasePool.js";
 import { z } from "zod";
 
-export async function getTestCasesByProblemId(problem_id: number) {
-  const test_case = [
-    {
-      input: [[1, 2, 3, 4, 5, 6, 7], 9],
-      output: [1, 6],
-    },
-    {
-      input: [[1, 2, 3, 4, 5], 5],
-      output: [0, 3],
-    },
-    {
-      input: [[3, 2, 7, 6, 5, 3, 2, 7, 12, 15, 1], 14],
-      output: [1, 8],
-    },
-  ];
-  return test_case;
+export async function getTestCasesByProblemId(problemId: number) {
+  const results = await pool.query(
+    "SELECT p.function_name, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
+    [problemId]
+  );
+  const testCasesData = z.array(TestCasesDataSchema).parse(results[0]);
+  if (testCasesData.length === 0) return null;
+
+  const runTestCasesData = {
+    functionName: testCasesData[0]?.function_name,
+    testCases: testCasesData.map((testCase) => {
+      return {
+        input: JSON.parse(testCase.input),
+        output: JSON.parse(testCase.output),
+      };
+    }),
+  };
+  return runTestCasesData;
 }
 
 export async function getExampleCasesDataById(problemId: number) {
   const results = await pool.query(
-    "SELECT p.function_name, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ?",
+    "SELECT p.function_name, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
     [problemId]
   );
-  const ExampleCasesData = z.array(ExampleCasesDataSchema).parse(results[0]);
-  if (ExampleCasesData.length === 0) return null;
+  const exampleCasesData = z.array(ExampleCasesDataSchema).parse(results[0]);
+  if (exampleCasesData.length === 0) return null;
 
   const runExampleDataParsed = {
-    functionName: ExampleCasesData[0]?.function_name,
-    exampleCases: ExampleCasesData.map((exampleCase) => {
+    functionName: exampleCasesData[0]?.function_name,
+    exampleCases: exampleCasesData.map((exampleCase) => {
       return {
         input: JSON.parse(exampleCase.input),
         output: JSON.parse(exampleCase.output),
@@ -68,7 +70,7 @@ export async function getProblemDetailsById(problemId: number) {
   );
 
   const exampleCaseResults = await pool.query(
-    "SELECT pe.input, pe.output, pe.explanation, pe.image FROM problem_example AS pe WHERE pe.problem_id = (?)",
+    "SELECT pe.input, pe.output, pe.explanation, pe.image FROM problem_example AS pe WHERE pe.problem_id = (?) ORDER BY pe.id;",
     problemId
   );
   const tagResults = await pool.query(
@@ -143,6 +145,13 @@ const TagSchema = z.object({
 
 //run example cases
 const ExampleCasesDataSchema = z.object({
+  function_name: z.string(),
+  input: z.string(),
+  output: z.string(),
+});
+
+//run test cases
+const TestCasesDataSchema = z.object({
   function_name: z.string(),
   input: z.string(),
   output: z.string(),

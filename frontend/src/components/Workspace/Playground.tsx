@@ -4,10 +4,10 @@ import { IoRefreshOutline } from "react-icons/io5";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import Split from "react-split";
 import PlaygroundFooter from "./PlaygroundFooter";
-import { RUN_EXAMPLE_CASES } from "../../api.const";
+import { RUN_EXAMPLE_CASES, RUN_TEST_CASES } from "../../api.const";
 import TestCasesArea from "./TestCasesArea";
 import ResultsArea from "./ResultsArea";
-import { RunResult, ExecutionError } from "../../types.const";
+import { RunResult, ExecutionError, SubmitResult } from "../../types.const";
 import CodeMirror from "./CodeMirror";
 
 type PlaygroundProps = {
@@ -17,13 +17,14 @@ type PlaygroundProps = {
 const Playground = ({ problem }: PlaygroundProps) => {
   const [language, setLanguage] = useState("Javascript");
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [settings, setSettings] = useState({});
   const [userCode, setUserCode] = useState<string>("");
   const [showTestcases, setShowTestcases] = useState(true);
 
-  const [runResults, setRunResults] = useState<RunResult[]>([]);
+  const [runResults, setRunResults] = useState<RunResult[]>();
+  const [submitResult, setSubmitResult] = useState<SubmitResult>();
   const [execError, setExecError] = useState<ExecutionError>();
   const [splitRatio, setSplitRatio] = useState<number>(50);
+  const [pending, setPending] = useState<boolean>(false);
 
   const handleFullScreen = () => {
     if (isFullScreen) {
@@ -35,9 +36,19 @@ const Playground = ({ problem }: PlaygroundProps) => {
     }
   };
 
-  const handleRun = () => {
+  const pendingStart = () => {
+    setPending(true);
     setExecError(undefined);
-    setRunResults([]);
+    setRunResults(undefined);
+    setSubmitResult(undefined);
+  };
+  const pendingStop = () => {
+    setShowTestcases(false); //switch to result page
+    setPending(false);
+  };
+
+  const handleRun = () => {
+    pendingStart();
     fetch(RUN_EXAMPLE_CASES, {
       method: "POST",
       headers: {
@@ -64,13 +75,41 @@ const Playground = ({ problem }: PlaygroundProps) => {
         setExecError(error);
       })
       .finally(() => {
-        //switch to result
-        setShowTestcases(false);
+        pendingStop();
       });
   };
 
   const handleSubmit = () => {
-    console.log(userCode);
+    pendingStart();
+    fetch(RUN_TEST_CASES, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        problemId: problem?.id || 0,
+        language: "js",
+        code: userCode,
+      }),
+    })
+      .then((response) => {
+        if (response.status !== 200) {
+          return response.json().then((error) => {
+            throw error;
+          });
+        }
+        return response.json();
+      })
+      .then((result) => {
+        console.log(result);
+        setSubmitResult(result);
+      })
+      .catch((error) => {
+        setExecError(error);
+      })
+      .finally(() => {
+        pendingStop();
+      });
   };
 
   const onChangeCode = (code: string) => {
@@ -174,6 +213,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
                     runResults={runResults}
                     showTestcases={showTestcases}
                     execError={execError}
+                    submitResult={submitResult}
                   />
                 </div>
               </Split>
