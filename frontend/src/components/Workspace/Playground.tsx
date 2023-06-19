@@ -101,7 +101,6 @@ const Playground = ({ problem }: PlaygroundProps) => {
         return response.json();
       })
       .then((result) => {
-        console.log(result);
         setSubmitResult(result);
       })
       .catch((error) => {
@@ -183,7 +182,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
               >
                 <CodeMirror userCode={userCode} onChangeCode={onChangeCode} />
 
-                {/* Result Header */}
+                {/* Console area */}
                 <div className="w-full px-5 overflow-auto relative">
                   <div className="flex h-11 sticky top-0 bg-dark-layer-1 z-10">
                     <div
@@ -210,6 +209,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
                   />
                   <ResultsArea
                     problem={problem}
+                    pending={pending}
                     runResults={runResults}
                     showTestcases={showTestcases}
                     execError={execError}
@@ -223,6 +223,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
               handleSubmit={handleSubmit}
               splitRatio={splitRatio}
               setSplitRatio={setSplitRatio}
+              pending={pending}
             />
           </div>
         </>

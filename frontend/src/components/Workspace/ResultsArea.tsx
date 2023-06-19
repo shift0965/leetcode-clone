@@ -9,14 +9,16 @@ import ValueDisplayArea from "./ValueDisplayArea";
 
 interface ResultsAreaProps {
   problem: ProblemDetails;
-  runResults: RunResult[] | undefined;
+  pending: boolean;
   showTestcases: boolean;
+  runResults: RunResult[] | undefined;
   submitResult: SubmitResult | undefined;
   execError: ExecutionError | undefined;
 }
 
 const ResultsArea = ({
   problem,
+  pending,
   showTestcases,
   runResults,
   execError,
@@ -50,7 +52,7 @@ const ResultsArea = ({
       )}
       {runResults && (
         <>
-          <h1 className="text-dark-pink font-semibold text-xl ml-1">
+          <h1 className="font-semibold text-xl ml-1">
             {accepted ? (
               <span className="text-dark-green-s">Accepted</span>
             ) : (
@@ -121,14 +123,20 @@ const ResultsArea = ({
         </>
       )}
 
-      {submitResult && (
+      {submitResult && submitResult.passed && (
         <>
-          <h1 className="text-dark-pink font-semibold text-xl ml-1">
-            {submitResult.passed ? (
-              <span className="text-dark-green-s">Passed</span>
-            ) : (
-              <span className="text-dark-pink">Failed</span>
-            )}
+          <h1 className="font-semibold text-xl ml-1">
+            <span className="text-dark-green-s">Passed</span>
+          </h1>
+          <div className=" text-dark-gray-7 text-md tracking-wide flex h-24 justify-center items-center">
+            All the test cases are passed
+          </div>
+        </>
+      )}
+      {submitResult && !submitResult.passed && (
+        <>
+          <h1 className="font-semibold text-xl ml-1">
+            <span className="text-dark-pink">Failed</span>
           </h1>
           <div>
             <div className="mt-4">
@@ -154,7 +162,7 @@ const ResultsArea = ({
 
       {!(runResults || execError || submitResult) && (
         <div className=" text-dark-gray-7 text-md tracking-wide flex h-24 justify-center items-center">
-          You need to run you code first
+          {pending ? "Pending..." : "You need to run you code first"}
         </div>
       )}
     </div>
