@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GET_PROBLEM_DETAILS } from "../api.const";
-import Topbar from "../components/Topbar";
+import Navbar from "../components/Navbar";
 import Split from "react-split";
 import Playground from "../components/Workspace/Playground";
 import Description from "../components/Workspace/Description";
@@ -22,7 +22,7 @@ const Workspace = () => {
 
   return (
     <>
-      <Topbar />
+      <Navbar isWorkspace={true} />
       <Split minSize={0} snapOffset={100} className="split">
         <Description problem={problem} />
         <Playground problem={problem} />

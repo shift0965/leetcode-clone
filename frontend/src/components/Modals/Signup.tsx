@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { authModalState } from "../../atoms/authModalAtom";
+import { authModalState } from "../../atoms/stateAtoms";
 
 const Signup = () => {
   const setAuthModalState = useSetRecoilState(authModalState);

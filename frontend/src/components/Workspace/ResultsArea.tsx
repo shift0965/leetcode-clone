@@ -99,10 +99,16 @@ const ResultsArea = ({
               >
                 <div className="mt-4">
                   <ValueDisplayArea
-                    label="Input"
+                    label="Stdin"
                     value={example.input
                       .map((input) => JSON.stringify(input))
                       .join(", ")}
+                  />
+                </div>
+                <div className="mt-4">
+                  <ValueDisplayArea
+                    label="Stdout"
+                    value={runResults[activeTestCaseId].stdout.join("\n")}
                   />
                 </div>
                 <div className="mt-4">

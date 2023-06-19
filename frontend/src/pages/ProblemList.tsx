@@ -1,11 +1,11 @@
 import React from "react";
-import Topbar from "../components/Topbar";
+import Navbar from "../components/Navbar";
 import ProblemsTable from "../components/ProblemsTable";
 
 const ProblemList = () => {
   return (
     <main className=" bg-dark-layer-2 min-h-screen">
-      <Topbar />
+      <Navbar />
       <h1 className="text-2xl text-center text-gray-300 mt-10 mb-5">
         Problems
       </h1>

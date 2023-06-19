@@ -1,34 +1,52 @@
-import React from "react";
-import { useSetRecoilState } from "recoil";
-import { authModalState } from "../atoms/authModalAtom";
+import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Timer from "./Timer";
+import { useRecoilState } from "recoil";
 
-const Navbar = () => {
-  const setAuthModalState = useSetRecoilState(authModalState);
-  const handleClick = () => {
-    setAuthModalState((prev) => ({ ...prev, type: "register", isOpen: true }));
+const Navbar = ({ isWorkspace = false }) => {
+  const user = undefined;
+  const handleLogout = () => {
+    console.log("hi");
   };
 
   return (
-    <div className="flex items-center justify-between sm:px-12 px-2 md:px-24">
-      <Link to="/" className="flex items-center justify-center h-20 w-40  ">
-        <img
-          src={"/logo.png"}
-          alt="LeetClone"
-          height={80}
-          width={160}
-          className=""
-        />
-      </Link>
-      <div className="flex items-center">
-        <button
-          className=" bg-brand-orange text-white px-2 py-1 sm:px-4 rounded-md text-sm font-medium hover:bg-opacity-90 duration-300"
-          onClick={handleClick}
-        >
-          Sign In
-        </button>
+    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+      <div
+        className={`flex w-full items-center justify-between ${
+          !isWorkspace ? "max-w-[1200px] mx-auto" : ""
+        }`}
+      >
+        <Link to="/" className="h-[22px] flex-1">
+          <img src="/logo-full.png" alt="Logo" height={100} width={100} />
+        </Link>
+
+        <div className="flex items-center space-x-4 flex-1 justify-end">
+          {isWorkspace && <Timer />}
+          {user ? (
+            <>
+              {" "}
+              <div className=" cursor-pointer relative">
+                <img src="/avatar.png" height={34} width={34} alt="user"></img>
+              </div>
+              <button
+                className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange"
+                onClick={() => {
+                  handleLogout;
+                }}
+              >
+                <FiLogOut />
+              </button>
+            </>
+          ) : (
+            <Link to="/to">
+              <button className=" bg-dark-fill-3 py-1 px-2 cursor-pointer rounded">
+                Sign In
+              </button>
+            </Link>
+          )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
 export default Navbar;
