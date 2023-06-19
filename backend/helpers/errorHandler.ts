@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
 export class ExecutionError extends Error {
-  line: number;
-  constructor(message: string, line: number) {
+  line: number | undefined;
+  constructor(name: string, message: string, line: number | undefined) {
     super(message);
     this.message = message;
     this.line = line;
-    this.name = "Execution Error";
+    this.name = name;
   }
 }
 

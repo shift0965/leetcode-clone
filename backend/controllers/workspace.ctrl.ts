@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { generateFile, removeFile } from "../helpers/filesHelper.js";
-import { runExampleCasesJs } from "../helpers/runCode.js";
+import { runJavaScript } from "../helpers/runCode.js";
 import {
   getExampleCasesDataById,
   getTestCasesByProblemId,
@@ -52,7 +52,7 @@ export async function runExampleCases(
         const args = exampleCase.input;
         const { output, consoles } =
           await new Promise<ExampleCasesStdoutPromise>((resolve, reject) => {
-            runExampleCasesJs(filePath, args, resolve, reject);
+            runJavaScript(filePath, args, resolve, reject);
           });
         const equality = checkEquality(output, exampleCase.output);
         return {
@@ -101,7 +101,7 @@ export async function runTestCases(
       const args = testCase.input;
       const { output } = await new Promise<TestCasesDataSchema>(
         (resolve, reject) => {
-          runExampleCasesJs(filePath, args, resolve, reject);
+          runJavaScript(filePath, args, resolve, reject);
         }
       );
       const equality = checkEquality(output, testCase.output);
