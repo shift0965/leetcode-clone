@@ -143,8 +143,8 @@ const Playground = ({ problem }: PlaygroundProps) => {
                 {language}
               </button>
             </div>
-            <div className="flex items-center m-2" onClick={resetUserCode}>
-              <button className="editor-nav-btn group">
+            <div className="flex items-center m-2">
+              <button className="editor-nav-btn group" onClick={resetUserCode}>
                 <div className="text-dark-gray-6 font-bold text-lg">
                   <IoRefreshOutline />
                 </div>

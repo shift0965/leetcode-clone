@@ -108,7 +108,7 @@ const ProblemsTable = () => {
                   <div className="w-full relative">
                     <IoClose
                       fontSize={"35"}
-                      className="cursor-pointer absolute -top-16 right-0"
+                      className="cursor-pointer absolute -top-16 right-0 text-dark-gray-8"
                       onClick={closeModal}
                     />
                     <YouTube

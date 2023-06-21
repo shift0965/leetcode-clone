@@ -28,6 +28,7 @@ const ResultsArea = ({
   const [accepted, setAccepted] = useState<boolean>(true);
 
   useEffect(() => {
+    setAccepted(true);
     runResults?.forEach((res) => {
       if (!res.passed) {
         setAccepted(false);
@@ -105,10 +106,21 @@ const ResultsArea = ({
                       .join(", ")}
                   />
                 </div>
-                <div className="mt-4">
+                <div
+                  className={`mt-4 ${
+                    runResults[activeTestCaseId].stdout.length > 0
+                      ? "block"
+                      : "hidden"
+                  }`}
+                >
                   <ValueDisplayArea
                     label="Stdout"
-                    value={runResults[activeTestCaseId].stdout.join("\n")}
+                    value={runResults[activeTestCaseId].stdout
+                      .map((console: any) => {
+                        if (typeof console === "string") return console;
+                        else return JSON.stringify(console);
+                      })
+                      .join("\n")}
                   />
                 </div>
                 <div className="mt-4">
