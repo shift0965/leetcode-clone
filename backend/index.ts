@@ -1,6 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import workspaceRouter from "./routes/workspace.route.js";
 import problemRouter from "./routes/problem.route.js";
+import contestRouter from "./routes/contest.route.js";
+
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -17,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/1.0", [workspaceRouter, problemRouter]);
+app.use("/api/1.0", [workspaceRouter, problemRouter, contestRouter]);
 
 app.post("/reInsertData", async (req: Request, res: Response) => {
   await reInsertData();

@@ -15,9 +15,6 @@ const ProblemsTable = () => {
     videoId: "",
   });
   const [problems, setProblems] = useState<Problem[]>([]);
-  const closeModal = () => {
-    setYoutubePlayer({ isOpen: false, videoId: "" });
-  };
   useEffect(() => {
     fetch(GET_ALL_PROBLEMS, {
       method: "GET",
@@ -27,6 +24,9 @@ const ProblemsTable = () => {
         setProblems(results);
       });
   }, []);
+  const closeModal = () => {
+    setYoutubePlayer({ isOpen: false, videoId: "" });
+  };
 
   return (
     <>
