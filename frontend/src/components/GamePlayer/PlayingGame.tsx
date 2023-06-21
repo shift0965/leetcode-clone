@@ -1,26 +1,6 @@
-import { io } from "socket.io-client";
-import { useEffect, useRef, useState } from "react";
-
-import { WEB_SOCKET_URL } from "../../api.const";
-
 const JoinGame = () => {
   const [userName, setUserName] = useState<string>();
   const [roomId, setRoomId] = useState<string>();
-  // const socket = useRef(io(WEB_SOCKET_URL)).current;
-
-  // useEffect(() => {
-  //   socket.emit("host-JoinRoom", roomId);
-  //   // socket.on("host-PlayerList", function (playerListData) {
-  //   //   console.log(playerListData);
-  //   // });
-  //   socket.on("host-Connected", function (message) {
-  //     console.log(message);
-  //   });
-  // }, []);
-
-  // const sendMessage = () => {
-  //   socket.emit("player-send-me-message");
-  // };
 
   // const handleJoinRooom = () => {
   //   // setIsWaiting(true);

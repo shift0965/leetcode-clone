@@ -3,27 +3,37 @@ import { validationResult } from "express-validator";
 
 import { randomUUID } from "crypto";
 import { hostCreateRoom, playerJoinRoom } from "../models/redis.model.js";
-import { createContest } from "../models/contest.model.js";
+import {
+  createContest,
+  insertPlayerIntoContest,
+  checkContestAvailability,
+} from "../models/contest.model.js";
 
-export async function createGame(req: Request, res: Response) {
+export async function hostCreateContest(req: Request, res: Response) {
   const { userId, timeLimit, problemList } = req.body;
   console.log(userId, timeLimit, problemList);
-  const contestId = createContest(userId, timeLimit, problemList);
-
-  hostCreateRoom(String(contestId));
+  const contestId = await createContest(userId, timeLimit, problemList);
+  if (contestId === null)
+    return res.status(500).send({ error: "Not able to create room" });
+  hostCreateRoom(contestId);
   console.log("Create Game");
-  res.cookie("RoomId", contestId);
+  res.cookie("hostContestId", contestId);
   res.send({ roomId: contestId });
 }
 
-export async function joinGame(req: Request, res: Response) {
+export async function playerJoinContest(req: Request, res: Response) {
   const roomId = req.body.roomId;
-  const userName = req.body.userName;
-  const userId = randomUUID();
-  console.log(roomId, userName, userId);
-  playerJoinRoom(
-    JSON.stringify({ roomId: roomId, playerId: userId, playerName: userName })
-  );
-  console.log("Join Game");
-  res.send({ success: "Join Success" });
+  const name = req.body.userName;
+
+  const contestId = await checkContestAvailability(roomId); //insertPlayerIntoContest(contestId, name);
+  if (contestId === undefined)
+    return res.status(404).send({ message: "Room Id Not Avaiable" });
+
+  const playerId = await insertPlayerIntoContest(contestId, name);
+  if (playerId === null)
+    return res.status(500).send({ message: "Insert Failed" });
+
+  playerJoinRoom(contestId, playerId, name);
+  res.cookie("contestPlayer", { playerName: name, playerId: playerId });
+  res.send({ playerId: playerId });
 }

@@ -4,30 +4,13 @@ import dotenv from "dotenv";
 import { Server } from "socket.io";
 import cors from "cors";
 import { redisClient } from "./model/redis.model.js";
+dotenv.config();
 
 interface Player {
   id: string;
   name: string;
 }
 const roomPlayerMap = new Map<string, Player[]>();
-
-redisClient.subscribe("host-createRoom");
-redisClient.subscribe("player-joinRoom");
-redisClient.on("message", (channel: string, message: string) => {
-  const response = JSON.parse(message);
-  if (channel === "host-createRoom") {
-    roomPlayerMap.set(response.roomId, []);
-    console.log("host create room", roomPlayerMap);
-  } else if (channel === "player-joinRoom") {
-    roomPlayerMap.set(response.roomId, [
-      {
-        id: response.playerId,
-        name: response.playerName,
-      },
-    ]);
-    console.log("player-joinRoom", roomPlayerMap);
-  }
-});
 
 const app: Express = express();
 const httpServer = http.createServer(app);
@@ -37,7 +20,7 @@ const io = new Server(httpServer, {
   },
 });
 
-dotenv.config();
+redisClient.subscribe("host-createRoom", "player-joinRoom");
 
 const roomUserMap = new Map<string, string[]>();
 const port = process.env.PORT;
@@ -76,6 +59,16 @@ io.on("connection", (socket) => {
     socket.to("cool").emit("player-JoinRoomResult", "message");
     socket.to("cool").emit("host-PlayerList", ["Leo"]);
   });
+});
+
+redisClient.on("message", (channel: string, message: string) => {
+  const response = JSON.parse(message);
+  console.log(response);
+  if (channel === "host-createRoom") {
+    console.log(response.contestId);
+  } else if (channel === "player-joinRoom") {
+    io.emit("host-playerJoinRoom", response.playerName);
+  }
 });
 
 httpServer.listen(port, () => {

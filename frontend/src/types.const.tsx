@@ -55,3 +55,5 @@ export interface AuthModalState {
   isOpen: boolean;
   type: "login" | "register" | "forgotPassword";
 }
+
+export type GameHostState = "GameCreating" | "PlayersJoining" | "GameWatching";

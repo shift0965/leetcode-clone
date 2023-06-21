@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* body {
+body {
   @apply bg-dark-layer-1;
-} */
+}
 
 .split {
   display: flex;
