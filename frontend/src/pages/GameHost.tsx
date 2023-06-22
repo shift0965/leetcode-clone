@@ -11,19 +11,13 @@ const GameHost = () => {
     useState<GameHostState>("GameCreating");
 
   return (
-    <div className="  min-h-screen">
+    <div className=" ">
       <Navbar />
-
-      <div className=" w-11/12  md:w-9/12 mx-auto mt-8 text-dark-gray-8">
-        {currentState === "GameCreating" && (
-          <GameCreating
-            setRoomId={setRoomId}
-            setCurrentState={setCurrentState}
-          />
-        )}
-        {currentState === "PlayersJoining" && <UserJoining roomId={roomId} />}
-        {currentState === "GameWatching" && <GameWatching />}
-      </div>
+      {currentState === "GameCreating" && (
+        <GameCreating setRoomId={setRoomId} setCurrentState={setCurrentState} />
+      )}
+      {currentState === "PlayersJoining" && <UserJoining roomId={roomId} />}
+      {currentState === "GameWatching" && <GameWatching />}
     </div>
   );
 };

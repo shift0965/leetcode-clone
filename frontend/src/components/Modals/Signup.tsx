@@ -10,62 +10,61 @@ const Signup = () => {
 
   return (
     <form className="px-6 pb-4 flex flex-col">
-      <h3 className="text-xl font-medium block mb-2 text-gray-300">
+      <h3 className="text-xl font-medium block mb-2 text-dark-gray-8">
         Sign in to Leetcode
       </h3>
-      <div className=" mt-3">
-        <label htmlFor="name" className="block mb-1 text-gray-300">
+      <div className="mt-3">
+        <label htmlFor="name" className="block mb-1 text-dark-gray-8">
           Your Name
         </label>
         <input
           type="name"
           name="name"
           id="name"
-          className="border-2 outline-none sm:text-sm rounded-lg 
-                   focus:border-blue-500 p-2.5 bg-gray-600 border-gray-500 
-                   w-full placeholder-gray-400 text-white"
+          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+          w-full placeholder-gray-400 text-white"
           placeholder="name"
         />
       </div>
-      <div className="mt-3">
-        <label htmlFor="email" className="block mb-1 text-gray-300">
+      <div className="mt-2">
+        <label htmlFor="email" className="block mb-1 text-dark-gray-8">
           Your Email
         </label>
         <input
           type="email"
           name="email"
           id="email"
-          className="border-2 outline-none sm:text-sm rounded-lg 
-                   focus:border-blue-500 p-2.5 bg-gray-600 border-gray-500 
-                   w-full placeholder-gray-400 text-white"
+          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+          w-full placeholder-gray-400 text-white"
           placeholder="name@email.com"
         />
       </div>
-      <div className="mt-3">
-        <label htmlFor="password" className="block mb-1 text-gray-300">
+      <div className="mt-2">
+        <label htmlFor="password" className="block mb-1 text-dark-gray-8">
           Your Password
         </label>
         <input
           type="password"
           name="password"
           id="password"
-          className="border-2 outline-none sm:text-sm rounded-lg 
-                   focus:border-blue-500 p-2.5 bg-gray-600 border-gray-500 
-                   w-full placeholder-gray-400 text-white"
+          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+          w-full placeholder-gray-400 text-white"
           placeholder="******"
         />
       </div>
-      <div className="mt-3">
-        <label htmlFor="Confirm password" className="block mb-1 text-gray-300">
+      <div className="mt-2">
+        <label
+          htmlFor="Confirm password"
+          className="block mb-1 text-dark-gray-8"
+        >
           Confirm Password
         </label>
         <input
           type="password"
           name="Confirm password"
           id="Confirm password"
-          className="border-2 outline-none sm:text-sm rounded-lg 
-                   focus:border-blue-500 p-2.5 bg-gray-600 border-gray-500 
-                   w-full placeholder-gray-400 text-white"
+          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+          w-full placeholder-gray-400 text-white"
           placeholder="******"
         />
       </div>
@@ -76,11 +75,11 @@ const Signup = () => {
       >
         Submit
       </button>
-      <div className=" text-sm text-gray-500 mt-3">
+      <div className=" text-sm text-dark-gray-8 mt-3">
         Already have an account
         <a
           href="#"
-          className="text-blue-700 hover:underline ml-3"
+          className="text-blue-300 hover:underline ml-3"
           onClick={handleClick}
         >
           Sign in

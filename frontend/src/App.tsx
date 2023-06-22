@@ -1,15 +1,17 @@
-import Auth from "./pages/Auth";
 import Workspace from "./pages/Workspace";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { RecoilRoot } from "recoil";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import GameHost from "./pages/GameHost";
 import GamePlayer from "./pages/GamePlayer";
 import HomePage from "./pages/HomePage";
+import AuthModal from "./components/Modals/AuthModal";
+import { useRecoilValue } from "recoil";
+import { authModalState } from "./atoms/stateAtoms";
 
 function App() {
+  const authModal = useRecoilValue(authModalState);
   return (
-    <RecoilRoot>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="bg-dark-layer-2 min-h-screen relative">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="problem" element={<Workspace />} />
@@ -17,8 +19,9 @@ function App() {
           <Route path="gamePlayer" element={<GamePlayer />} />
           {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
         </Routes>
-      </BrowserRouter>
-    </RecoilRoot>
+        {authModal.isOpen && <AuthModal />}
+      </div>
+    </BrowserRouter>
   );
 }
 

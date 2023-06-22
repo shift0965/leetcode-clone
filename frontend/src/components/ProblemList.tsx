@@ -1,10 +1,8 @@
-import React from "react";
-import Navbar from "./Navbar";
 import ProblemsTable from "./ProblemsTable";
 
 const ProblemList = () => {
   return (
-    <div className="relative overflow-x-auto mx-auto mb-10">
+    <div className="relative overflow-x-auto mx-auto">
       <table className="w-full mx-auto">
         <thead className=" text-gray-300 border-b text-left">
           <tr>

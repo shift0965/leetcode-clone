@@ -17,7 +17,7 @@ const PlayersJoining = ({ roomId }: PlayersJoiningProps) => {
   }, []);
 
   return (
-    <div>
+    <div className="w-11/12 md:w-9/12 mx-auto mt-8 text-dark-gray-8">
       <div>
         <h1 className=" text-2xl">
           ROOM ID : <strong>{roomId}</strong>

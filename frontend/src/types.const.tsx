@@ -57,3 +57,4 @@ export interface AuthModalState {
 }
 
 export type GameHostState = "GameCreating" | "PlayersJoining" | "GameWatching";
+export type GamePlayerState = "GameJoining" | "GameWaiting" | "GamePlaying";

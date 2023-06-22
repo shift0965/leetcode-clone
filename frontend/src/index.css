@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-dark-layer-1;
+  @apply bg-dark-layer-2;
 }
 
 .split {

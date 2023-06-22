@@ -55,7 +55,7 @@ const GameCreating = ({ setRoomId, setCurrentState }: GameCreatingProps) => {
   };
 
   return (
-    <div>
+    <div className="w-11/12 md:w-9/12 mx-auto mt-8 text-dark-gray-8">
       <h1 className="text-xl">Questions</h1>
       <div className="">
         {gameProblems.map((gameProblem, index) => (

@@ -1,13 +1,12 @@
-import React from "react";
 import ProblemList from "../components/ProblemList";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
-    <main className=" bg-dark-layer-2 min-h-screen">
+    <div>
       <Navbar />
-      <div className=" w-11/12  md:w-9/12 mx-auto mt-8">
+      <div className="w-11/12  md:w-9/12 mx-auto mt-8">
         <div>
           <h1 className="text-xl text-left text-gray-200 ml-1">Let's Code!</h1>
           <div className=" flex mt-5">
@@ -33,13 +32,13 @@ const HomePage = () => {
           </div>
         </div>
         <div className="mt-12">
-          <h1 className="text-xl text-left text-gray-200 ml-1 mt-5 mb-3">
+          <h1 className="text-xl text-left text-gray-200 ml-1 mt-5">
             Problems
           </h1>
           <ProblemList />
         </div>
       </div>
-    </main>
+    </div>
   );
 };
 
