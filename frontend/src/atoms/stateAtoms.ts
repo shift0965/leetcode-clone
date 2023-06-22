@@ -3,5 +3,5 @@ import { AuthModalState } from "../types.const";
 
 export const authModalState = atom<AuthModalState>({
   key: "authModalState",
-  default: { isOpen: false, type: "login" },
+  default: { isOpen: false, type: "login", isLogin: false },
 });

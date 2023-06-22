@@ -6,12 +6,26 @@ import HomePage from "./pages/HomePage";
 import AuthModal from "./components/Modals/AuthModal";
 import { useRecoilValue } from "recoil";
 import { authModalState } from "./atoms/stateAtoms";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const authModal = useRecoilValue(authModalState);
   return (
     <BrowserRouter>
       <div className="bg-dark-layer-2 min-h-screen relative">
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="problem" element={<Workspace />} />

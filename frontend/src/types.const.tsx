@@ -53,6 +53,7 @@ export interface SubmitResult {
 //atoms
 export interface AuthModalState {
   isOpen: boolean;
+  isLogin: boolean;
   type: "login" | "register" | "forgotPassword";
 }
 
