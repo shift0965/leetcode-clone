@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GET_PROBLEM_DETAILS } from "../api.const";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBars/Navbar";
 import Split from "react-split";
 import Playground from "../components/Workspace/Playground";
 import Description from "../components/Workspace/Description";

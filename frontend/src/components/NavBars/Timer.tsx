@@ -1,4 +1,3 @@
-import React from "react";
 import { FiRefreshCcw } from "react-icons/fi";
 import { useState, useEffect } from "react";
 
@@ -17,8 +16,7 @@ const Timer = () => {
   };
 
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
+    let intervalId: ReturnType<typeof setTimeout>;
     if (showTimer) {
       intervalId = setInterval(() => {
         setTime((time) => time + 1);

@@ -11,7 +11,18 @@ export const USER_SIGNIN = `${expressBase}/api/1.0/user/signin`;
 export const USER_SIGNUP = `${expressBase}/api/1.0/user/signup`;
 
 //contest
-export const HOST_CREATE_ROOM = `${expressBase}/api/1.0/contest/createGame`;
-export const Player_JOIN_ROOM = `${expressBase}/api/1.0/contest/joinGame`;
+export const HOST_CHECK_GAME = `${expressBase}/api/1.0/contest/hostCheckGame`;
+export const HOST_CREATE_GAME = `${expressBase}/api/1.0/contest/hostCreateGame`;
+export const HOST_SHOT_DOWN = `${expressBase}/api/1.0/contest/hostTerminateGame`;
+
+export const PLAYER_JOIN_GAME = `${expressBase}/api/1.0/contest/playerJoinGame`;
+export const PLAYER_CHECK_GAME = `${expressBase}/api/1.0/contest/playerCheckGame`;
+export const PLAYER_AVATAR_URL =
+  "https://api.dicebear.com/6.x/avataaars/svg?size=64";
+// "https://api.dicebear.com/6.x/adventurer/svg?size=64";
+
+export const PLAYER_EXIT_GAME = `${expressBase}/api/1.0/contest/playerExitGame`;
+
+export const GET_CONTEST_PLAYERS = `${expressBase}/api/1.0/contest/getContestPlayers`;
 
 export const WEB_SOCKET_URL = socketBase;

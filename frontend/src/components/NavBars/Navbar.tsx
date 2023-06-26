@@ -3,7 +3,7 @@ import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Timer from "./Timer";
 import { useRecoilState } from "recoil";
-import { authModalState } from "../atoms/stateAtoms";
+import { authModalState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 
 const Navbar = ({ isWorkspace = false }) => {
@@ -18,17 +18,17 @@ const Navbar = ({ isWorkspace = false }) => {
   };
 
   useEffect(() => {
-    if (!authModal.isLogin) {
-      const userDataJson = localStorage.getItem("userData");
-      if (userDataJson) {
-        const userData = JSON.parse(userDataJson);
-        //if expired
-        if (userData.access_expired < new Date().getTime()) {
-          localStorage.removeItem("userData");
-        } else {
-          setAuthModal((prev) => ({ ...prev, isLogin: true }));
-        }
+    const userDataJson = localStorage.getItem("userData");
+    if (userDataJson) {
+      const userData = JSON.parse(userDataJson);
+      if (userData.access_expired > new Date().getTime() / 1000) {
+        setAuthModal((prev) => ({ ...prev, isLogin: true }));
+      } else {
+        localStorage.removeItem("userData");
+        setAuthModal((prev) => ({ ...prev, isLogin: false }));
       }
+    } else {
+      setAuthModal((prev) => ({ ...prev, isLogin: false }));
     }
   }, []);
 

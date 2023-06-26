@@ -16,7 +16,7 @@ function App() {
       <div className="bg-dark-layer-2 min-h-screen relative">
         <ToastContainer
           position="top-center"
-          autoClose={3000}
+          autoClose={2500}
           hideProgressBar
           newestOnTop={false}
           closeOnClick

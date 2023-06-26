@@ -1,28 +1,29 @@
-import { Player_JOIN_ROOM } from "../../api.const";
+import { PLAYER_JOIN_GAME } from "../../api.const";
 import { useState } from "react";
 import { GamePlayerState } from "../../types.const";
+import { toast } from "react-toastify";
+import { Player } from "../../types.const";
 
 interface GameJoiningProps {
   setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
+  setPlayer: React.Dispatch<React.SetStateAction<Player | undefined>>;
 }
 
-const GameJoining = ({ setCurrentState }: GameJoiningProps) => {
-  const [userName, setUserName] = useState<string>("");
-  const [roomId, setRoomId] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>();
+const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
+  const [playerName, setPlayerName] = useState<string>("");
+  const [gameId, setGameId] = useState<string>("");
 
   const handleJoinRoom = () => {
-    setErrorMessage(undefined);
-    fetch(Player_JOIN_ROOM, {
+    fetch(PLAYER_JOIN_GAME, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        roomId: roomId,
-        userName: userName,
+        gameId: gameId,
+        playerName: playerName,
       }),
     })
       .then((response) => {
-        if (response.status === 404)
+        if (response.status !== 200)
           return response.json().then((error) => {
             throw error;
           });
@@ -31,44 +32,46 @@ const GameJoining = ({ setCurrentState }: GameJoiningProps) => {
         }
       })
       .then((result) => {
-        console.log(result);
+        const playerData: Player = {
+          id: result.playerId,
+          gameId: Number(gameId),
+          name: playerName,
+        };
+        setPlayer(playerData);
+        localStorage.setItem("playerData", JSON.stringify(playerData));
         setCurrentState("GameWaiting");
       })
       .catch((error) => {
-        setErrorMessage(error.message);
+        toast.error(error.errors);
       });
   };
 
   return (
-    <div className="w-11/12 md:w-9/12 mx-auto mt-8 text-dark-gray-8">
-      <div>
-        <div>
-          {errorMessage && (
-            <div className="mb-5 text-dark-pink">{errorMessage}</div>
-          )}
-        </div>
-        <label>RoomId: </label>
+    <div className="flex flex-col items-center justify-center mx-auto mt-10 text-dark-gray-8">
+      <h1 className="text-2xl text-center">Join Game</h1>
+      <div className="mt-8">
+        <div className="text-lg">Game Id</div>
         <input
           type="text"
-          className="bg-dark-fill-2"
-          value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
+          className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
+          value={gameId}
+          onChange={(e) => setGameId(e.target.value)}
         />
       </div>
-      <div className=" mt-2">
-        <label>UserName: </label>
+      <div className="mt-4">
+        <div className="text-lg">Name </div>
         <input
           type="text"
-          className="bg-dark-fill-2"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
+          value={playerName}
+          onChange={(e) => setPlayerName(e.target.value)}
         />
       </div>
       <button
         onClick={handleJoinRoom}
-        className="bg-dark-yellow px-5 py-2 rounded-lg text-white mt-5"
+        className="mt-8 bg-dark-green-s hover:bg-opacity-60 transition-all px-5 py-2 rounded-lg text-white font-semibold"
       >
-        JoinRoom
+        Join Game
       </button>
     </div>
   );

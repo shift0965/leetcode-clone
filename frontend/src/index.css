@@ -26,6 +26,21 @@ body {
   cursor: row-resize;
 }
 
+.blink {
+  animation: blink 2s linear infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 8px;

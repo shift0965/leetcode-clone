@@ -20,8 +20,6 @@ const io = new Server(httpServer, {
   },
 });
 
-redisClient.subscribe("host-createRoom", "player-joinRoom");
-
 const roomUserMap = new Map<string, string[]>();
 const port = process.env.PORT;
 
@@ -31,43 +29,32 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("host-JoinRoom", (roomId) => {
-    socket.join("cool");
-    console.log("host join room " + "cool");
-    io.to("cool").emit("host-Connected", "connected!");
-    //console.log("host join room " + roomId);
-    //roomUserMap.set(roomId, roomUserMap.get(roomId) || []);
+  socket.on("ws-host-createGame", (msg) => {
+    socket.join(msg.gameId);
   });
-
-  socket.on("player-JoinRoom", () => {
-    socket.join("cool");
-    console.log("player join room " + "cool");
-    // if (roomUserMap.has(roomId)) {
-    //   //socket.join("cool");
-    //   //console.log("player join room " + roomId);
-    //   // const player = roomUserMap.get(roomId) || [];
-    //   // player.push(userName);
-    //   // socket.to(roomId).emit("host-PlayerList", player);
-    //   // socket.to(roomId).emit("player-JoinRoomResult", { success: true });
-    // } else {
-    //   socket.emit("player-JoinRoomResult", { success: false });
-    // }
-  });
-
-  socket.on("player-send-me-message", () => {
-    console.log("send");
-    socket.to("cool").emit("player-JoinRoomResult", "message");
-    socket.to("cool").emit("host-PlayerList", ["Leo"]);
+  socket.on("ws-player-joinGame", (msg) => {
+    socket.join(msg.gameId);
   });
 });
 
+redisClient.subscribe(
+  "ps-player-joinGame",
+  "ps-player-exitGame",
+  "ps-host-terminateGame"
+);
 redisClient.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
-  console.log(response);
-  if (channel === "host-createRoom") {
-    console.log(response.contestId);
-  } else if (channel === "player-joinRoom") {
-    io.emit("host-playerJoinRoom", response.playerName);
+  if (channel === "ps-player-joinGame") {
+    io.to(response.contestId).emit("ws-host-playerJoinGame", {
+      id: response.id,
+      name: response.name,
+    });
+  } else if (channel === "ps-player-exitGame") {
+    io.to(response.contestId).emit("ws-host-playerExitGame", {
+      id: response.id,
+    });
+  } else if (channel === "ps-host-terminateGame") {
+    io.to(response.contestId).emit("ws-player-hostTerminateGame");
   }
 });
 

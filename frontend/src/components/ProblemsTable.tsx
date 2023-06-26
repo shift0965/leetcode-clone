@@ -9,7 +9,6 @@ import { GET_ALL_PROBLEMS } from "../api.const";
 import { Problem } from "../types.const";
 
 const ProblemsTable = () => {
-  const [loading, setLoading] = useState(true);
   const [youtubePlayer, setYoutubePlayer] = useState({
     isOpen: false,
     videoId: "",
@@ -30,9 +29,7 @@ const ProblemsTable = () => {
 
   return (
     <>
-      {problems.length === 0 ? (
-        <div className="text-white">Loading</div>
-      ) : (
+      {problems.length > 0 && (
         <>
           <tbody className="text-white">
             {problems !== undefined &&

@@ -50,6 +50,12 @@ export interface SubmitResult {
   expected: any;
 }
 
+export interface Player {
+  id: number;
+  name: string;
+  gameId: number;
+}
+
 //atoms
 export interface AuthModalState {
   isOpen: boolean;
@@ -57,5 +63,13 @@ export interface AuthModalState {
   type: "login" | "register" | "forgotPassword";
 }
 
-export type GameHostState = "GameCreating" | "PlayersJoining" | "GameWatching";
-export type GamePlayerState = "GameJoining" | "GameWaiting" | "GamePlaying";
+export type GameHostState =
+  | "GameCreating"
+  | "PlayersJoining"
+  | "GameWatching"
+  | "Loading";
+export type GamePlayerState =
+  | "GameJoining"
+  | "GameWaiting"
+  | "GamePlaying"
+  | "Loading";

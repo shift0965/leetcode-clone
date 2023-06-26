@@ -5,20 +5,39 @@ const client = new Redis({
   port: 6379,
 });
 
-export async function hostCreateRoom(contestId: number) {
-  client.publish("host-createRoom", JSON.stringify({ contestId: contestId }));
-}
-export function playerJoinRoom(
+export function publishPlayerJoinContest(
   contestId: number,
   playerId: number,
   name: string
 ) {
   client.publish(
-    "player-joinRoom",
+    "ps-player-joinGame",
     JSON.stringify({
       contestId: contestId,
-      playerId: playerId,
-      playerName: name,
+      id: playerId,
+      name: name,
+    })
+  );
+}
+
+export async function publishPlayerExitContest(
+  contestId: number,
+  playerId: number
+) {
+  client.publish(
+    "ps-player-exitGame",
+    JSON.stringify({
+      contestId: contestId,
+      id: playerId,
+    })
+  );
+}
+
+export async function publishHostTerminateContest(contestId: number) {
+  client.publish(
+    "ps-host-terminateGame",
+    JSON.stringify({
+      contestId: contestId,
     })
   );
 }

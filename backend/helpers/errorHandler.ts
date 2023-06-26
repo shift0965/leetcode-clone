@@ -31,7 +31,7 @@ export function errorHandler(
   }
 
   if (err instanceof ValidationError) {
-    return res.status(401).json(err);
+    return res.status(401).json({ errors: err.message });
   }
   if (err instanceof Error) {
     return res.status(500).json({ errors: err.message });

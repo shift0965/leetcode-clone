@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBars/Navbar";
 import AuthModal from "../components/Modals/AuthModal";
 import { useRecoilValue } from "recoil";
 import { authModalState } from "../atoms/stateAtoms";

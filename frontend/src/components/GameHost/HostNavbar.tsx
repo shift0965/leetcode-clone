@@ -1,0 +1,68 @@
+import { FiTriangle, FiCircle } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { HOST_SHOT_DOWN } from "../../api.const";
+import { toast } from "react-toastify";
+
+interface HostNavbarProps {
+  gameId: number | undefined;
+}
+
+const HostNavbar = ({ gameId }: HostNavbarProps) => {
+  const navigate = useNavigate();
+
+  const handleShotDown = () => {
+    const userDataJSON = localStorage.getItem("userData");
+    if (userDataJSON && gameId) {
+      const userToken = JSON.parse(userDataJSON).access_token;
+      fetch(HOST_SHOT_DOWN, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+          gameId: gameId,
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          toast.success("Shot down successfully");
+        } else {
+          toast.error("Shot down failed");
+        }
+      });
+      navigate("/");
+    }
+  };
+
+  return (
+    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+      <div className="flex w-full items-center justify-between">
+        <Link to="/" className="h-[22px] flex-1">
+          <img src="/logo-full.png" alt="Logo" className="h-full" />
+        </Link>
+
+        <div className="relative h-11 border-white flex-1 flex justify-center">
+          <img src="./gameHost.png" alt="user" className=" h-full"></img>
+          <div className="flex items-center ml-2 text-lg text-dark-gray-8">
+            HOST
+          </div>
+        </div>
+        <div className="flex items-center space-x-4 flex-1 justify-end">
+          <button className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all">
+            <div className="mr-2">Start Game</div>
+            <FiCircle />
+          </button>
+          <button
+            className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink font-medium hover:bg-dark-fill-2 transition-all"
+            onClick={handleShotDown}
+          >
+            <div className="mr-2">Shut Down</div>
+            <FiTriangle />
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+export default HostNavbar;
