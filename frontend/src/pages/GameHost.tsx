@@ -54,8 +54,12 @@ const GameHost = () => {
       {currentState === "GameCreating" && (
         <GameCreating setGameId={setGameId} setCurrentState={setCurrentState} />
       )}
-      {currentState === "PlayersJoining" && <PlayerJoining gameId={gameId} />}
-      {currentState === "GameWatching" && <GameWatching />}
+      {currentState === "PlayersJoining" && gameId && (
+        <PlayerJoining gameId={gameId} />
+      )}
+      {currentState === "GameWatching" && gameId && (
+        <GameWatching gameId={gameId} />
+      )}
     </>
   );
 };

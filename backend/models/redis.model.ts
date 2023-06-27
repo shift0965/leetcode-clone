@@ -50,3 +50,22 @@ export async function publishHostStartContest(contestId: number) {
     })
   );
 }
+
+export async function publishPlayerUpdateProgress(
+  contestId: number,
+  playerId: number,
+  progress: Progress,
+  finishedAt: Date | null
+) {
+  client.publish(
+    "ps-player-updateProgress",
+    JSON.stringify({
+      contestId: contestId,
+      playerId: playerId,
+      progress: progress,
+      finishedAt: finishedAt,
+    })
+  );
+}
+
+type Progress = { id: number; passed: boolean };

@@ -17,7 +17,7 @@ export async function checkContestStateByUser(userId: number) {
 
 export async function checkContestStateById(contestId: number) {
   const results = await pool.query(
-    "select id AS contestId, state from contest where id = ?",
+    "SELECT id AS contestId, state FROM contest WHERE id = ?",
     [contestId]
   );
 
@@ -120,8 +120,8 @@ export async function getContestProblemsById(contestId: number) {
 
 export async function getPlayersProgressById(contestId: number) {
   const results = await pool.query(
-    "SELECT id, name, progress FROM contest_player WHERE contest_id=?",
-    [contestId]
+    "SELECT id, name, progress, finished_at FROM contest_player WHERE contest_id=? AND state=?",
+    [contestId, "joined"]
   );
   const progress = z.array(ProgressSchema).parse(results[0]);
   return progress;
@@ -137,10 +137,10 @@ export async function setPlayerProgressById(
   );
 }
 
-export async function setPlayerFinished(playerId: number) {
+export async function setPlayerFinished(finished_at: Date, playerId: number) {
   const results = await pool.query(
     "UPDATE contest_player SET finished_at = ? WHERE id=?",
-    [new Date(), playerId]
+    [finished_at, playerId]
   );
 }
 
@@ -148,6 +148,7 @@ const ProgressSchema = z.object({
   id: z.number(),
   name: z.string(),
   progress: z.string().nullable(),
+  finished_at: z.date().nullable(),
 });
 const ProblemIdSchema = z.object({
   id: z.number(),

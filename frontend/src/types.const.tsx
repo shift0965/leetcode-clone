@@ -59,6 +59,7 @@ export interface Player {
 export interface PlayerProgress {
   id: number;
   name: string;
+  finishedAt: Date | null;
   progress: {
     id: number;
     passed: boolean;

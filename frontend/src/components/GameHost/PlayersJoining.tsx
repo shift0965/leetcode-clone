@@ -18,15 +18,16 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          contestId: gameId,
+          gameId: gameId,
         }),
       })
         .then((response) => response.json())
         .then((results) => {
+          console.log(results);
           setPlayers(results.players);
         });
 
-      socket.emit("ws-host-createGame", { gameId: gameId });
+      socket.emit("ws-host-joinGame", { gameId: gameId });
       socket.on(
         "ws-host-playerJoinGame",
         function (newPlayer: { id: number; name: string }) {

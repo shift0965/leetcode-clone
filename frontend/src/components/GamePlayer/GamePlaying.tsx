@@ -1,41 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { GET_CONTEST_PROBLEMS, GET_PLAYER_PROGRESS } from "../../api.const";
+import { useEffect, useState, useRef } from "react";
 import {
-  Player,
-  GamePlayerState,
-  PlayerProgress,
-  ProblemDetails,
-} from "../../types.const";
+  GET_CONTEST_PROBLEMS,
+  GET_PLAYER_PROGRESS,
+  WEB_SOCKET_URL,
+} from "../../api.const";
+import { Player, PlayerProgress, ProblemDetails } from "../../types.const";
 import Split from "react-split";
 import Playground from "../Workspace/Playground";
 import { BsCheck2Circle } from "react-icons/bs";
 import DescriptionArea from "../Workspace/DescriptionArea";
+import { io } from "socket.io-client";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface GamePlayingProps {
   player: Player;
-  setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
+  //setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
 }
 
-const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
+const GamePlaying = ({ player }: GamePlayingProps) => {
   const [problems, setProblems] = useState<ProblemDetails[]>([]);
   const [currentProblemId, setCurrentProblemId] = useState<number>(0);
   const [myProgress, setMyProgress] = useState<PlayerProgress>();
-  const [playersProgress, setPlayersProgress] = useState<PlayerProgress[]>([]);
+  //const [playersProgress, setPlayersProgress] = useState<PlayerProgress[]>([]);
+  const socket = useRef(io(WEB_SOCKET_URL)).current;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (player) {
-      fetch(GET_CONTEST_PROBLEMS, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player?.gameId,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setProblems(data.problems);
-        });
-    }
+    fetch(GET_CONTEST_PROBLEMS, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        gameId: player?.gameId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setProblems(data.problems);
+      });
+
+    socket.emit("ws-player-joinGame", { gameId: player.gameId });
+    socket.on("ws-player-hostTerminateGame", function () {
+      toast.info("Host terminated game");
+      localStorage.removeItem("playerData");
+      navigate("/");
+    });
+
+    return () => {
+      socket.off("ws-player-hostTerminateGame");
+    };
   }, []);
 
   useEffect(() => {
@@ -49,28 +62,35 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
       })
         .then((response) => response.json())
         .then((results) => {
-          setPlayersProgress([]);
+          //setPlayersProgress([]);
           results.progress.forEach(
-            (res: { id: number; name: string; progress: string }) => {
+            (res: {
+              id: number;
+              name: string;
+              progress: string;
+              finishedAt: Date;
+            }) => {
               if (res.id === player.id) {
                 setMyProgress({
                   id: res.id,
                   name: res.name,
+                  finishedAt: res.finishedAt,
                   progress: res.progress
                     ? JSON.parse(res.progress)
                     : problems.map((p) => ({ id: p.id, passed: false })),
                 });
-                setPlayersProgress((prev) => [
-                  ...prev,
-                  {
-                    id: res.id,
-                    name: res.name,
-                    progress: res.progress
-                      ? JSON.parse(res.progress)
-                      : problems.map((p) => ({ id: p.id, passed: false })),
-                  },
-                ]);
               }
+              // setPlayersProgress((prev) => [
+              //   ...prev,
+              //   {
+              //     id: res.id,
+              //     name: res.name,
+              //     finishedAt: res.finishedAt,
+              //     progress: res.progress
+              //       ? JSON.parse(res.progress)
+              //       : problems.map((p) => ({ id: p.id, passed: false })),
+              //   },
+              // ]);
             }
           );
         });
@@ -116,7 +136,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
             problem={problems[currentProblemId]}
             gameMode={true}
             gameData={{
-              playerId: player.id,
+              player: player,
               myProgress: myProgress,
               setMyProgress: setMyProgress,
             }}

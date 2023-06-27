@@ -12,7 +12,7 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
   return (
     <div className={`${showTestcases ? "block" : "hidden"} py-3`}>
       <div className="flex">
-        {problem.exampleCases.map((e, index) => (
+        {problem.exampleCases.map((_, index) => (
           <div
             className="mr-2 items-start mt-2 "
             key={index}
@@ -35,7 +35,7 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
         ))}
       </div>
       <div className="mt-4">
-        {problem.exampleCases.map((example, exampleId) => {
+        {problem.exampleCases.map((_, exampleId) => {
           return (
             <div
               key={exampleId}

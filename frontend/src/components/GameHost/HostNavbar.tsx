@@ -64,9 +64,11 @@ const HostNavbar = ({ gameId, setCurrentState }: HostNavbarProps) => {
   return (
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
       <div className="flex w-full items-center justify-between">
-        <Link to="/" className="h-[22px] flex-1">
-          <img src="/logo-full.png" alt="Logo" className="h-full" />
-        </Link>
+        <div className="flex-1 h-[22px]">
+          <Link to="/" className=" h-full block w-32">
+            <img src="/logo-full.png" alt="Logo" className="h-full" />
+          </Link>
+        </div>
 
         <div className="relative h-11 border-white flex-1 flex justify-center">
           <img src="./gameHost.png" alt="user" className=" h-full"></img>

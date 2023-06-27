@@ -5,6 +5,7 @@ import {
   publishPlayerExitContest,
   publishHostTerminateContest,
   publishHostStartContest,
+  publishPlayerUpdateProgress,
 } from "../models/redis.model.js";
 import {
   createContest,
@@ -35,7 +36,7 @@ export async function hostCheckContest(
     const userId = res.locals.userId;
     const contest = await checkContestStateByUser(userId);
     if (!contest) return res.send({ founded: false });
-    res.send({
+    return res.send({
       founded: true,
       contestId: contest.contestId,
       state: contest.state,
@@ -126,7 +127,7 @@ export async function playerJoinContest(
     const name = req.body.playerName;
 
     const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
-    if (contest === undefined)
+    if (contest === undefined || contest.state === "ended")
       return res.status(404).send({ errors: "Game Id not exist" });
 
     const playerId = await insertPlayerIntoContest(contest.contestId, name);
@@ -211,7 +212,8 @@ export async function playerSubmit(
   res: Response,
   next: NextFunction
 ) {
-  const { problemId, language, code, playerId, progress } = req.body;
+  const { problemId, language, code, gameId, playerId, progress, finishedAt } =
+    req.body;
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
@@ -226,18 +228,30 @@ export async function playerSubmit(
   type Progress = { id: number; passed: boolean };
   try {
     const result = await verifyTestCases(testCases, filePath);
+
+    if (finishedAt)
+      return res
+        .status(200)
+        .send({ ...result, progress: progress, finishedAt: finishedAt });
+
+    let newFinishedAt = null;
     if (result.passed) {
       progress.forEach((pro: Progress) => {
-        if (pro.id === problemId) {
+        if (pro.id === problemId && !pro.passed) {
           pro.passed = true;
         }
       });
-      setPlayerProgressById(playerId, JSON.stringify(progress));
     }
+    setPlayerProgressById(playerId, JSON.stringify(progress));
+
     if (progress.reduce((acc: boolean, cur: Progress) => cur.passed && acc)) {
-      setPlayerFinished(playerId);
+      newFinishedAt = new Date();
+      setPlayerFinished(newFinishedAt, playerId);
     }
-    return res.status(200).send({ ...result, progress: progress });
+    publishPlayerUpdateProgress(gameId, playerId, progress, finishedAt);
+    return res
+      .status(200)
+      .send({ ...result, progress: progress, finishedAt: finishedAt });
   } catch (err) {
     next(err);
   } finally {

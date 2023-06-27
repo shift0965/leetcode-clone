@@ -39,9 +39,11 @@ const Navbar = ({ isWorkspace = false }) => {
           !isWorkspace ? "max-w-[1200px] mx-auto" : ""
         }`}
       >
-        <Link to="/" className="h-[22px] flex-1">
-          <img src="/logo-full.png" alt="Logo" className="h-full" />
-        </Link>
+        <div className="flex-1 h-[22px]">
+          <Link to="/" className=" h-full block w-32">
+            <img src="/logo-full.png" alt="Logo" className="h-full" />
+          </Link>
+        </div>
 
         <div className="flex items-center space-x-4 flex-1 justify-end">
           {isWorkspace && <Timer />}

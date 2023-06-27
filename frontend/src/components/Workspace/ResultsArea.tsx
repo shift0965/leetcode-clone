@@ -61,7 +61,7 @@ const ResultsArea = ({
             )}
           </h1>
           <div className="flex mt-1">
-            {problem.exampleCases.map((e, exampleId) => (
+            {problem.exampleCases.map((_, exampleId) => (
               <div
                 className="mr-2 items-start mt-2 "
                 key={exampleId}

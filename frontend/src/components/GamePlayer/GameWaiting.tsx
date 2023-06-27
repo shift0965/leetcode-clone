@@ -67,6 +67,7 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
           console.log("Leaved");
         }
       );
+
       socket.on("ws-player-hostTerminateGame", function () {
         toast.info("Host terminated game");
         localStorage.removeItem("playerData");

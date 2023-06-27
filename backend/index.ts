@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import workspaceRouter from "./routes/workspace.route.js";
 import problemRouter from "./routes/problem.route.js";
 import contestRouter from "./routes/contest.route.js";
 import userRouter from "./routes/user.route.js";
+import path from "path";
 
 import cors from "cors";
 import dotenv from "dotenv";
@@ -27,15 +28,15 @@ app.use("/api/1.0", [
   userRouter,
 ]);
 
-app.post("/reInsertData", async (req: Request, res: Response) => {
-  await reInsertData();
-  res.send("OK");
-});
+// app.post("/reInsertData", async (req: Request, res: Response) => {
+//   await reInsertData();
+//   res.send("OK");
+// });
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+app.use("/", express.static(path.resolve("../frontend/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve("../frontend/dist/index.html"));
 });
-
 app.use(errorHandler);
 
 app.listen(port, () => {

@@ -29,7 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("ws-host-createGame", (msg) => {
+  socket.on("ws-host-joinGame", (msg) => {
     socket.join(msg.gameId);
   });
   socket.on("ws-player-joinGame", (msg) => {
@@ -41,7 +41,8 @@ redisClient.subscribe(
   "ps-player-joinGame",
   "ps-player-exitGame",
   "ps-host-terminateGame",
-  "ps-host-startGame"
+  "ps-host-startGame",
+  "ps-player-updateProgress"
 );
 redisClient.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
@@ -58,6 +59,12 @@ redisClient.on("message", (channel: string, message: string) => {
     io.to(response.contestId).emit("ws-player-hostTerminateGame");
   } else if (channel === "ps-host-startGame") {
     io.to(response.contestId).emit("ws-player-hostStartGame");
+  } else if (channel === "ps-player-updateProgress") {
+    io.to(response.contestId).emit("ws-host-updateProgress", {
+      playerId: response.playerId,
+      progress: response.progress,
+      finishedAt: response.finishedAt,
+    });
   }
 });
 

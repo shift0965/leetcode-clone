@@ -14,7 +14,6 @@ const GamePlayer = () => {
   useEffect(() => {
     const playerDataJSON = localStorage.getItem("playerData");
     if (!playerDataJSON) {
-      console.log("No player data");
       setCurrentState("GameJoining");
     } else {
       const playerData: Player = JSON.parse(playerDataJSON);
@@ -58,7 +57,7 @@ const GamePlayer = () => {
         <GameWaiting setCurrentState={setCurrentState} player={player} />
       )}
       {currentState === "GamePlaying" && player && (
-        <GamePlaying setCurrentState={setCurrentState} player={player} />
+        <GamePlaying player={player} />
       )}
     </div>
   );

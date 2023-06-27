@@ -12,6 +12,7 @@ import {
   SubmitResult,
   ProblemDetails,
   PlayerProgress,
+  Player,
 } from "../../types.const";
 import {
   RUN_EXAMPLE_CASES,
@@ -24,7 +25,7 @@ type PlaygroundProps = {
   problem: ProblemDetails | undefined;
   gameMode?: boolean;
   gameData?: {
-    playerId: number;
+    player: Player;
     myProgress: PlayerProgress;
     setMyProgress: React.Dispatch<
       React.SetStateAction<PlayerProgress | undefined>
@@ -114,8 +115,10 @@ const Playground = ({
               problemId: problem?.id || 0,
               language: "js",
               code: userCode,
-              playerId: gameData?.playerId,
+              playerId: gameData?.player.id,
+              gameId: gameData?.player.gameId,
               progress: gameData?.myProgress.progress,
+              finishedAt: gameData?.myProgress.finishedAt,
             }
           : {
               problemId: problem?.id || 0,
@@ -140,6 +143,7 @@ const Playground = ({
             id: gameData.myProgress.id,
             name: gameData.myProgress.name,
             progress: result.progress,
+            finishedAt: result.finishedAt,
           });
         }
         if (result.passed) {
