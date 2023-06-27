@@ -14,6 +14,12 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
   const [gameId, setGameId] = useState<string>("");
 
   const handleJoinRoom = () => {
+    if (playerName === "") return toast.error("Name can not be empty");
+    if (playerName.length > 20) return toast.error("Name too long");
+    if (gameId === "") return toast.error("Game id can not be empty");
+    if (Number(gameId) > 100000 || Number(gameId) < 0)
+      return toast.error("Invalid game id");
+
     fetch(PLAYER_JOIN_GAME, {
       method: "POST",
       headers: { "content-type": "application/json" },
