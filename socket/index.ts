@@ -1,10 +1,8 @@
 import express, { Express, Request, Response } from "express";
 import http from "http";
-import dotenv from "dotenv";
 import { Server } from "socket.io";
 import cors from "cors";
 import { redisClient } from "./model/redis.model.js";
-dotenv.config();
 
 interface Player {
   id: string;
