@@ -9,7 +9,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 //insert data
-import { reInsertData } from "./devFolder/devFuncs.js";
+// import { reInsertData } from "./devFolder/devFuncs.js";
 import { errorHandler } from "./helpers/errorHandler.js";
 
 dotenv.config();
