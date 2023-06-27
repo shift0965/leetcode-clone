@@ -17,6 +17,23 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
   const [problems, setProblems] = useState<ProblemDetails[]>([]);
   const socket = useRef(io(WEB_SOCKET_URL)).current;
 
+  const sortProgress = () => {
+    setPlayersProgress((prev) => {
+      prev.sort((a, b) => {
+        const scoreA = a.progress.reduce(
+          (acc, cur) => (cur.passed ? acc + 1 : acc),
+          0
+        );
+        const scoreB = b.progress.reduce(
+          (acc, cur) => (cur.passed ? acc + 1 : acc),
+          0
+        );
+        return scoreB - scoreA;
+      });
+      return [...prev];
+    });
+  };
+
   useEffect(() => {
     fetch(GET_CONTEST_PROBLEMS, {
       method: "POST",
@@ -51,6 +68,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           });
           return [...prev];
         });
+        sortProgress();
       }
     );
 
@@ -99,6 +117,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
                     : problems.map((p) => ({ id: p.id, passed: false })),
                 },
               ]);
+              sortProgress();
             }
           );
         });
