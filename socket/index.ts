@@ -27,7 +27,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
   socket.on("ws-host-joinGame", (msg) => {
     socket.join(msg.gameId);
   });
@@ -45,7 +44,6 @@ redisClient.subscribe(
 );
 redisClient.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
-  console.log(response);
   if (channel === "ps-player-joinGame") {
     io.to(response.contestId).emit("ws-host-playerJoinGame", {
       id: response.id,
