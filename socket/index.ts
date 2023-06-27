@@ -44,6 +44,7 @@ redisClient.subscribe(
 );
 redisClient.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
+  console.log(response);
   if (channel === "ps-player-joinGame") {
     io.to(response.contestId).emit("ws-host-playerJoinGame", {
       id: response.id,
