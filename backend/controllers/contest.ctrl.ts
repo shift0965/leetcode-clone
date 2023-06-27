@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { getTestCasesByProblemId } from "../models/problem.model.js";
 import {
   publishPlayerJoinContest,
   publishPlayerExitContest,
   publishHostTerminateContest,
+  publishHostStartContest,
 } from "../models/redis.model.js";
 import {
   createContest,
@@ -14,7 +15,16 @@ import {
   getPlayersByContestId,
   endContestByIdAndUserId,
   ExitContestByIdAndPlayerId,
+  startContestByIdAndUserId,
+  getContestProblemsById,
+  getPlayersProgressById,
+  setPlayerProgressById,
+  setPlayerFinished,
 } from "../models/contest.model.js";
+
+import { getProblemDetailsById } from "../models/problem.model.js";
+import { generateFile, removeFile } from "../helpers/filesHelper.js";
+import { verifyTestCases } from "../helpers/runCode.js";
 
 export async function hostCheckContest(
   req: Request,
@@ -56,7 +66,7 @@ export async function getPlayers(
   next: NextFunction
 ) {
   try {
-    const contestId = req.body.contestId;
+    const contestId = req.body.gameId;
     const players = await getPlayersByContestId(contestId);
     res.send({
       players: players.map((player) => ({
@@ -144,5 +154,93 @@ export async function playerExitContest(
     res.sendStatus(200);
   } catch (err) {
     next(err);
+  }
+}
+
+export async function hostStartContest(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = res.locals.userId;
+    const contestId = req.body.gameId;
+    await startContestByIdAndUserId(contestId, userId);
+    publishHostStartContest(contestId);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getProblems(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = res.locals.userId;
+    const contestId = req.body.gameId;
+    const problems = await getContestProblemsById(contestId);
+    const problemDetails = await Promise.all(
+      problems.map((id) => getProblemDetailsById(id))
+    );
+
+    res.send({ problems: problemDetails });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getPlayersProgress(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const contestId = req.body.gameId;
+    const progress = await getPlayersProgressById(contestId);
+    res.send({ progress: progress });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function playerSubmit(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { problemId, language, code, playerId, progress } = req.body;
+  const testCasesData = await getTestCasesByProblemId(problemId);
+  if (testCasesData === null)
+    return res.status(400).send({ errors: "Problem not found" });
+  const { functionName, testCases } = testCasesData;
+  const ifRecordConsole = false;
+  const filePath = await generateFile(
+    language,
+    code,
+    functionName,
+    ifRecordConsole
+  );
+  type Progress = { id: number; passed: boolean };
+  try {
+    const result = await verifyTestCases(testCases, filePath);
+    if (result.passed) {
+      progress.forEach((pro: Progress) => {
+        if (pro.id === problemId) {
+          pro.passed = true;
+        }
+      });
+      setPlayerProgressById(playerId, JSON.stringify(progress));
+    }
+    if (progress.reduce((acc: boolean, cur: Progress) => cur.passed && acc)) {
+      setPlayerFinished(playerId);
+    }
+    return res.status(200).send({ ...result, progress: progress });
+  } catch (err) {
+    next(err);
+  } finally {
+    await removeFile(filePath);
   }
 }

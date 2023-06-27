@@ -41,3 +41,12 @@ export async function publishHostTerminateContest(contestId: number) {
     })
   );
 }
+
+export async function publishHostStartContest(contestId: number) {
+  client.publish(
+    "ps-host-startGame",
+    JSON.stringify({
+      contestId: contestId,
+    })
+  );
+}

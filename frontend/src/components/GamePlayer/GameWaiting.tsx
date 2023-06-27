@@ -1,5 +1,9 @@
-import { Player } from "../../types.const";
-import { GET_CONTEST_PLAYERS, WEB_SOCKET_URL } from "../../api.const";
+import { Player, GamePlayerState, ProblemDetails } from "../../types.const";
+import {
+  GET_CONTEST_PLAYERS,
+  WEB_SOCKET_URL,
+  GET_CONTEST_PROBLEMS,
+} from "../../api.const";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
@@ -8,8 +12,9 @@ import PlayersLobby from "../GameHost/PlayersLobby";
 
 interface GameWaitingProps {
   player: Player | undefined;
+  setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
 }
-const GameWaiting = ({ player }: GameWaitingProps) => {
+const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
   const socket = useRef(io(WEB_SOCKET_URL)).current;
   const [players, setPlayers] = useState<Player[]>([]);
   const navigate = useNavigate();
@@ -20,12 +25,27 @@ const GameWaiting = ({ player }: GameWaitingProps) => {
         method: "post",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          contestId: player.gameId,
+          gameId: player.gameId,
         }),
       })
         .then((response) => response.json())
         .then((results) => {
           setPlayers(results.players);
+        });
+
+      //clean local storage
+      fetch(GET_CONTEST_PROBLEMS, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          gameId: player.gameId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          data.problems.forEach((problem: ProblemDetails) => {
+            localStorage.removeItem(`code?problem_id=${problem?.id}&gameMode`);
+          });
         });
 
       socket.emit("ws-player-joinGame", { gameId: player.gameId });
@@ -53,10 +73,16 @@ const GameWaiting = ({ player }: GameWaitingProps) => {
         navigate("/");
       });
 
+      socket.on("ws-player-hostStartGame", function () {
+        toast("🔥 Game Started !");
+        setCurrentState("GamePlaying");
+      });
+
       return () => {
         socket.off("ws-host-playerExitGame");
         socket.off("ws-host-playerJoinGame");
         socket.off("ws-player-hostTerminateGame");
+        socket.off("ws-player-hostStartGame");
       };
     }
   }, []);

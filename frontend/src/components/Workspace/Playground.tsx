@@ -1,21 +1,42 @@
-import { ProblemDetails } from "../../types.const";
-import { useState, useEffect } from "react";
 import { IoRefreshOutline } from "react-icons/io5";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
+import { useState, useEffect } from "react";
 import Split from "react-split";
 import PlaygroundFooter from "./PlaygroundFooter";
-import { RUN_EXAMPLE_CASES, RUN_TEST_CASES } from "../../api.const";
 import TestCasesArea from "./TestCasesArea";
 import ResultsArea from "./ResultsArea";
-import { RunResult, ExecutionError, SubmitResult } from "../../types.const";
 import CodeMirror from "./CodeMirror";
+import {
+  RunResult,
+  ExecutionError,
+  SubmitResult,
+  ProblemDetails,
+  PlayerProgress,
+} from "../../types.const";
+import {
+  RUN_EXAMPLE_CASES,
+  RUN_TEST_CASES,
+  PLAYER_SUBMIT,
+} from "../../api.const";
+import { toast } from "react-toastify";
 
 type PlaygroundProps = {
   problem: ProblemDetails | undefined;
+  gameMode?: boolean;
+  gameData?: {
+    playerId: number;
+    myProgress: PlayerProgress;
+    setMyProgress: React.Dispatch<
+      React.SetStateAction<PlayerProgress | undefined>
+    >;
+  };
 };
 
-const Playground = ({ problem }: PlaygroundProps) => {
-  const [language, setLanguage] = useState("Javascript");
+const Playground = ({
+  problem,
+  gameMode = false,
+  gameData = undefined,
+}: PlaygroundProps) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [userCode, setUserCode] = useState<string>("");
   const [showTestcases, setShowTestcases] = useState(true);
@@ -81,16 +102,27 @@ const Playground = ({ problem }: PlaygroundProps) => {
 
   const handleSubmit = () => {
     pendingStart();
-    fetch(RUN_TEST_CASES, {
+    const endPoint = gameMode ? PLAYER_SUBMIT : RUN_TEST_CASES;
+    fetch(endPoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        problemId: problem?.id || 0,
-        language: "js",
-        code: userCode,
-      }),
+      body: JSON.stringify(
+        gameMode
+          ? {
+              problemId: problem?.id || 0,
+              language: "js",
+              code: userCode,
+              playerId: gameData?.playerId,
+              progress: gameData?.myProgress.progress,
+            }
+          : {
+              problemId: problem?.id || 0,
+              language: "js",
+              code: userCode,
+            }
+      ),
     })
       .then((response) => {
         if (response.status !== 200) {
@@ -102,6 +134,17 @@ const Playground = ({ problem }: PlaygroundProps) => {
       })
       .then((result) => {
         setSubmitResult(result);
+        console.log(result);
+        if (gameMode) {
+          gameData?.setMyProgress({
+            id: gameData.myProgress.id,
+            name: gameData.myProgress.name,
+            progress: result.progress,
+          });
+        }
+        if (result.passed) {
+          toast.success("Passed !");
+        }
       })
       .catch((error) => {
         setExecError(error);
@@ -112,7 +155,10 @@ const Playground = ({ problem }: PlaygroundProps) => {
   };
 
   const onChangeCode = (code: string) => {
-    localStorage.setItem(`leetclone/code?problem_id=${problem?.id}`, code);
+    localStorage.setItem(
+      `code?problem_id=${problem?.id}&${gameMode && "gameMode"}`,
+      code
+    );
     setUserCode(code);
   };
 
@@ -123,7 +169,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
   useEffect(() => {
     if (problem) {
       const storedCode = localStorage.getItem(
-        `leetclone/code?problem_id=${problem.id}`
+        `code?problem_id=${problem.id}&${gameMode && "gameMode"}`
       );
       if (storedCode !== null) {
         setUserCode(storedCode);
@@ -140,7 +186,7 @@ const Playground = ({ problem }: PlaygroundProps) => {
           <div className="flex items-center justify-between bg-dark-layer-2 h-10 w-full">
             <div className="flex items-center text-white">
               <button className="flex cursor-pointer items-center rounded-lg bg-dark-fill-3 text-dark-label-2 px-2 py-1 hover:bg-dark-fill-2">
-                {language}
+                JavaScript
               </button>
             </div>
             <div className="flex items-center m-2">

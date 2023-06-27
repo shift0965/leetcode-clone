@@ -1,15 +1,41 @@
 import { FiTriangle, FiCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { HOST_SHOT_DOWN } from "../../api.const";
+import { HOST_SHOT_DOWN, HOST_START_GAME } from "../../api.const";
 import { toast } from "react-toastify";
+import { GameHostState } from "../../types.const";
 
 interface HostNavbarProps {
   gameId: number | undefined;
+  setCurrentState: React.Dispatch<React.SetStateAction<GameHostState>>;
 }
 
-const HostNavbar = ({ gameId }: HostNavbarProps) => {
+const HostNavbar = ({ gameId, setCurrentState }: HostNavbarProps) => {
   const navigate = useNavigate();
+
+  const handleStartGame = () => {
+    const userDataJSON = localStorage.getItem("userData");
+    if (userDataJSON && gameId) {
+      const userToken = JSON.parse(userDataJSON).access_token;
+      fetch(HOST_START_GAME, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify({
+          gameId: gameId,
+        }),
+      }).then((response) => {
+        if (response.status === 200) {
+          toast("🔥 Game Started !");
+        } else {
+          toast.error("Start Game failed");
+        }
+      });
+      setCurrentState("GameWatching");
+    }
+  };
 
   const handleShotDown = () => {
     const userDataJSON = localStorage.getItem("userData");
@@ -49,7 +75,10 @@ const HostNavbar = ({ gameId }: HostNavbarProps) => {
           </div>
         </div>
         <div className="flex items-center space-x-4 flex-1 justify-end">
-          <button className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all">
+          <button
+            className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all"
+            onClick={handleStartGame}
+          >
             <div className="mr-2">Start Game</div>
             <FiCircle />
           </button>

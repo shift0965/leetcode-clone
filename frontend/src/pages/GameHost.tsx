@@ -12,7 +12,6 @@ import HostNavbar from "../components/GameHost/HostNavbar";
 const GameHost = () => {
   const navigate = useNavigate();
   const [gameId, setGameId] = useState<number>();
-
   const [currentState, setCurrentState] = useState<GameHostState>("Loading");
 
   useEffect(() => {
@@ -35,6 +34,7 @@ const GameHost = () => {
             setGameId(result.contestId);
             setCurrentState(() => {
               if (result.state === "created") return "PlayersJoining";
+              else if (result.state === "started") return "GameWatching";
               return "GameCreating";
             });
           } else {
@@ -49,7 +49,7 @@ const GameHost = () => {
       {currentState === "GameCreating" ? (
         <Navbar />
       ) : (
-        <HostNavbar gameId={gameId} />
+        <HostNavbar gameId={gameId} setCurrentState={setCurrentState} />
       )}
       {currentState === "GameCreating" && (
         <GameCreating setGameId={setGameId} setCurrentState={setCurrentState} />

@@ -56,6 +56,15 @@ export interface Player {
   gameId: number;
 }
 
+export interface PlayerProgress {
+  id: number;
+  name: string;
+  progress: {
+    id: number;
+    passed: boolean;
+  }[];
+}
+
 //atoms
 export interface AuthModalState {
   isOpen: boolean;

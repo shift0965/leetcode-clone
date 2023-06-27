@@ -40,7 +40,8 @@ io.on("connection", (socket) => {
 redisClient.subscribe(
   "ps-player-joinGame",
   "ps-player-exitGame",
-  "ps-host-terminateGame"
+  "ps-host-terminateGame",
+  "ps-host-startGame"
 );
 redisClient.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
@@ -55,6 +56,8 @@ redisClient.on("message", (channel: string, message: string) => {
     });
   } else if (channel === "ps-host-terminateGame") {
     io.to(response.contestId).emit("ws-player-hostTerminateGame");
+  } else if (channel === "ps-host-startGame") {
+    io.to(response.contestId).emit("ws-player-hostStartGame");
   }
 });
 

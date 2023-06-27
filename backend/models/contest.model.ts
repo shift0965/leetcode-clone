@@ -93,12 +93,65 @@ export async function ExitContestByIdAndPlayerId(
   contestId: number,
   playerId: number
 ) {
-  console.log(contestId, playerId);
   await pool.query(
     "UPDATE contest_player SET state = ? WHERE id = ? AND contest_id = ?",
     ["exited", playerId, contestId]
   );
 }
+
+export async function startContestByIdAndUserId(
+  contestId: number,
+  userId: string
+) {
+  const results = await pool.query(
+    "UPDATE contest SET state = ?, started_at = ? WHERE id = ? AND user_id = ?",
+    ["started", new Date(), contestId, userId]
+  );
+}
+
+export async function getContestProblemsById(contestId: number) {
+  const results = await pool.query(
+    "SELECT cp.problem_id AS id FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id WHERE c.id = ? AND c.state != ?",
+    [contestId, "ended"]
+  );
+  const problems = z.array(ProblemIdSchema).parse(results[0]);
+  return problems.map((problem) => problem.id);
+}
+
+export async function getPlayersProgressById(contestId: number) {
+  const results = await pool.query(
+    "SELECT id, name, progress FROM contest_player WHERE contest_id=?",
+    [contestId]
+  );
+  const progress = z.array(ProgressSchema).parse(results[0]);
+  return progress;
+}
+
+export async function setPlayerProgressById(
+  playerId: number,
+  progress: string
+) {
+  const results = await pool.query(
+    "UPDATE contest_player SET progress = ? WHERE id=?",
+    [progress, playerId]
+  );
+}
+
+export async function setPlayerFinished(playerId: number) {
+  const results = await pool.query(
+    "UPDATE contest_player SET finished_at = ? WHERE id=?",
+    [new Date(), playerId]
+  );
+}
+
+const ProgressSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  progress: z.string().nullable(),
+});
+const ProblemIdSchema = z.object({
+  id: z.number(),
+});
 
 const ContestIdSchema = z.object({
   contestId: z.number(),

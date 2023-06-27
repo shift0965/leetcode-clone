@@ -5,6 +5,7 @@ import GameJoining from "../components/GamePlayer/GameJoining";
 import GameWaiting from "../components/GamePlayer/GameWaiting";
 import { PLAYER_CHECK_GAME } from "../api.const";
 import PlayerNavbar from "../components/GamePlayer/PlayerNavbar";
+import GamePlaying from "../components/GamePlayer/GamePlaying";
 
 const GamePlayer = () => {
   const [currentState, setCurrentState] = useState<GamePlayerState>("Loading");
@@ -17,7 +18,6 @@ const GamePlayer = () => {
       setCurrentState("GameJoining");
     } else {
       const playerData: Player = JSON.parse(playerDataJSON);
-      console.log(playerData);
       fetch(PLAYER_CHECK_GAME, {
         method: "post",
         headers: { "content-type": "application/json" },
@@ -30,8 +30,11 @@ const GamePlayer = () => {
         .then((result) => {
           setPlayer(playerData);
           if (result.founded) {
-            if (result.state === "created")
-              return setCurrentState("GameWaiting");
+            setCurrentState(() => {
+              if (result.state === "created") return "GameWaiting";
+              else if (result.state === "started") return "GamePlaying";
+              else return "GameJoining";
+            });
           } else {
             //if the game is ended
             localStorage.removeItem("playerData");
@@ -51,7 +54,12 @@ const GamePlayer = () => {
       {currentState === "GameJoining" && (
         <GameJoining setCurrentState={setCurrentState} setPlayer={setPlayer} />
       )}
-      {currentState === "GameWaiting" && <GameWaiting player={player} />}
+      {currentState === "GameWaiting" && player && (
+        <GameWaiting setCurrentState={setCurrentState} player={player} />
+      )}
+      {currentState === "GamePlaying" && player && (
+        <GamePlaying setCurrentState={setCurrentState} player={player} />
+      )}
     </div>
   );
 };
