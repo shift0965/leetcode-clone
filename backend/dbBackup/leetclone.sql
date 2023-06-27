@@ -35,9 +35,9 @@ CREATE TABLE `contest` (
   `user_id` int DEFAULT NULL,
   `time_limit_mins` int DEFAULT NULL,
   `state` enum('created','started','ended') DEFAULT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `started_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `contest` (
 
 LOCK TABLES `contest` WRITE;
 /*!40000 ALTER TABLE `contest` DISABLE KEYS */;
-INSERT INTO `contest` VALUES (3,4,60,'ended','2023-06-24 11:15:28'),(4,4,100,'ended','2023-06-25 11:43:34'),(5,4,60,'ended','2023-06-25 12:37:17'),(6,4,60,'ended','2023-06-25 12:39:50'),(7,4,60,'ended','2023-06-25 22:09:58'),(8,4,60,'ended','2023-06-25 22:11:28'),(9,4,60,'ended','2023-06-25 22:12:01'),(10,4,60,'ended','2023-06-25 22:13:33'),(11,4,60,'ended','2023-06-25 22:14:56'),(12,4,60,'ended','2023-06-26 13:46:29'),(13,4,60,'ended','2023-06-26 13:55:11'),(14,4,100,'ended','2023-06-26 14:46:12');
 /*!40000 ALTER TABLE `contest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,8 +61,10 @@ CREATE TABLE `contest_player` (
   `contest_id` int DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `state` enum('joined','exited') NOT NULL,
+  `progress` varchar(255) DEFAULT NULL,
+  `finished_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +73,6 @@ CREATE TABLE `contest_player` (
 
 LOCK TABLES `contest_player` WRITE;
 /*!40000 ALTER TABLE `contest_player` DISABLE KEYS */;
-INSERT INTO `contest_player` VALUES (1,3,'Jackie','exited'),(2,3,'Jackie','exited'),(3,3,'Jackie','exited'),(4,3,'Jackie','exited'),(5,3,'Jackie','exited'),(6,3,'Jackie','joined'),(7,4,'Jackie','exited'),(8,4,'Jackie','exited'),(9,6,'Jackie','exited'),(10,6,'Ken','exited'),(11,6,'Jackie','exited'),(12,6,'Karry','exited'),(13,6,'aseopfijaspoeijfas','exited'),(14,6,'Jackie cool','exited'),(15,6,'Jackie','exited'),(16,6,'asefasefasev afsefasefasefasefase','exited'),(17,6,'Jackie','exited'),(18,6,'Jackie','exited'),(19,6,'Jackie','exited'),(20,6,'Jackie','joined'),(21,7,'Jackie','joined'),(22,9,'Jackie','exited'),(23,10,'Jackie','exited'),(24,11,'Jackie','joined'),(25,12,'Jackie','exited'),(26,12,'Jackie','exited'),(27,12,'Jackie','exited'),(28,12,'Jackie','exited'),(29,13,'Jackie','exited'),(30,13,'Howard','joined'),(31,14,'Jackie','exited'),(32,14,'Jackie','joined');
 /*!40000 ALTER TABLE `contest_player` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +88,7 @@ CREATE TABLE `contest_problem` (
   `contest_id` int DEFAULT NULL,
   `problem_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,6 @@ CREATE TABLE `contest_problem` (
 
 LOCK TABLES `contest_problem` WRITE;
 /*!40000 ALTER TABLE `contest_problem` DISABLE KEYS */;
-INSERT INTO `contest_problem` VALUES (1,5,25),(2,5,27),(3,5,27),(4,6,25),(5,6,26),(6,6,27),(7,7,25),(8,7,25),(9,8,25),(10,8,25),(11,9,25),(12,9,25),(13,11,25),(14,11,26),(15,12,26),(16,12,27),(17,13,26),(18,13,27),(19,14,25),(20,14,26),(21,15,26),(22,15,27),(23,16,26),(24,16,27),(25,18,25),(26,18,26),(27,19,25),(28,20,26),(29,20,27),(30,21,26),(31,21,25),(32,22,26),(33,23,25),(34,24,25),(35,25,26),(36,1,26),(37,2,26),(38,3,25),(39,4,25),(40,4,26),(41,5,25),(42,5,26),(43,6,25),(44,6,26),(45,7,25),(46,8,25),(47,9,25),(48,10,25),(49,11,25),(50,12,26),(51,13,25),(52,14,26),(53,14,25);
 /*!40000 ALTER TABLE `contest_problem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,4 +300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-26 14:58:55
+-- Dump completed on 2023-06-27 17:33:34
