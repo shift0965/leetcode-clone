@@ -81,8 +81,25 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       }
     );
 
+    socket.on(
+      "ws-host-playerJoinGame",
+      function (newPlayer: { id: number; name: string }) {
+        setPlayersProgress((prev) => [
+          ...prev,
+          {
+            id: newPlayer.id,
+            name: newPlayer.name,
+            finishedAt: null,
+            progress: problems.map((p) => ({ id: p.id, passed: false })),
+          },
+        ]);
+      }
+    );
+
     return () => {
-      socket.off("ws-player-updateProgress");
+      socket.off("ws-host-updateProgress");
+      socket.off("ws-host-playerJoinGame");
+      socket.off("ws-host-playerExitGame");
     };
   }, []);
 
@@ -127,32 +144,39 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
   return (
     <div>
       <div className=" text-dark-gray-8 w-96 mx-auto mt-20">
-        {playersProgress.map((player, id) => {
-          const total = player.progress.length;
-          const score = player.progress.reduce(
-            (acc, cur) => (cur.passed ? acc + 1 : acc),
-            0
-          );
-          return (
-            <div
-              className=" h-20 flex items-center bg-dark-fill-3 rounded-md px-4"
-              key={id}
-            >
-              <div className="text-2xl">{id + 1}</div>
-              <div className="h-16 w-16 bg-dark-fill-2 rounded-full flex justify-center items-center overflow-hidden ml-4">
-                <img
-                  src={`${PLAYER_AVATAR_URL}&seed=${player.name}`}
-                  alt="avatar"
-                  className="h-14"
-                />
+        <div className="mt-14">
+          <h1 className="text-4xl text-center">
+            Game Id - <strong className=" text-dark-pink">{gameId}</strong>
+          </h1>
+        </div>
+        <div className="mt-10">
+          {playersProgress.map((player, id) => {
+            const total = player.progress.length;
+            const score = player.progress.reduce(
+              (acc, cur) => (cur.passed ? acc + 1 : acc),
+              0
+            );
+            return (
+              <div
+                className="mt-2 h-20 flex items-center bg-dark-fill-3 rounded-md px-4"
+                key={id}
+              >
+                <div className="text-2xl">{id + 1}</div>
+                <div className="h-16 w-16 bg-dark-fill-2 rounded-full flex justify-center items-center overflow-hidden ml-4">
+                  <img
+                    src={`${PLAYER_AVATAR_URL}&seed=${player.name}`}
+                    alt="avatar"
+                    className="h-14"
+                  />
+                </div>
+                <div className="text-2xl ml-4">{player.name}</div>
+                <div className=" ml-auto text-xl">
+                  {score}/{total}
+                </div>
               </div>
-              <div className="text-2xl ml-4">{player.name}</div>
-              <div className=" ml-auto text-xl">
-                {score}/{total}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

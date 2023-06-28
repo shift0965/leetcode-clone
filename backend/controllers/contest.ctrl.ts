@@ -136,7 +136,7 @@ export async function playerJoinContest(
 
     publishPlayerJoinContest(contest.contestId, playerId, name);
     res.cookie("contestPlayer", { playerName: name, playerId: playerId });
-    res.send({ playerId: playerId });
+    res.send({ playerId: playerId, gameState: contest.state });
   } catch (err) {
     next(err);
   }
