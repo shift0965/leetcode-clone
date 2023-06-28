@@ -104,8 +104,8 @@ export async function startContestByIdAndUserId(
   userId: string
 ) {
   const results = await pool.query(
-    "UPDATE contest SET state = ?, started_at = ? WHERE id = ? AND user_id = ?",
-    ["started", new Date(), contestId, userId]
+    "UPDATE contest SET state = ?, started_at = ? WHERE id = ? AND user_id = ? AND state = ?",
+    ["started", new Date(), contestId, userId, "started"]
   );
 }
 

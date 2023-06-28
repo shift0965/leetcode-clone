@@ -49,7 +49,11 @@ const GameHost = () => {
       {currentState === "GameCreating" ? (
         <Navbar />
       ) : (
-        <HostNavbar gameId={gameId} setCurrentState={setCurrentState} />
+        <HostNavbar
+          gameId={gameId}
+          currentState={currentState}
+          setCurrentState={setCurrentState}
+        />
       )}
       {currentState === "GameCreating" && (
         <GameCreating setGameId={setGameId} setCurrentState={setCurrentState} />

@@ -7,10 +7,15 @@ import { GameHostState } from "../../types.const";
 
 interface HostNavbarProps {
   gameId: number | undefined;
+  currentState: GameHostState;
   setCurrentState: React.Dispatch<React.SetStateAction<GameHostState>>;
 }
 
-const HostNavbar = ({ gameId, setCurrentState }: HostNavbarProps) => {
+const HostNavbar = ({
+  gameId,
+  currentState,
+  setCurrentState,
+}: HostNavbarProps) => {
   const navigate = useNavigate();
 
   const handleStartGame = () => {
@@ -78,7 +83,10 @@ const HostNavbar = ({ gameId, setCurrentState }: HostNavbarProps) => {
         </div>
         <div className="flex items-center space-x-4 flex-1 justify-end">
           <button
-            className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all"
+            className={`flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all
+                        ${
+                          currentState === "PlayersJoining" ? "block" : "hidden"
+                        }`}
             onClick={handleStartGame}
           >
             <div className="mr-2">Start Game</div>
