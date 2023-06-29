@@ -1,15 +1,25 @@
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { PLAYER_AVATAR_URL } from "../../api.const";
-import { Player } from "../../types.const";
+import { GET_TIME_LIMIT, PLAYER_AVATAR_URL } from "../../api.const";
+import { GamePlayerState, Player } from "../../types.const";
 import { PLAYER_EXIT_GAME } from "../../api.const";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import CountDown from "../NavBars/CountDown";
 
 interface PlayerNavbarProps {
   player: Player | undefined;
+  currentState: GamePlayerState;
+  setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
 }
 
-const PlayerNavbar = ({ player }: PlayerNavbarProps) => {
+const PlayerNavbar = ({
+  player,
+  currentState,
+  setCurrentState,
+}: PlayerNavbarProps) => {
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
   const navigate = useNavigate();
   const handleExitGame = () => {
     if (player) {
@@ -25,6 +35,23 @@ const PlayerNavbar = ({ player }: PlayerNavbarProps) => {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    if (currentState === "GamePlaying" && player) {
+      fetch(GET_TIME_LIMIT, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          gameId: player.gameId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          const msLeft = result.endedAt - new Date().getTime();
+          setTimeLeft(Math.floor(msLeft / 1000));
+        });
+    }
+  }, [currentState]);
 
   return (
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
@@ -48,6 +75,7 @@ const PlayerNavbar = ({ player }: PlayerNavbarProps) => {
               </div>
             </div>
             <div className="flex items-center space-x-4 flex-1 justify-end">
+              <CountDown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
               <button
                 className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink hover:bg-dark-fill-2 transition-all"
                 onClick={handleExitGame}

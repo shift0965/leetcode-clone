@@ -15,6 +15,7 @@ export const HOST_CHECK_GAME = `${expressBase}/api/1.0/contest/hostCheckGame`;
 export const HOST_CREATE_GAME = `${expressBase}/api/1.0/contest/hostCreateGame`;
 export const HOST_SHOT_DOWN = `${expressBase}/api/1.0/contest/hostTerminateGame`;
 export const HOST_START_GAME = `${expressBase}/api/1.0/contest/hostStartGame`;
+export const HOST_GET_PLAYERS_CODE = `${expressBase}/api/1.0/contest/hostGetPlayersCode`;
 
 export const PLAYER_JOIN_GAME = `${expressBase}/api/1.0/contest/playerJoinGame`;
 export const PLAYER_CHECK_GAME = `${expressBase}/api/1.0/contest/playerCheckGame`;
@@ -26,6 +27,7 @@ export const PLAYER_SUBMIT = `${expressBase}/api/1.0/contest/playerSubmit`;
 export const GET_CONTEST_PLAYERS = `${expressBase}/api/1.0/contest/getPlayers`;
 export const GET_CONTEST_PROBLEMS = `${expressBase}/api/1.0/contest/getProblems`;
 export const GET_PLAYER_PROGRESS = `${expressBase}/api/1.0/contest/getPlayersProgress`;
+export const GET_TIME_LIMIT = `${expressBase}/api/1.0/contest/getTimeLimit`;
 
 //web socket
 export const WEB_SOCKET_URL = socketBase;

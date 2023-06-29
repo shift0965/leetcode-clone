@@ -48,7 +48,11 @@ const GamePlayer = () => {
       {currentState === "GameJoining" ? (
         <Navbar />
       ) : (
-        <PlayerNavbar player={player} />
+        <PlayerNavbar
+          player={player}
+          currentState={currentState}
+          setCurrentState={setCurrentState}
+        />
       )}
       {currentState === "GameJoining" && (
         <GameJoining setCurrentState={setCurrentState} setPlayer={setPlayer} />

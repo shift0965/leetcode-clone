@@ -30,6 +30,14 @@ type PlaygroundProps = {
     setMyProgress: React.Dispatch<
       React.SetStateAction<PlayerProgress | undefined>
     >;
+    updateCode: (
+      gameId: number,
+      playerId: number,
+      playerName: string,
+      problemId: number,
+      problemTitle: string,
+      code: string
+    ) => void;
   };
 };
 
@@ -159,10 +167,22 @@ const Playground = ({
   };
 
   const onChangeCode = (code: string) => {
-    localStorage.setItem(
-      `code?problem_id=${problem?.id}&${gameMode && "gameMode"}`,
-      code
-    );
+    if (problem) {
+      localStorage.setItem(
+        `code?problem_id=${problem.id}&${gameMode && "gameMode"}`,
+        code
+      );
+      if (gameMode) {
+        gameData?.updateCode(
+          gameData.player.gameId,
+          gameData.player.id,
+          gameData.player.name,
+          problem.id,
+          problem.title,
+          code
+        );
+      }
+    }
     setUserCode(code);
   };
 

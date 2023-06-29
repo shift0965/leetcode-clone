@@ -6,6 +6,7 @@ import {
   publishHostTerminateContest,
   publishHostStartContest,
   publishPlayerUpdateProgress,
+  getCodeByGameIdAndPlayerId,
 } from "../models/redis.model.js";
 import {
   createContest,
@@ -21,6 +22,7 @@ import {
   getPlayersProgressById,
   setPlayerProgressById,
   setPlayerFinished,
+  getTimeLimitAndStartAtById,
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
@@ -256,5 +258,40 @@ export async function playerSubmit(
     next(err);
   } finally {
     await removeFile(filePath);
+  }
+}
+
+export async function hostGetPlayersCode(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const contestId = req.body.gameId;
+    const players = await getPlayersByContestId(contestId);
+    const playersCode = await Promise.all(
+      players.map((player) =>
+        getCodeByGameIdAndPlayerId(contestId, player.id, player.name)
+      )
+    );
+    res.send({ playersCode: playersCode });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export async function getTimeLimit(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const contestId = req.body.gameId;
+    const time = await getTimeLimitAndStartAtById(contestId);
+    return res.send({
+      endedAt: time.startedAt.getTime() + time.timeLimit * 60000,
+    });
+  } catch (err) {
+    next(err);
   }
 }

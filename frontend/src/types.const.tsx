@@ -66,6 +66,17 @@ export interface PlayerProgress {
   }[];
 }
 
+export interface PlayerCode {
+  id: number;
+  name: string;
+  problems: {
+    id: number;
+    title: string;
+    code: string;
+  }[];
+  lastModifyedProblem?: number;
+}
+
 //atoms
 export interface AuthModalState {
   isOpen: boolean;

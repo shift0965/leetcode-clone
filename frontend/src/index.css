@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   @apply bg-dark-layer-2;
 }
@@ -81,7 +85,6 @@ body {
   padding-top: 5px;
   height: 100%;
   margin-bottom: 0px;
-  font-size: 14px;
 }
 
 /* code */

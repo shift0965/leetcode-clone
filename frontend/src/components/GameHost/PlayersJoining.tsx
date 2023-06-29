@@ -31,6 +31,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       socket.on(
         "ws-host-playerJoinGame",
         function (newPlayer: { id: number; name: string }) {
+          console.log(newPlayer);
           setPlayers((prev) => [
             ...prev,
             { id: newPlayer.id, name: newPlayer.name, gameId: gameId },

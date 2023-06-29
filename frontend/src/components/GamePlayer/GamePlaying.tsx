@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import {
   GET_CONTEST_PROBLEMS,
   GET_PLAYER_PROGRESS,
@@ -12,6 +12,7 @@ import DescriptionArea from "../Workspace/DescriptionArea";
 import { io } from "socket.io-client";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 interface GamePlayingProps {
   player: Player;
@@ -97,6 +98,26 @@ const GamePlaying = ({ player }: GamePlayingProps) => {
     }
   }, [problems]);
 
+  const updateCode = (
+    gameId: number,
+    playerId: number,
+    playerName: string,
+    problemId: number,
+    problemTitle: string,
+    code: string
+  ) => {
+    socket.emit("ws-player-updateCode", {
+      gameId,
+      playerId,
+      playerName,
+      problemId,
+      problemTitle,
+      code,
+    });
+  };
+
+  const debounceUpdateCode = useCallback(debounce(updateCode, 500), []);
+
   return (
     <div>
       {problems.length > 0 && myProgress && (
@@ -139,6 +160,7 @@ const GamePlaying = ({ player }: GamePlayingProps) => {
               player: player,
               myProgress: myProgress,
               setMyProgress: setMyProgress,
+              updateCode: debounceUpdateCode,
             }}
           />
         </Split>

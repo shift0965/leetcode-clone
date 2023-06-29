@@ -2,7 +2,11 @@ import { Redis } from "ioredis";
 import dotenv from "dotenv";
 dotenv.config();
 
-const client = new Redis({
+const redisPubsub = new Redis({
+  host: process.env.REDIS_HOST || "localhost",
+  port: Number(process.env.REDIS_PORT) || 6379,
+});
+const redisClient = new Redis({
   host: process.env.REDIS_HOST || "localhost",
   port: Number(process.env.REDIS_PORT) || 6379,
 });
@@ -12,7 +16,7 @@ export function publishPlayerJoinContest(
   playerId: number,
   name: string
 ) {
-  client.publish(
+  redisPubsub.publish(
     "ps-player-joinGame",
     JSON.stringify({
       contestId: contestId,
@@ -26,7 +30,7 @@ export async function publishPlayerExitContest(
   contestId: number,
   playerId: number
 ) {
-  client.publish(
+  redisPubsub.publish(
     "ps-player-exitGame",
     JSON.stringify({
       contestId: contestId,
@@ -36,7 +40,7 @@ export async function publishPlayerExitContest(
 }
 
 export async function publishHostTerminateContest(contestId: number) {
-  client.publish(
+  redisPubsub.publish(
     "ps-host-terminateGame",
     JSON.stringify({
       contestId: contestId,
@@ -45,7 +49,7 @@ export async function publishHostTerminateContest(contestId: number) {
 }
 
 export async function publishHostStartContest(contestId: number) {
-  client.publish(
+  redisPubsub.publish(
     "ps-host-startGame",
     JSON.stringify({
       contestId: contestId,
@@ -59,7 +63,7 @@ export async function publishPlayerUpdateProgress(
   progress: Progress,
   finishedAt: Date | null
 ) {
-  client.publish(
+  redisPubsub.publish(
     "ps-player-updateProgress",
     JSON.stringify({
       contestId: contestId,
@@ -68,6 +72,18 @@ export async function publishPlayerUpdateProgress(
       finishedAt: finishedAt,
     })
   );
+}
+
+export async function getCodeByGameIdAndPlayerId(
+  contestId: number,
+  playerId: number,
+  playerName: string
+) {
+  const key = `playersCode-${contestId}-${playerId}`;
+  const playerCodeJson = await redisClient.get(key);
+  if (playerCodeJson) {
+    return JSON.parse(playerCodeJson);
+  } else return { id: playerId, name: playerName, problems: [] };
 }
 
 type Progress = { id: number; passed: boolean };

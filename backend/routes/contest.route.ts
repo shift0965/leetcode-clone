@@ -12,6 +12,8 @@ import {
   getProblems,
   getPlayersProgress,
   playerSubmit,
+  hostGetPlayersCode,
+  getTimeLimit,
 } from "../controllers/contest.ctrl.js";
 import authentication from "../middleware/authentication.js";
 
@@ -25,6 +27,7 @@ router
   .post(authentication, hostTerminateContest);
 
 router.route("/contest/hostStartGame").post(authentication, hostStartContest);
+router.route("/contest/hostGetPlayersCode").post(hostGetPlayersCode);
 
 //players
 router.route("/contest/playerCheckGame").post(playerCheckContest);
@@ -36,5 +39,6 @@ router.route("/contest/playerSubmit").post(playerSubmit);
 
 //both
 router.route("/contest/getPlayers").post(getPlayers);
+router.route("/contest/getTimeLimit").post(getTimeLimit);
 
 export default router;

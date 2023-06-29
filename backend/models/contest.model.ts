@@ -137,12 +137,26 @@ export async function setPlayerProgressById(
   );
 }
 
+export async function getTimeLimitAndStartAtById(contestId: number) {
+  const results = await pool.query(
+    "SELECT time_limit_mins AS timeLimit, started_at AS startedAt FROM contest WHERE id = ? AND state = ?",
+    [contestId, "started"]
+  );
+  const time = z.array(contestTimeSchema).parse(results[0]);
+  return time[0];
+}
+
 export async function setPlayerFinished(finished_at: Date, playerId: number) {
   const results = await pool.query(
     "UPDATE contest_player SET finished_at = ? WHERE id=?",
     [finished_at, playerId]
   );
 }
+
+const contestTimeSchema = z.object({
+  timeLimit: z.number(),
+  startedAt: z.date(),
+});
 
 const ProgressSchema = z.object({
   id: z.number(),

@@ -1,9 +1,15 @@
 import { FiTriangle, FiCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { HOST_SHOT_DOWN, HOST_START_GAME } from "../../api.const";
+import {
+  HOST_SHOT_DOWN,
+  HOST_START_GAME,
+  GET_TIME_LIMIT,
+} from "../../api.const";
 import { toast } from "react-toastify";
 import { GameHostState } from "../../types.const";
+import { useEffect, useState } from "react";
+import CountDown from "../NavBars/CountDown";
 
 interface HostNavbarProps {
   gameId: number | undefined;
@@ -17,6 +23,25 @@ const HostNavbar = ({
   setCurrentState,
 }: HostNavbarProps) => {
   const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+
+  useEffect(() => {
+    if (currentState === "GameWatching" && gameId) {
+      fetch(GET_TIME_LIMIT, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          gameId: gameId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          const msLeft = result.endedAt - new Date().getTime();
+          console.log(msLeft);
+          setTimeLeft(Math.floor(msLeft / 1000));
+        });
+    }
+  }, [currentState]);
 
   const handleStartGame = () => {
     const userDataJSON = localStorage.getItem("userData");
@@ -82,6 +107,7 @@ const HostNavbar = ({
           </div>
         </div>
         <div className="flex items-center space-x-4 flex-1 justify-end">
+          <CountDown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
           <button
             className={`flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all
                         ${
