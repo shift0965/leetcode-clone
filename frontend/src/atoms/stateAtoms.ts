@@ -5,3 +5,8 @@ export const authModalState = atom<AuthModalState>({
   key: "authModalState",
   default: { isOpen: false, type: "login", isLogin: false },
 });
+
+export const bulletSwitchState = atom<boolean>({
+  key: "bulletSwitchState",
+  default: true,
+});

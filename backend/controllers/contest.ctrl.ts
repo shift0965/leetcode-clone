@@ -6,7 +6,9 @@ import {
   publishHostTerminateContest,
   publishHostStartContest,
   publishPlayerUpdateProgress,
+  publishHostMessageToPlayer,
   getCodeByGameIdAndPlayerId,
+  publishHostCloseContest,
 } from "../models/redis.model.js";
 import {
   createContest,
@@ -23,6 +25,8 @@ import {
   setPlayerProgressById,
   setPlayerFinished,
   getTimeLimitAndStartAtById,
+  getContestResultsById,
+  closeContestById,
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
@@ -38,6 +42,19 @@ export async function hostCheckContest(
     const userId = res.locals.userId;
     const contest = await checkContestStateByUser(userId);
     if (!contest) return res.send({ founded: false });
+    const time = await getTimeLimitAndStartAtById(contest.contestId);
+    if (
+      time &&
+      time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
+    ) {
+      console.log(
+        time.startedAt.getTime(),
+        time.timeLimit * 60000,
+        new Date().getTime()
+      );
+      await closeContestById(contest.contestId);
+      contest.state = "closed";
+    }
     return res.send({
       founded: true,
       contestId: contest.contestId,
@@ -92,6 +109,14 @@ export async function playerCheckContest(
     const playerId = req.body.playerId;
     const contestId = req.body.contestId;
     const contest = await checkContestStateByIdAndPlayerId(contestId, playerId);
+    const time = await getTimeLimitAndStartAtById(contest.contestId);
+    if (
+      time &&
+      time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
+    ) {
+      await closeContestById(contest.contestId);
+      contest.state = "closed";
+    }
     if (!contest) return res.send({ founded: false });
     res.send({
       founded: true,
@@ -129,7 +154,11 @@ export async function playerJoinContest(
     const name = req.body.playerName;
 
     const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
-    if (contest === undefined || contest.state === "ended")
+    if (
+      contest === undefined ||
+      contest.state === "ended" ||
+      contest.state === "closed"
+    )
       return res.status(404).send({ errors: "Game Id not exist" });
 
     const playerId = await insertPlayerIntoContest(contest.contestId, name);
@@ -137,7 +166,6 @@ export async function playerJoinContest(
       return res.status(500).send({ errors: "Insert Failed" });
 
     publishPlayerJoinContest(contest.contestId, playerId, name);
-    res.cookie("contestPlayer", { playerName: name, playerId: playerId });
     res.send({ playerId: playerId, gameState: contest.state });
   } catch (err) {
     next(err);
@@ -291,6 +319,101 @@ export async function getTimeLimit(
     return res.send({
       endedAt: time.startedAt.getTime() + time.timeLimit * 60000,
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function hostSendMessage(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const contestId = req.body.gameId;
+    const playerId = req.body.playerId;
+    const message = req.body.message;
+    publishHostMessageToPlayer(contestId, playerId, message);
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getContestResult(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const contestId = req.body.gameId;
+    const { time, problems, players } = await getContestResultsById(contestId);
+
+    problems.sort((a, b) => a.id - b.id);
+    const playerResults = players.map((player) => {
+      const PlayerResult = {
+        id: player.id,
+        name: player.name,
+        timeUsed: player.finishedAt
+          ? (player.finishedAt.getTime() - time.startedAt.getTime()) / 1000
+          : null,
+      };
+
+      if (player.progress) {
+        const progress: { id: number; passed: boolean }[] = JSON.parse(
+          player.progress
+        );
+        progress.sort((a, b) => a.id - b.id);
+        return {
+          ...PlayerResult,
+          progress: progress.map((pro) => pro.passed),
+        };
+      } else {
+        const progress = Array(problems.length).fill(false);
+        return {
+          ...PlayerResult,
+          progress: progress,
+        };
+      }
+    });
+
+    playerResults.sort((a, b) => {
+      const scoreA = a.progress.reduce((acc, cur) => {
+        cur ? acc + 1 : acc;
+      }, 0);
+      const scoreB = b.progress.reduce((acc, cur) => {
+        cur ? acc + 1 : acc;
+      }, 0);
+      if (scoreA !== scoreB) return scoreB - scoreA;
+      else {
+        if (a.timeUsed && b.timeUsed) {
+          return a.timeUsed - b.timeUsed;
+        } else return 0;
+      }
+    });
+
+    res.send({ problems: problems, players: playerResults });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function hostCloseContest(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = res.locals.userId;
+    const contestId = req.body.gameId;
+    await closeContestById(contestId);
+    const players = await getPlayersByContestId(contestId);
+    if (players.length === 0) {
+      await endContestByIdAndUserId(contestId, userId);
+      return res.sendStatus(400);
+    }
+    publishHostCloseContest(contestId);
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }

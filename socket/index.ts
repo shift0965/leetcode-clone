@@ -83,7 +83,9 @@ redisPubsub.subscribe(
   "ps-player-exitGame",
   "ps-host-terminateGame",
   "ps-host-startGame",
-  "ps-player-updateProgress"
+  "ps-player-updateProgress",
+  "ps-host-sendMessageToPlayer",
+  "ps-host-closeGame"
 );
 redisPubsub.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
@@ -99,6 +101,9 @@ redisPubsub.on("message", (channel: string, message: string) => {
     });
   } else if (channel === "ps-host-terminateGame") {
     io.to(String(response.contestId)).emit("ws-player-hostTerminateGame");
+  } else if (channel === "ps-host-closeGame") {
+    console.log("close");
+    io.to(String(response.contestId)).emit("ws-player-hostCloseGame");
   } else if (channel === "ps-host-startGame") {
     io.to(String(response.contestId)).emit("ws-player-hostStartGame");
   } else if (channel === "ps-player-updateProgress") {
@@ -106,6 +111,12 @@ redisPubsub.on("message", (channel: string, message: string) => {
       playerId: response.playerId,
       progress: response.progress,
       finishedAt: response.finishedAt,
+    });
+  } else if (channel === "ps-host-sendMessageToPlayer") {
+    console.log(response);
+    io.to(String(response.contestId)).emit("ws-player-sendMessageToPlayer", {
+      id: response.playerId,
+      message: response.message,
     });
   }
 });

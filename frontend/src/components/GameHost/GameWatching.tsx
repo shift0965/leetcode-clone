@@ -37,7 +37,19 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           (acc, cur) => (cur.passed ? acc + 1 : acc),
           0
         );
-        return scoreB - scoreA;
+        if (scoreA > scoreB) {
+          return -1;
+        } else if (scoreA < scoreB) {
+          return 1;
+        } else {
+          if (a.finishedAt && b.finishedAt) {
+            return (
+              new Date(a.finishedAt).getTime() -
+              new Date(b.finishedAt).getTime()
+            );
+          }
+        }
+        return 0;
       });
       return [...prev];
     });
@@ -70,6 +82,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       })
         .then((response) => response.json())
         .then((results) => {
+          console.log(results);
           setPlayersProgress(
             results.progress.map(
               (data: {
@@ -329,6 +342,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       )}
       {focusedPlayerId && (
         <FocusedPlayer
+          gameId={gameId}
           playersCode={playersCode}
           focusedPlayerId={focusedPlayerId}
           playersProgress={playersProgress}

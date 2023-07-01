@@ -18,7 +18,7 @@ const CodeMirror = ({
   return (
     <div className="w-full overflow-auto h-full flex flex-col">
       <ReactCodeMirror
-        className={`codeMirror ${textLarge ? "text-[18px]" : "text-[14px]"}`}
+        className={`codeMirror ${textLarge ? "text-[16px]" : "text-[14px]"}`}
         value={userCode}
         onChange={(value: string) => onChangeCode && onChangeCode(value)}
         theme={vscodeDark}

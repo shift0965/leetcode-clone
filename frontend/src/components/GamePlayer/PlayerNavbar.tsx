@@ -1,4 +1,6 @@
 import { FiLogOut } from "react-icons/fi";
+import { GiBulletBill } from "react-icons/gi";
+import { BsSlashLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { GET_TIME_LIMIT, PLAYER_AVATAR_URL } from "../../api.const";
 import { GamePlayerState, Player } from "../../types.const";
@@ -6,6 +8,8 @@ import { PLAYER_EXIT_GAME } from "../../api.const";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CountDown from "../NavBars/CountDown";
+import { useRecoilState } from "recoil";
+import { bulletSwitchState } from "../../atoms/stateAtoms";
 
 interface PlayerNavbarProps {
   player: Player | undefined;
@@ -18,22 +22,25 @@ const PlayerNavbar = ({
   currentState,
   setCurrentState,
 }: PlayerNavbarProps) => {
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<number>();
+  const [bulletSwitch, setBulletSwitch] = useRecoilState(bulletSwitchState);
 
   const navigate = useNavigate();
   const handleExitGame = () => {
-    if (player) {
-      fetch(PLAYER_EXIT_GAME, {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player.gameId,
-          playerId: player.id,
-        }),
-      });
-      localStorage.removeItem("playerData");
-      navigate("/");
-    }
+    if (currentState === "GamePlaying" || currentState === "GameWaiting")
+      if (player) {
+        fetch(PLAYER_EXIT_GAME, {
+          method: "post",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            gameId: player.gameId,
+            playerId: player.id,
+          }),
+        });
+        localStorage.removeItem("playerData");
+      }
+    localStorage.removeItem("playerData");
+    navigate("/");
   };
 
   useEffect(() => {
@@ -52,6 +59,12 @@ const PlayerNavbar = ({
         });
     }
   }, [currentState]);
+
+  useEffect(() => {
+    if (currentState === "GamePlaying" && timeLeft && timeLeft === 0) {
+      setCurrentState("GameResult");
+    }
+  }, [timeLeft, currentState]);
 
   return (
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
@@ -75,7 +88,31 @@ const PlayerNavbar = ({
               </div>
             </div>
             <div className="flex items-center space-x-4 flex-1 justify-end">
-              <CountDown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
+              {currentState === "GamePlaying" && (
+                <div
+                  className="text-xl relative cursor-pointer flex h-9 w-9  justify-center items-center"
+                  title={`${
+                    bulletSwitch ? "Turn off bullets" : "Turn on bullets"
+                  }`}
+                  onClick={() => {
+                    setBulletSwitch((prev) => !prev);
+                  }}
+                >
+                  <div
+                    className={`absolute text-dark-gray-6 text-3xl top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2
+                            ${
+                              bulletSwitch ? "opacity-100" : "opacity-0"
+                            } transition-all`}
+                  >
+                    <BsSlashLg />
+                  </div>
+                  <GiBulletBill />
+                </div>
+              )}
+              {currentState === "GamePlaying" && timeLeft && (
+                <CountDown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
+              )}
+
               <button
                 className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink hover:bg-dark-fill-2 transition-all"
                 onClick={handleExitGame}

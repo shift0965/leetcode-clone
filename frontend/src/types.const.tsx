@@ -84,13 +84,23 @@ export interface AuthModalState {
   type: "login" | "register" | "forgotPassword";
 }
 
+export interface Bullet {
+  message: string;
+  height: number;
+  id: string;
+  duration: number;
+  colorName: string;
+}
+
 export type GameHostState =
   | "GameCreating"
   | "PlayersJoining"
   | "GameWatching"
+  | "GameResult"
   | "Loading";
 export type GamePlayerState =
   | "GameJoining"
   | "GameWaiting"
   | "GamePlaying"
+  | "GameResult"
   | "Loading";

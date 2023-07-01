@@ -48,6 +48,15 @@ export async function publishHostTerminateContest(contestId: number) {
   );
 }
 
+export async function publishHostCloseContest(contestId: number) {
+  redisPubsub.publish(
+    "ps-host-closeGame",
+    JSON.stringify({
+      contestId: contestId,
+    })
+  );
+}
+
 export async function publishHostStartContest(contestId: number) {
   redisPubsub.publish(
     "ps-host-startGame",
@@ -84,6 +93,21 @@ export async function getCodeByGameIdAndPlayerId(
   if (playerCodeJson) {
     return JSON.parse(playerCodeJson);
   } else return { id: playerId, name: playerName, problems: [] };
+}
+
+export async function publishHostMessageToPlayer(
+  contestId: number,
+  playerId: number,
+  message: string
+) {
+  redisPubsub.publish(
+    "ps-host-sendMessageToPlayer",
+    JSON.stringify({
+      contestId: contestId,
+      playerId: playerId,
+      message: message,
+    })
+  );
 }
 
 type Progress = { id: number; passed: boolean };

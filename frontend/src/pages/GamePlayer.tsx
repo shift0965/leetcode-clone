@@ -6,10 +6,12 @@ import GameWaiting from "../components/GamePlayer/GameWaiting";
 import { PLAYER_CHECK_GAME } from "../api.const";
 import PlayerNavbar from "../components/GamePlayer/PlayerNavbar";
 import GamePlaying from "../components/GamePlayer/GamePlaying";
+import GameResult from "../components/GameResult/GameResult";
 
 const GamePlayer = () => {
   const [currentState, setCurrentState] = useState<GamePlayerState>("Loading");
   const [player, setPlayer] = useState<Player>();
+  const [bulletSwitch, setBulletSwitch] = useState<boolean>(true);
 
   useEffect(() => {
     const playerDataJSON = localStorage.getItem("playerData");
@@ -32,6 +34,7 @@ const GamePlayer = () => {
             setCurrentState(() => {
               if (result.state === "created") return "GameWaiting";
               else if (result.state === "started") return "GamePlaying";
+              else if (result.state === "closed") return "GameResult";
               else return "GameJoining";
             });
           } else {
@@ -61,7 +64,10 @@ const GamePlayer = () => {
         <GameWaiting setCurrentState={setCurrentState} player={player} />
       )}
       {currentState === "GamePlaying" && player && (
-        <GamePlaying player={player} />
+        <GamePlaying setCurrentState={setCurrentState} player={player} />
+      )}
+      {currentState === "GameResult" && player && (
+        <GameResult gameId={player.gameId} />
       )}
     </div>
   );

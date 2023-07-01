@@ -124,3 +124,27 @@ code {
 .description p {
   @apply mt-3;
 }
+
+.bullet {
+  @apply absolute text-white tracking-wide flex shrink-0 items-center;
+  animation-name: bullet;
+  animation-timing-function: linear;
+}
+
+@keyframes bullet {
+  from {
+    transform: translateX(100%);
+    right: 0;
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-300%);
+    right: 100%;
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-300%);
+    right: 100%;
+    opacity: 0;
+  }
+}

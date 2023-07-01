@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PlayerCode, PlayerProgress } from "../../types.const";
 import CodeMirror from "../Workspace/CodeMirror";
 import { BsCheck2Circle } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
+import { HOST_SEND_MESSAGE } from "../../api.const";
 
 interface FocusedPlayerProps {
+  gameId: number;
   playersCode: PlayerCode[];
   focusedPlayerId: number;
   playersProgress: PlayerProgress[];
@@ -12,14 +14,15 @@ interface FocusedPlayerProps {
 }
 
 const FocusedPlayer = ({
+  gameId,
   playersCode,
   focusedPlayerId,
   playersProgress,
   setFocusedPlayerId,
 }: FocusedPlayerProps) => {
+  const [message, setMessage] = useState("");
   const player = playersCode.find((p) => p.id === focusedPlayerId);
   //if (!player) return setFocusedPlayerId(undefined);
-  console.log(player);
 
   const [currentProblemId, setCurrentProblemId] = useState<number>(
     player?.lastModifyedProblem || 0
@@ -28,11 +31,39 @@ const FocusedPlayer = ({
     (progress) => progress.id === player?.id
   )?.progress;
 
+  const handleSendMessage = () => {
+    if (player) {
+      fetch(HOST_SEND_MESSAGE, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          gameId: gameId,
+          playerId: player.id,
+          message: message,
+        }),
+      });
+    }
+    setMessage("");
+  };
+
+  const handleSendGroupMessage = () => {
+    fetch(HOST_SEND_MESSAGE, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        gameId: gameId,
+        playerId: -1,
+        message: message,
+      }),
+    });
+    setMessage("");
+  };
+
   return (
-    <div className="text-gray-50 grid grid-cols-10 gap-[12px] px-[10px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto relative">
+    <div className="text-gray-50 flex gap-[12px] px-[10px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto relative">
       {player && (
         <>
-          <div className=" col-span-7 rounded-lg overflow-hidden bg-dark-layer-1">
+          <div className="w-full  shrink rounded-lg overflow-hidden bg-dark-layer-1">
             <CodeMirror
               userCode={player.problems[currentProblemId].code}
               readOnly={true}
@@ -40,7 +71,7 @@ const FocusedPlayer = ({
             />
           </div>
 
-          <div className="flex flex-col col-span-3 text-white bg-dark-layer-2">
+          <div className="flex flex-col w-[300px] shrink-0 text-white bg-dark-layer-2">
             <div className="w-full overflow-auto flex flex-col">
               <div className="h-14 flex items-center px-3 text-dark-gray-8 text-lg border-b-[1px] border-dark-fill-2">
                 Problems
@@ -76,19 +107,33 @@ const FocusedPlayer = ({
                 ))}
               </div>
             </div>
-            <div className="mt-auto h-52">
+            <div className="mt-auto h-40">
               <div className="h-14 flex items-center px-3 text-dark-gray-8 text-lg border-t-[1px] border-dark-fill-2">
                 Send Message
               </div>
               <div className="px-2">
-                <textarea
-                  id=""
-                  rows={3}
+                <input
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDownCapture={(e) => {
+                    {
+                      e.key === "Enter" && handleSendMessage();
+                    }
+                  }}
                   className=" w-full bg-dark-fill-2 rounded-lg outline-none text-lg px-3 py-2 resize-none"
-                ></textarea>
+                ></input>
               </div>
-              <div className="flex  px-3 mt-[5px]">
-                <button className="px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-green-s hover:bg-opacity-80 rounded-lg">
+              <div className="flex px-3 mt-3">
+                <button
+                  className=" px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-gray-6 hover:bg-opacity-80 rounded-lg"
+                  onClick={handleSendGroupMessage}
+                >
+                  Send Group
+                </button>
+                <button
+                  className="ml-auto px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-green-s hover:bg-opacity-80 rounded-lg"
+                  onClick={handleSendMessage}
+                >
                   Send
                 </button>
               </div>

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { HOST_CHECK_GAME } from "../api.const";
 import HostNavbar from "../components/GameHost/HostNavbar";
+import GameResult from "../components/GameResult/GameResult";
 
 const GameHost = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const GameHost = () => {
             setCurrentState(() => {
               if (result.state === "created") return "PlayersJoining";
               else if (result.state === "started") return "GameWatching";
+              else if (result.state === "closed") return "GameResult";
               return "GameCreating";
             });
           } else {
@@ -63,6 +65,9 @@ const GameHost = () => {
       )}
       {currentState === "GameWatching" && gameId && (
         <GameWatching gameId={gameId} />
+      )}
+      {currentState === "GameResult" && gameId && (
+        <GameResult gameId={gameId} />
       )}
     </>
   );

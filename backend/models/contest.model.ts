@@ -43,7 +43,7 @@ export async function createContest(
   problemIds: number[]
 ) {
   const insertContest = await pool.query(
-    "insert into contest (user_id, time_limit_mins, state) values (?,?,?)",
+    "insert into contest (user_id, time_limit_mins, state) VALUES (?,?,?)",
     [userId, timeLimit, "created"]
   );
   if (Array.isArray(insertContest) && instanceOfSetHeader(insertContest[0])) {
@@ -60,14 +60,31 @@ export async function createContest(
 }
 
 export async function insertPlayerIntoContest(contestId: number, name: string) {
-  const insertContest = await pool.query(
-    "insert into contest_player (contest_id, name, state) values (?,?,?)",
-    [contestId, name, "joined"]
-  );
-  if (Array.isArray(insertContest) && instanceOfSetHeader(insertContest[0])) {
-    return insertContest[0].insertId;
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const countResult = await connection.query(
+      "SELECT COUNT(id) AS playerNumber FROM contest_player WHERE contest_id = ?",
+      [contestId]
+    );
+    const count = z
+      .array(z.object({ playerNumber: z.number() }))
+      .parse(countResult[0]);
+    if (count[0].playerNumber > 12) throw new Error("Game Room Full");
+    const insertContest = await pool.query(
+      "INSERT INTO contest_player (contest_id, name, state) VALUES (?,?,?)",
+      [contestId, name, "joined"]
+    );
+    if (Array.isArray(insertContest) && instanceOfSetHeader(insertContest[0])) {
+      await connection.commit();
+      return insertContest[0].insertId;
+    } else throw new Error("Join Room Failed");
+  } catch (err) {
+    await connection.rollback();
+    throw err;
+  } finally {
+    connection.release();
   }
-  return null;
 }
 
 export async function getPlayersByContestId(contestId: number) {
@@ -86,6 +103,13 @@ export async function endContestByIdAndUserId(
   const results = await pool.query(
     "UPDATE contest SET state = ? WHERE id = ? AND user_id = ?",
     ["ended", contestId, userId]
+  );
+}
+
+export async function closeContestById(contestId: number) {
+  const results = await pool.query(
+    "UPDATE contest SET state = ? WHERE id = ?",
+    ["closed", contestId]
   );
 }
 
@@ -120,7 +144,7 @@ export async function getContestProblemsById(contestId: number) {
 
 export async function getPlayersProgressById(contestId: number) {
   const results = await pool.query(
-    "SELECT id, name, progress, finished_at FROM contest_player WHERE contest_id=? AND state=?",
+    "SELECT id, name, progress, finished_at AS finishedAt FROM contest_player WHERE contest_id=? AND state=?",
     [contestId, "joined"]
   );
   const progress = z.array(ProgressSchema).parse(results[0]);
@@ -153,6 +177,30 @@ export async function setPlayerFinished(finished_at: Date, playerId: number) {
   );
 }
 
+export async function getContestResultsById(contestId: number) {
+  const contestTimeResults = await pool.query(
+    "SELECT c.time_limit_mins AS timeLimit, c.started_at AS startedAt FROM contest AS c WHERE c.id = ?",
+    [contestId]
+  );
+  const contestProblems = await pool.query(
+    "SELECT cp.problem_id AS id, p.title AS title FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id JOIN problem AS p ON cp.problem_id = p.id WHERE c.id = ?",
+    [contestId]
+  );
+  const playerResults = await pool.query(
+    "SELECT id, name, progress, finished_at AS finishedAt FROM contest_player WHERE contest_id=? AND state=?",
+    [contestId, "joined"]
+  );
+  const times = z.array(contestTimeSchema).parse(contestTimeResults[0]);
+  const problems = z.array(problemResultsSchema).parse(contestProblems[0]);
+  const players = z.array(ProgressSchema).parse(playerResults[0]);
+  return { time: times[0], problems, players };
+}
+
+const problemResultsSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+});
+
 const contestTimeSchema = z.object({
   timeLimit: z.number(),
   startedAt: z.date(),
@@ -162,7 +210,7 @@ const ProgressSchema = z.object({
   id: z.number(),
   name: z.string(),
   progress: z.string().nullable(),
-  finished_at: z.date().nullable(),
+  finishedAt: z.date().nullable(),
 });
 const ProblemIdSchema = z.object({
   id: z.number(),

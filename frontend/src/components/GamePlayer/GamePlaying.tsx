@@ -4,7 +4,12 @@ import {
   GET_PLAYER_PROGRESS,
   WEB_SOCKET_URL,
 } from "../../api.const";
-import { Player, PlayerProgress, ProblemDetails } from "../../types.const";
+import {
+  GamePlayerState,
+  Player,
+  PlayerProgress,
+  ProblemDetails,
+} from "../../types.const";
 import Split from "react-split";
 import Playground from "../Workspace/Playground";
 import { BsCheck2Circle } from "react-icons/bs";
@@ -13,18 +18,23 @@ import { io } from "socket.io-client";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
+import BulletScreen from "./BulletScreen";
+import { useRecoilValue } from "recoil";
+import { bulletSwitchState } from "../../atoms/stateAtoms";
 
 interface GamePlayingProps {
   player: Player;
-  //setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
+  setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
 }
 
-const GamePlaying = ({ player }: GamePlayingProps) => {
+const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
   const [problems, setProblems] = useState<ProblemDetails[]>([]);
   const [currentProblemId, setCurrentProblemId] = useState<number>(0);
   const [myProgress, setMyProgress] = useState<PlayerProgress>();
   //const [playersProgress, setPlayersProgress] = useState<PlayerProgress[]>([]);
   const socket = useRef(io(WEB_SOCKET_URL)).current;
+  const bulletSwitch = useRecoilValue(bulletSwitchState);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,14 +51,15 @@ const GamePlaying = ({ player }: GamePlayingProps) => {
       });
 
     socket.emit("ws-player-joinGame", { gameId: player.gameId });
-    socket.on("ws-player-hostTerminateGame", function () {
-      toast.info("Host terminated game");
-      localStorage.removeItem("playerData");
-      navigate("/");
+    socket.on("ws-player-hostCloseGame", function () {
+      // toast.info("Host terminated game");
+      // localStorage.removeItem("playerData");
+      // navigate("/");
+      setCurrentState("GameResult");
     });
 
     return () => {
-      socket.off("ws-player-hostTerminateGame");
+      socket.off("ws-player-hostCloseGame");
     };
   }, []);
 
@@ -119,7 +130,8 @@ const GamePlaying = ({ player }: GamePlayingProps) => {
   const debounceUpdateCode = useCallback(debounce(updateCode, 500), []);
 
   return (
-    <div>
+    <div className="relative">
+      {bulletSwitch && <BulletScreen player={player} />}
       {problems.length > 0 && myProgress && (
         <Split minSize={0} snapOffset={100} className="split">
           <div className="bg-dark-layer-1">

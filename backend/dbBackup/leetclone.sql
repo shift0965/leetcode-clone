@@ -34,10 +34,10 @@ CREATE TABLE `contest` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `time_limit_mins` int DEFAULT NULL,
-  `state` enum('created','started','ended') DEFAULT NULL,
+  `state` enum('created','started','closed','ended') DEFAULT NULL,
   `started_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +46,7 @@ CREATE TABLE `contest` (
 
 LOCK TABLES `contest` WRITE;
 /*!40000 ALTER TABLE `contest` DISABLE KEYS */;
+INSERT INTO `contest` VALUES (1,4,60,'ended','2023-07-01 10:55:43'),(2,4,60,'ended','2023-07-01 11:02:00'),(3,4,60,'ended','2023-07-01 11:05:53'),(4,4,60,'ended','2023-07-01 11:07:20'),(5,4,60,'ended','2023-07-01 11:22:14'),(6,4,60,'ended','2023-07-01 11:26:53'),(7,4,1,'ended','2023-07-01 11:37:47'),(8,4,60,'ended',NULL),(9,4,60,'ended','2023-07-01 11:48:19'),(10,4,60,'ended','2023-07-01 11:50:29'),(11,4,60,'ended','2023-07-01 11:50:47'),(12,4,60,'ended','2023-07-01 12:06:04'),(13,4,60,'ended','2023-07-01 12:52:54'),(14,4,60,'ended','2023-07-01 13:01:15'),(15,4,60,'ended','2023-07-01 13:06:50'),(16,4,60,'ended','2023-07-01 13:13:39');
 /*!40000 ALTER TABLE `contest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +65,7 @@ CREATE TABLE `contest_player` (
   `progress` varchar(255) DEFAULT NULL,
   `finished_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,6 +74,7 @@ CREATE TABLE `contest_player` (
 
 LOCK TABLES `contest_player` WRITE;
 /*!40000 ALTER TABLE `contest_player` DISABLE KEYS */;
+INSERT INTO `contest_player` VALUES (51,1,'Jackie','exited',NULL,NULL),(52,2,'Jackie','exited',NULL,NULL),(53,3,'JACKIE','exited',NULL,NULL),(54,4,'Jackie','joined',NULL,NULL),(55,5,'Jackie','exited',NULL,NULL),(56,6,'Jackie','joined',NULL,NULL),(57,8,'Jackie','exited',NULL,NULL),(58,9,'Jackie','joined',NULL,NULL),(59,11,'Jackie','joined',NULL,NULL),(60,12,'Jackie','exited',NULL,NULL),(61,12,'Jackie','exited',NULL,NULL),(62,12,'Jackie','exited',NULL,NULL),(63,12,'Jackie','joined',NULL,NULL),(64,14,'Jackie','joined',NULL,NULL);
 /*!40000 ALTER TABLE `contest_player` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +90,7 @@ CREATE TABLE `contest_problem` (
   `contest_id` int DEFAULT NULL,
   `problem_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,6 +99,7 @@ CREATE TABLE `contest_problem` (
 
 LOCK TABLES `contest_problem` WRITE;
 /*!40000 ALTER TABLE `contest_problem` DISABLE KEYS */;
+INSERT INTO `contest_problem` VALUES (109,1,25),(110,1,26),(111,2,25),(112,2,26),(113,3,25),(114,3,26),(115,4,25),(116,4,26),(117,5,25),(118,5,26),(119,6,25),(120,6,26),(121,7,25),(122,8,25),(123,8,27),(124,9,25),(125,9,26),(126,10,25),(127,11,25),(128,12,25),(129,12,26),(130,13,26),(131,14,25),(132,14,26),(133,15,25),(134,15,26),(135,16,25),(136,16,26);
 /*!40000 ALTER TABLE `contest_problem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -300,4 +303,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-06-27 17:33:34
+-- Dump completed on 2023-07-01 13:14:17

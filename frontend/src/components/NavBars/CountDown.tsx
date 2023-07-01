@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 interface CountDownProps {
   timeLeft: number;
-  setTimeLeft: React.Dispatch<React.SetStateAction<number>>;
+  setTimeLeft: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 const CountDown = ({ timeLeft, setTimeLeft }: CountDownProps) => {
@@ -19,8 +19,10 @@ const CountDown = ({ timeLeft, setTimeLeft }: CountDownProps) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTimeLeft((time) => {
-        if (time <= 0) return 0;
-        else return time - 1;
+        if (time) {
+          if (time <= 0) return 0;
+          else return time - 1;
+        } else return time;
       });
     }, 1000);
     return () => clearInterval(intervalId);
