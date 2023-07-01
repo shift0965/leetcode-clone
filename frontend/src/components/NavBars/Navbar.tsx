@@ -39,9 +39,9 @@ const Navbar = ({ isWorkspace = false }) => {
           !isWorkspace ? "max-w-[1200px] mx-auto" : ""
         }`}
       >
-        <div className="flex-1 h-[22px]">
-          <Link to="/" className=" h-full block w-32">
-            <img src="/logo-full.png" alt="Logo" className="h-full" />
+        <div className="flex-1 flex items-center text-white text-lg">
+          <Link to="/" className=" block w-[100px]">
+            <img src="/logo-full.png" alt="Logo" className=" w-full" />
           </Link>
         </div>
 

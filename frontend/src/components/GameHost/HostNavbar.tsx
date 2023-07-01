@@ -123,9 +123,9 @@ const HostNavbar = ({
   return (
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
       <div className="flex w-full items-center justify-between">
-        <div className="flex-1 h-[22px]">
-          <Link to="/" className=" h-full block w-32">
-            <img src="/logo-full.png" alt="Logo" className="h-full" />
+        <div className="flex-1 flex items-center text-white text-lg">
+          <Link to="/" className=" block w-[100px]">
+            <img src="/logo-full.png" alt="Logo" className=" w-full" />
           </Link>
         </div>
 

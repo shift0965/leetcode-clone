@@ -78,6 +78,11 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
           className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
+          onKeyDownCapture={(e) => {
+            {
+              e.key === "Enter" && handleJoinRoom();
+            }
+          }}
         />
       </div>
       <button
