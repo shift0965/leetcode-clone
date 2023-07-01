@@ -22,7 +22,7 @@ import {
 import { toast } from "react-toastify";
 
 type PlaygroundProps = {
-  problem: ProblemDetails | undefined;
+  problem: ProblemDetails;
   gameMode?: boolean;
   gameData?: {
     player: Player;
@@ -85,7 +85,7 @@ const Playground = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        problemId: problem?.id || 0,
+        problemId: problem.id || 0,
         language: "js",
         code: userCode,
       }),
@@ -120,7 +120,7 @@ const Playground = ({
       body: JSON.stringify(
         gameMode
           ? {
-              problemId: problem?.id || 0,
+              problemId: problem.id || 0,
               language: "js",
               code: userCode,
               playerId: gameData?.player.id,
@@ -129,7 +129,7 @@ const Playground = ({
               finishedAt: gameData?.myProgress.finishedAt,
             }
           : {
-              problemId: problem?.id || 0,
+              problemId: problem.id || 0,
               language: "js",
               code: userCode,
             }
@@ -145,17 +145,22 @@ const Playground = ({
       })
       .then((result) => {
         setSubmitResult(result);
-        console.log(result);
-        if (gameMode) {
-          gameData?.setMyProgress({
-            id: gameData.myProgress.id,
-            name: gameData.myProgress.name,
-            progress: result.progress,
-            finishedAt: result.finishedAt,
-          });
-        }
+
         if (result.passed) {
           toast.success("Passed !");
+          const problemStatus = JSON.parse(
+            localStorage.getItem("problemStatus") || "{}"
+          );
+          problemStatus[problem.id] = true;
+          localStorage.setItem("problemStatus", JSON.stringify(problemStatus));
+          if (gameMode) {
+            gameData?.setMyProgress({
+              id: gameData.myProgress.id,
+              name: gameData.myProgress.name,
+              progress: result.progress,
+              finishedAt: result.finishedAt,
+            });
+          }
         }
       })
       .catch((error) => {

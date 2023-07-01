@@ -23,10 +23,12 @@ const Workspace = () => {
   return (
     <>
       <Navbar isWorkspace={true} />
-      <Split minSize={0} snapOffset={100} className="split">
-        <Description problem={problem} />
-        <Playground problem={problem} />
-      </Split>
+      {problem && (
+        <Split minSize={0} snapOffset={100} className="split">
+          <Description problem={problem} />
+          <Playground problem={problem} />
+        </Split>
+      )}
     </>
   );
 };

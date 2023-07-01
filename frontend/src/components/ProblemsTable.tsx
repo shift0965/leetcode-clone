@@ -14,6 +14,9 @@ const ProblemsTable = () => {
     videoId: "",
   });
   const [problems, setProblems] = useState<Problem[]>([]);
+  const problemStatus = JSON.parse(
+    localStorage.getItem("problemStatus") || "{}"
+  );
   useEffect(() => {
     fetch(GET_ALL_PROBLEMS, {
       method: "GET",
@@ -46,8 +49,10 @@ const ProblemsTable = () => {
                     className={`${id % 2 === 1 ? "bg-dark-layer-1" : ""}`}
                     key={id}
                   >
-                    <td className="px-3 py-4 whitespace-nowrap text-dark-green-s">
-                      <BsCheckCircle width="18" />
+                    <td className="pl-4 py-4 whitespace-nowrap text-dark-green-s">
+                      {problemStatus[problem.id] && (
+                        <BsCheckCircle width="18" />
+                      )}
                     </td>
 
                     <td className="px-3 py-4">
