@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Timer from "./Timer";
@@ -7,6 +7,7 @@ import { authModalState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 
 const Navbar = ({ isWorkspace = false }) => {
+  const [userName, setUserName] = useState("");
   const handleLogout = () => {
     localStorage.removeItem("userData");
     setAuthModal((prev) => ({ ...prev, isLogin: false }));
@@ -21,6 +22,7 @@ const Navbar = ({ isWorkspace = false }) => {
     const userDataJson = localStorage.getItem("userData");
     if (userDataJson) {
       const userData = JSON.parse(userDataJson);
+      setUserName(userData.user.name);
       if (userData.access_expired > new Date().getTime() / 1000) {
         setAuthModal((prev) => ({ ...prev, isLogin: true }));
       } else {
@@ -49,8 +51,8 @@ const Navbar = ({ isWorkspace = false }) => {
           {isWorkspace && <Timer />}
           {authModal.isLogin ? (
             <>
-              <div className=" cursor-pointer relative h-7">
-                <img src="/avatar.png" alt="user" className=" h-full"></img>
+              <div className=" relative flex items-center">
+                Hi, <span className=" text-dark ml-1">{userName}</span>
               </div>
               <button
                 className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2 transition-all"
