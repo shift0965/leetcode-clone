@@ -8,7 +8,6 @@ import { useRecoilValue } from "recoil";
 import { authModalState } from "./atoms/stateAtoms";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import BulletScreeen from "./components/GamePlayer/BulletScreen";
 
 function App() {
   const authModal = useRecoilValue(authModalState);

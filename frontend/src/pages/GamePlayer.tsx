@@ -11,7 +11,6 @@ import GameResult from "../components/GameResult/GameResult";
 const GamePlayer = () => {
   const [currentState, setCurrentState] = useState<GamePlayerState>("Loading");
   const [player, setPlayer] = useState<Player>();
-  const [bulletSwitch, setBulletSwitch] = useState<boolean>(true);
 
   useEffect(() => {
     const playerDataJSON = localStorage.getItem("playerData");

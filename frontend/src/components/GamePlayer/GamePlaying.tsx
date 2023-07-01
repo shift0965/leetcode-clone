@@ -15,8 +15,6 @@ import Playground from "../Workspace/Playground";
 import { BsCheck2Circle } from "react-icons/bs";
 import DescriptionArea from "../Workspace/DescriptionArea";
 import { io } from "socket.io-client";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import BulletScreen from "./BulletScreen";
 import { useRecoilValue } from "recoil";
@@ -34,8 +32,6 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
   //const [playersProgress, setPlayersProgress] = useState<PlayerProgress[]>([]);
   const socket = useRef(io(WEB_SOCKET_URL)).current;
   const bulletSwitch = useRecoilValue(bulletSwitchState);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(GET_CONTEST_PROBLEMS, {

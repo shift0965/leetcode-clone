@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PlayerCode, PlayerProgress } from "../../types.const";
 import CodeMirror from "../Workspace/CodeMirror";
 import { BsCheck2Circle } from "react-icons/bs";

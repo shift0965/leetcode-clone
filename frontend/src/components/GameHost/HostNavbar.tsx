@@ -38,7 +38,6 @@ const HostNavbar = ({
         .then((response) => response.json())
         .then((result) => {
           const msLeft = result.endedAt - new Date().getTime();
-          console.log(msLeft);
           setTimeLeft(Math.floor(msLeft / 1000));
         });
     }
@@ -115,7 +114,8 @@ const HostNavbar = ({
   };
 
   useEffect(() => {
-    if (currentState === "GameWatching" && timeLeft && timeLeft === 0) {
+    if (currentState === "GameWatching" && timeLeft === 0) {
+      console.log("Go");
       setCurrentState("GameResult");
     }
   }, [timeLeft, currentState]);

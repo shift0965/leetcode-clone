@@ -61,7 +61,7 @@ const PlayerNavbar = ({
   }, [currentState]);
 
   useEffect(() => {
-    if (currentState === "GamePlaying" && timeLeft && timeLeft === 0) {
+    if (currentState === "GamePlaying" && timeLeft === 0) {
       setCurrentState("GameResult");
     }
   }, [timeLeft, currentState]);
