@@ -1,28 +1,25 @@
-name: CI/CD counter app
+name: CI/CD ec2 app
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
 
 jobs:
-  build_and_deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-      - name: deploy in EC2
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY  }}
-          REMOTE_HOST: ${{ secrets.HOSTNAME  }}
-          REMOTE_USER: ${{ secrets.USER_NAME  }}
-          TARGET: "/home/ubuntu"
-
-        run: |
-          echo "Hello from github action, start deploy main to ec2"
-
-            #Now we have got the access of EC2 and we will start the deploy .
+      - name: pull and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.EC2_USERNAME }}
+          script: |
+            echo "Hello from github action, start deploy main to ec2"
             cd /home/ubuntu/leetcode-clone
             docker-compose down
-            git pull origin main 
-            docker-compose up -d
-          '
+            docker system prune --force
+            git pull origin develop 
+            docker-compose build --no-cache
+            docker-compose up
