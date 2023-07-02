@@ -30,8 +30,7 @@ import {
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
-import { generateFile, removeFile } from "../helpers/filesHelper.js";
-import { verifyTestCases } from "../helpers/runCode.js";
+import { verifyTestCases } from "../helpers/vmRunCode.js";
 
 export async function hostCheckContest(
   req: Request,
@@ -248,16 +247,9 @@ export async function playerSubmit(
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
   const { functionName, testCases } = testCasesData;
-  const ifRecordConsole = false;
-  const filePath = await generateFile(
-    language,
-    code,
-    functionName,
-    ifRecordConsole
-  );
   type Progress = { id: number; passed: boolean };
   try {
-    const result = await verifyTestCases(testCases, filePath);
+    const result = verifyTestCases(testCases, code, functionName);
 
     if (finishedAt)
       return res
@@ -284,8 +276,6 @@ export async function playerSubmit(
       .send({ ...result, progress: progress, finishedAt: finishedAt });
   } catch (err) {
     next(err);
-  } finally {
-    await removeFile(filePath);
   }
 }
 

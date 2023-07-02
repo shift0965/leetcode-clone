@@ -99,6 +99,7 @@ const Playground = ({
         return response.json();
       })
       .then((result) => {
+        console.log(result);
         setRunResults(result);
       })
       .catch((error) => {

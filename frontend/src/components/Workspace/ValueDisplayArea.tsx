@@ -6,7 +6,7 @@ type ValueDisplayAreaProps = {
 const ValueDisplayArea = ({ value, label }: ValueDisplayAreaProps) => {
   const valueString =
     value === undefined
-      ? "Undefined"
+      ? "undefined"
       : typeof value === "string"
       ? value
       : JSON.stringify(value);

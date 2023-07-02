@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { generateFile, removeFile } from "../helpers/filesHelper.js";
 import {
   getExampleCasesDataById,
   getTestCasesByProblemId,
 } from "../models/problem.model.js";
 import { validationResult } from "express-validator";
-import { verifyExampleCases, verifyTestCases } from "../helpers/runCode.js";
+import { verifyExampleCases, verifyTestCases } from "../helpers/vmRunCode.js";
 
 export async function runExampleCases(
   req: Request,
@@ -23,20 +22,13 @@ export async function runExampleCases(
 
   const { functionName, exampleCases } = exampleCasesData;
   const ifRecordConsole = true;
-  const filePath = await generateFile(
-    language,
-    code,
-    functionName,
-    ifRecordConsole
-  );
 
   try {
-    const results = await verifyExampleCases(exampleCases, filePath);
+    const results = verifyExampleCases(exampleCases, code, functionName);
     return res.status(200).send(results);
+    //res.sendStatus(200);
   } catch (err) {
     next(err);
-  } finally {
-    await removeFile(filePath);
   }
 }
 
@@ -54,20 +46,10 @@ export async function runTestCases(
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
   const { functionName, testCases } = testCasesData;
-  const ifRecordConsole = false;
-  const filePath = await generateFile(
-    language,
-    code,
-    functionName,
-    ifRecordConsole
-  );
-
   try {
-    const result = await verifyTestCases(testCases, filePath);
+    const result = verifyTestCases(testCases, code, functionName);
     return res.status(200).send(result);
   } catch (err) {
     next(err);
-  } finally {
-    await removeFile(filePath);
   }
 }
