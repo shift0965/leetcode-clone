@@ -1,0 +1,24 @@
+version: "3"
+
+networks:
+  my-net:
+    driver: bridge
+
+services:
+  express:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:3000
+    networks:
+      - my-net
+
+  socket:
+    build:
+      context: ./socket/
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    networks:
+      - my-net
