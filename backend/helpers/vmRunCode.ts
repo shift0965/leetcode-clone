@@ -5,7 +5,8 @@ import util from "util";
 export function verifyExampleCases(
   exampleCases: inputCases[],
   code: string,
-  functionName: string
+  functionName: string,
+  verifyVariable: string | null
 ) {
   return exampleCases.map((exampleCase) => {
     const inputs = exampleCase.input;
@@ -28,7 +29,8 @@ export function verifyExampleCases(
 export function verifyTestCases(
   testCases: inputCases[],
   code: string,
-  functionName: string
+  functionName: string,
+  verifyVariable: string | null
 ) {
   for (let testCase of testCases) {
     const inputs = testCase.input;
@@ -52,20 +54,6 @@ export function verifyTestCases(
     passed: true,
   };
 }
-
-type inputCases = {
-  input: any;
-  output: any;
-};
-
-type ExampleCasesStdoutPromise = {
-  output: any;
-  consoles: any;
-};
-
-type TestCasesData = {
-  output: any;
-};
 
 function formatConsoleLog(data: any) {
   if (typeof data === "string") {
@@ -142,7 +130,6 @@ function runJavaScript(
       );
     } else if (error.name === "ReferenceError") {
       let split = error.stack.split("\n");
-      //get error line
       const line = split[1].split(":")[split[1].split(":").length - 2];
       const message = split[0];
       throw new ExecutionError("Reference Error", message, line);
@@ -156,3 +143,8 @@ function runJavaScript(
     }
   }
 }
+
+type inputCases = {
+  input: any;
+  output: any;
+};

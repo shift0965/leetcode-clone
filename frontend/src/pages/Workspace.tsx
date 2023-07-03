@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GET_PROBLEM_DETAILS } from "../api.const";
 import Navbar from "../components/NavBars/Navbar";
@@ -6,15 +6,25 @@ import Split from "react-split";
 import Playground from "../components/Workspace/Playground";
 import Description from "../components/Workspace/Description";
 import { ProblemDetails } from "../types.const";
+import { toast } from "react-toastify";
 
 const Workspace = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [problem, setProblem] = useState<ProblemDetails>();
   const id = searchParams.get("id") || 0;
 
   useEffect(() => {
     fetch(`${GET_PROBLEM_DETAILS}?id=${id}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status !== 200) {
+          response.json().then((error) => {
+            toast.error(error.errors);
+            navigate("/");
+          });
+        }
+        return response.json();
+      })
       .then((result) => {
         setProblem(result);
       });

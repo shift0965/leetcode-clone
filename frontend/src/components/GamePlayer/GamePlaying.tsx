@@ -43,6 +43,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setProblems(data.problems);
       });
 
@@ -79,6 +80,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
               finishedAt: Date;
             }) => {
               if (res.id === player.id) {
+                console.log(problems);
                 setMyProgress({
                   id: res.id,
                   name: res.name,

@@ -19,14 +19,16 @@ export async function runExampleCases(
   const exampleCasesData = await getExampleCasesDataById(problemId);
   if (exampleCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
-
-  const { functionName, exampleCases } = exampleCasesData;
-  const ifRecordConsole = true;
+  const { functionName, exampleCases, verifyVariable } = exampleCasesData;
 
   try {
-    const results = verifyExampleCases(exampleCases, code, functionName);
+    const results = verifyExampleCases(
+      exampleCases,
+      code,
+      functionName,
+      verifyVariable
+    );
     return res.status(200).send(results);
-    //res.sendStatus(200);
   } catch (err) {
     next(err);
   }
@@ -45,9 +47,14 @@ export async function runTestCases(
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
-  const { functionName, testCases } = testCasesData;
+  const { functionName, testCases, verifyVariable } = testCasesData;
   try {
-    const result = verifyTestCases(testCases, code, functionName);
+    const result = verifyTestCases(
+      testCases,
+      code,
+      functionName,
+      verifyVariable
+    );
     return res.status(200).send(result);
   } catch (err) {
     next(err);

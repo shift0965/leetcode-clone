@@ -39,6 +39,12 @@ const DescriptionArea = ({ problem }: DescriptionAreaProps) => {
               <div key={id}>
                 <p className="font-medium text-white">Example {id + 1}: </p>
                 <div className="example-card">
+                  {example.image && (
+                    <img
+                      src={example.image}
+                      className="mt-2 w-full max-w-[450px]"
+                    />
+                  )}
                   <pre className="text-sm">
                     <strong className="text-white">Input: </strong>
                     {problem.inputKeys.map((key, id) => (

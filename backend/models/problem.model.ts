@@ -11,6 +11,7 @@ export async function getTestCasesByProblemId(problemId: number) {
 
   const runTestCasesData = {
     functionName: testCasesData[0]?.function_name,
+    verifyVariable: testCasesData[0]?.verify_variable,
     testCases: testCasesData.map((testCase) => {
       return {
         input: JSON.parse(testCase.input),
@@ -23,14 +24,15 @@ export async function getTestCasesByProblemId(problemId: number) {
 
 export async function getExampleCasesDataById(problemId: number) {
   const results = await pool.query(
-    "SELECT p.function_name, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
+    "SELECT p.function_name, p.verify_variable, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
     [problemId]
   );
-  const exampleCasesData = z.array(ExampleCasesDataSchema).parse(results[0]);
+  const exampleCasesData = z.array(TestCasesDataSchema).parse(results[0]);
   if (exampleCasesData.length === 0) return null;
 
   const runExampleDataParsed = {
     functionName: exampleCasesData[0]?.function_name,
+    verifyVariable: exampleCasesData[0]?.verify_variable,
     exampleCases: exampleCasesData.map((exampleCase) => {
       return {
         input: JSON.parse(exampleCase.input),
@@ -143,16 +145,18 @@ const TagSchema = z.object({
   title: z.string(),
 });
 
-//run example cases
-const ExampleCasesDataSchema = z.object({
-  function_name: z.string(),
-  input: z.string(),
-  output: z.string(),
-});
+// //run example cases
+// const ExampleCasesDataSchema = z.object({
+//   function_name: z.string(),
+//   verify_variable: z.string(),
+//   input: z.string(),
+//   output: z.string(),
+// });
 
 //run test cases
 const TestCasesDataSchema = z.object({
   function_name: z.string(),
+  verify_variable: z.string(),
   input: z.string(),
   output: z.string(),
 });
