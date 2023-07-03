@@ -28,6 +28,7 @@ export async function getExampleCasesDataById(problemId: number) {
     [problemId]
   );
   const exampleCasesData = z.array(TestCasesDataSchema).parse(results[0]);
+  console.log(exampleCasesData);
   if (exampleCasesData.length === 0) return null;
 
   const runExampleDataParsed = {
@@ -156,7 +157,7 @@ const TagSchema = z.object({
 //run test cases
 const TestCasesDataSchema = z.object({
   function_name: z.string(),
-  verify_variable: z.string(),
+  verify_variable: z.string().nullable(),
   input: z.string(),
   output: z.string(),
 });

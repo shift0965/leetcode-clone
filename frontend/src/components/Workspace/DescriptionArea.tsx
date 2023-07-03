@@ -41,7 +41,7 @@ const DescriptionArea = ({ problem }: DescriptionAreaProps) => {
                 <div className="example-card">
                   {example.image && (
                     <img
-                      src={example.image}
+                      src={`problemsImgs/${example.image}`}
                       className="mt-2 w-full max-w-[450px]"
                     />
                   )}

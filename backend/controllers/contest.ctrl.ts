@@ -246,10 +246,15 @@ export async function playerSubmit(
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
-  const { functionName, testCases } = testCasesData;
+  const { functionName, testCases, verifyVariable } = testCasesData;
   type Progress = { id: number; passed: boolean };
   try {
-    const result = verifyTestCases(testCases, code, functionName);
+    const result = verifyTestCases(
+      testCases,
+      code,
+      functionName,
+      verifyVariable
+    );
 
     if (finishedAt)
       return res

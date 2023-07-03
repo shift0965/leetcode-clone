@@ -16,7 +16,7 @@ export function verifyExampleCases(
       functionName,
       code
     );
-    const equality = checkEquality(result, JSON.stringify(exampleCase.output));
+    const equality = checkEquality(result, exampleCase.output, verifyVariable);
     return {
       passed: equality,
       stdout: consoles,
@@ -40,7 +40,7 @@ export function verifyTestCases(
       functionName,
       code
     );
-    const equality = checkEquality(result, JSON.stringify(testCase.output));
+    const equality = checkEquality(result, testCase.output, verifyVariable);
     if (!equality) {
       return {
         passed: equality,
@@ -86,8 +86,20 @@ function isCyclic(obj: any) {
   return detect(obj);
 }
 
-function checkEquality(input1: any, input2: any) {
-  return input1 === input2;
+function checkEquality(
+  result: any,
+  answer: any,
+  verifyVariable: string | null
+) {
+  if (verifyVariable === "ignore order") {
+    try {
+      return (
+        JSON.stringify([...result].sort()) === JSON.stringify(answer.sort())
+      );
+    } catch (err) {
+      return false;
+    }
+  } else return JSON.stringify(result) === JSON.stringify(answer);
 }
 
 function runJavaScript(
@@ -109,16 +121,16 @@ function runJavaScript(
             ifRecordConsole && consoles.push(formatConsoleLog(data));
           },
         },
-        INPUT_VARIABLES: inputs,
+        EXECUTION_INPUT: inputs,
       },
     });
-
     let result = vm.run(`${code}
-      ${functionName}(...INPUT_VARIABLES)
-      `);
-
+      const EXECUTE_USER_CODE = (cb) => {
+        return cb(...EXECUTION_INPUT)
+      }
+      EXECUTE_USER_CODE(${functionName})`);
     return {
-      result: isCyclic(result) ? util.inspect(result) : JSON.stringify(result),
+      result: isCyclic(result) ? util.inspect(result) : result,
       consoles,
     };
   } catch (error) {
