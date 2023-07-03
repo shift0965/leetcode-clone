@@ -2,7 +2,7 @@ name: CI/CD ec2 app
 
 on:
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   build:
@@ -18,8 +18,20 @@ jobs:
           script: |
             echo "Hello from github action, start deploy main to ec2"
             cd /home/ubuntu/leetcode-clone
+
+            #clean up
             docker-compose down
             docker system prune --force
-            git pull origin develop 
+
+            #pull change
+            git pull origin main 
+
+            #update db
+            docker run --network my-net --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
+            docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -pjackieer leetclone' < /home/ubuntu/leetcode-clone/backend/dbBackup/leetclone.sql
+            docker container stop mysql
+            docker container rm mysql
+
+            #compose
             docker-compose build --no-cache
-            docker-compose up
+            docker-compose up -d
