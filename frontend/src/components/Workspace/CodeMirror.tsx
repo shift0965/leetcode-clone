@@ -1,6 +1,7 @@
 import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import ReactCodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
 
 type CodeMirrorProps = {
   userCode: string;
@@ -16,13 +17,13 @@ const CodeMirror = ({
   textLarge = false,
 }: CodeMirrorProps) => {
   return (
-    <div className="w-full overflow-auto h-full flex flex-col">
+    <div className="w-full overflow-y-auto h-full flex flex-col">
       <ReactCodeMirror
         className={`codeMirror ${textLarge ? "text-[16px]" : "text-[14px]"}`}
         value={userCode}
         onChange={(value: string) => onChangeCode && onChangeCode(value)}
         theme={vscodeDark}
-        extensions={[javascript()]}
+        extensions={[javascript(), EditorView.lineWrapping]}
         basicSetup={{
           autocompletion: false,
           highlightActiveLine: !readOnly,

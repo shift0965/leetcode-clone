@@ -77,10 +77,6 @@ body {
 .cm-gutters {
   background-color: #282828 !important;
 }
-/* .cm-selectionBackground {
-  background-color: lightblue !important;
-  opacity: 20%;
-} */
 .codeMirror {
   padding-top: 5px;
   height: 100%;

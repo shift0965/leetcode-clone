@@ -67,12 +67,17 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
         timeLimit: timeLimit,
         problemList: selectedProblemIds.map((id) => allProblems[id].id),
       }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        setGameId(result.gameId);
-        setCurrentState("PlayersJoining");
-      });
+    }).then((response) => {
+      if (response.status === 401 || response.status === 403) {
+        toast.error("Login timeout");
+        localStorage.removeItem("userData");
+        setCurrentState("GameCreating");
+      } else
+        response.json().then((result) => {
+          setGameId(result.gameId);
+          setCurrentState("PlayersJoining");
+        });
+    });
   };
 
   return (

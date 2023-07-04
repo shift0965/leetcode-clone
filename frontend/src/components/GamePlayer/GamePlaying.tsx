@@ -75,7 +75,6 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setProblems(data.problems);
       });
 
@@ -86,7 +85,6 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
     socket.on(
       "ws-host-playerJoinGame",
       function (newPlayer: { id: number; name: string }) {
-        console.log(newPlayer);
         setPlayersProgress((prev) => [
           ...prev,
           {
@@ -197,7 +195,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
   const debounceUpdateCode = useCallback(debounce(updateCode, 500), []);
 
   return (
-    <div className="relative flex">
+    <div className="relative flex w-full">
       {bulletSwitch && <BulletScreen player={player} />}
       <div
         className={`transform transition-all duration-500 ease-in-out flex items-center justify-center h-20 w-5
@@ -270,7 +268,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
           })}
         </div>
       </div>
-      <div className="">
+      <div className="w-full">
         {problems.length > 0 && myProgress && (
           <Split minSize={0} snapOffset={100} className="split">
             <div className="bg-dark-layer-1">

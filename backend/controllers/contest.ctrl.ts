@@ -271,8 +271,9 @@ export async function playerSubmit(
       });
     }
     setPlayerProgressById(playerId, JSON.stringify(progress));
-
-    if (progress.reduce((acc: boolean, cur: Progress) => cur.passed && acc)) {
+    if (
+      progress.reduce((acc: boolean, cur: Progress) => cur.passed && acc, false)
+    ) {
       newFinishedAt = new Date();
       setPlayerFinished(newFinishedAt, playerId);
     }
