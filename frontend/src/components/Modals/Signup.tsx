@@ -48,7 +48,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="px-6 pb-4 flex flex-col">
+    <div className="px-8 pb-4 flex flex-col bg-gradient-to-b from-brand-orange-s to-dark-layer-1 pt-10 w-[340px]">
       <h3 className="text-2xl font-medium block mb-2 text-white">Sign Up</h3>
       <div className="mt-3">
         <label className="block mb-1 text-dark-gray-8">Your Name</label>

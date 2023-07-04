@@ -81,7 +81,7 @@ export interface PlayerCode {
 export interface AuthModalState {
   isOpen: boolean;
   isLogin: boolean;
-  type: "login" | "register" | "forgotPassword";
+  type: "login" | "register" | "profile";
 }
 
 export interface Bullet {
@@ -90,6 +90,18 @@ export interface Bullet {
   id: string;
   duration: number;
   colorName: string;
+}
+
+export interface contestHistory {
+  startedAt: Date;
+  contestId: number;
+  problems: {
+    id: number;
+    title: string;
+  }[];
+  players: {
+    name: string;
+  }[];
 }
 
 export type GameHostState =

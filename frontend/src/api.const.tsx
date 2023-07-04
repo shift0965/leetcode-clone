@@ -18,6 +18,7 @@ export const HOST_START_GAME = `${expressBase}/api/1.0/contest/hostStartGame`;
 export const HOST_GET_PLAYERS_CODE = `${expressBase}/api/1.0/contest/hostGetPlayersCode`;
 export const HOST_SEND_MESSAGE = `${expressBase}/api/1.0/contest/hostSendMessage`;
 export const HOST_CLOSE_GAME = `${expressBase}/api/1.0/contest/hostCloseGame`;
+export const HOST_GET_HISTORY = `${expressBase}/api/1.0/contest/hostGetHistory`;
 
 export const PLAYER_JOIN_GAME = `${expressBase}/api/1.0/contest/playerJoinGame`;
 export const PLAYER_CHECK_GAME = `${expressBase}/api/1.0/contest/playerCheckGame`;

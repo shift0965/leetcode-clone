@@ -196,6 +196,83 @@ export async function getContestResultsById(contestId: number) {
   return { time: times[0], problems, players };
 }
 
+export async function getContestHistoryByUser(userId: number) {
+  const contestProblemsResults = await pool.query(
+    "SELECT c.id AS contestId, c.started_at AS startedAt, p.id AS problemId, p.title as problemTitle FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id JOIN problem AS p on cp.problem_id = p.id WHERE c.started_at IS NOT NULL AND c.user_id = ?",
+    [userId]
+  );
+  const problems = z
+    .array(historyProblemResultsSchema)
+    .parse(contestProblemsResults[0]);
+
+  const contestPlayerResults = await pool.query(
+    "SELECT c.id as contestId, cp.name AS playerName, cp.progress AS progress, cp.finished_at AS finishedAt FROM contest AS c JOIN contest_player AS cp ON c.id = cp.contest_id WHERE c.started_at IS NOT NULL AND c.user_id = ?",
+    [userId]
+  );
+
+  const players = z
+    .array(historyPlayerResultsSchema)
+    .parse(contestPlayerResults[0]);
+
+  players.sort((a, b) => {
+    const scoreA = a.progress
+      ? JSON.parse(a.progress).reduce(
+          (acc: number, pro: { passed: boolean }) =>
+            pro.passed ? acc + 1 : acc,
+          0
+        )
+      : 0;
+    const scoreB = b.progress
+      ? JSON.parse(b.progress).reduce(
+          (acc: number, pro: { passed: boolean }) =>
+            pro.passed ? acc + 1 : acc,
+          0
+        )
+      : 0;
+    if (scoreA === scoreB) {
+      if (a.finishedAt && b.finishedAt)
+        return a.finishedAt.getTime() - b.finishedAt.getTime();
+      else return 0;
+    } else return scoreB - scoreA;
+  });
+
+  const contestMap = new Map();
+  problems.forEach((problem) => {
+    const contest = contestMap.get(problem.contestId) || {
+      startedAt: problem.startedAt,
+      contestId: problem.contestId,
+      problems: [],
+      players: [],
+    };
+    contest.problems.push({
+      id: problem.problemId,
+      title: problem.problemTitle,
+    });
+    contestMap.set(problem.contestId, contest);
+  });
+  players.forEach((player) => {
+    const contest = contestMap.get(player.contestId);
+    contest?.players.push({
+      name: player.playerName,
+    });
+  });
+  return Array.from(contestMap.values());
+}
+
+const historyProblemResultsSchema = z.object({
+  contestId: z.number(),
+  startedAt: z.date(),
+  problemId: z.number(),
+  problemTitle: z.string(),
+});
+
+const historyPlayerResultsSchema = z.object({
+  contestId: z.number(),
+  playerName: z.string(),
+  progress: z.string().nullable(),
+  finishedAt: z.date().nullable(),
+});
+
 const problemResultsSchema = z.object({
   id: z.number(),
   title: z.string(),

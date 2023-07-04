@@ -24,6 +24,7 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ) {
+  console.log(err);
   if (err instanceof ExecutionError) {
     return res
       .status(400)
@@ -36,6 +37,5 @@ export function errorHandler(
   if (err instanceof Error) {
     return res.status(500).json({ errors: err.message });
   }
-  res.status(500).send("Oops, unknown error");
-  return;
+  return res.status(500).send("Oops, unknown error");
 }

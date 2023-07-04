@@ -43,7 +43,7 @@ const Login = () => {
   };
 
   return (
-    <div className="px-6 pb-4">
+    <div className="px-8 pb-4 flex flex-col bg-gradient-to-b from-brand-orange-s to-dark-layer-1 pt-10 w-[340px]">
       <h3 className="text-2xl font-medium block mb-2 text-white">Sign In</h3>
       <div className=" mt-4">
         <label className="block mb-2 text-dark-gray-8">Your Email</label>

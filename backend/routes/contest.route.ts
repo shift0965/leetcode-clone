@@ -17,6 +17,7 @@ import {
   hostSendMessage,
   getContestResult,
   hostCloseContest,
+  hostGetHistory,
 } from "../controllers/contest.ctrl.js";
 import authentication from "../middleware/authentication.js";
 
@@ -29,10 +30,10 @@ router
   .route("/contest/hostTerminateGame")
   .post(authentication, hostTerminateContest);
 router.route("/contest/hostCloseGame").post(authentication, hostCloseContest);
-
 router.route("/contest/hostStartGame").post(authentication, hostStartContest);
 router.route("/contest/hostGetPlayersCode").post(hostGetPlayersCode);
 router.route("/contest/hostSendMessage").post(hostSendMessage);
+router.route("/contest/hostGetHistory").post(authentication, hostGetHistory);
 
 //players
 router.route("/contest/playerCheckGame").post(playerCheckContest);

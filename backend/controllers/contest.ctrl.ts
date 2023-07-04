@@ -27,6 +27,7 @@ import {
   getTimeLimitAndStartAtById,
   getContestResultsById,
   closeContestById,
+  getContestHistoryByUser,
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
@@ -409,6 +410,20 @@ export async function hostCloseContest(
     }
     publishHostCloseContest(contestId);
     res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function hostGetHistory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = res.locals.userId;
+    const hostHistory = await getContestHistoryByUser(userId);
+    res.send(hostHistory);
   } catch (err) {
     next(err);
   }
