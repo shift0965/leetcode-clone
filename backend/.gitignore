@@ -2,3 +2,4 @@
 node_modules/
 devFolder/
 dist/
+.DS_Store
