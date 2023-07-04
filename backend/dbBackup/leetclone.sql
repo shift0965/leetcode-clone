@@ -37,7 +37,7 @@ CREATE TABLE `contest` (
   `state` enum('created','started','closed','ended') DEFAULT NULL,
   `started_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,6 @@ CREATE TABLE `contest` (
 
 LOCK TABLES `contest` WRITE;
 /*!40000 ALTER TABLE `contest` DISABLE KEYS */;
-INSERT INTO `contest` VALUES (1,4,60,'ended','2023-07-01 10:55:43'),(2,4,60,'ended','2023-07-01 11:02:00'),(3,4,60,'ended','2023-07-01 11:05:53'),(4,4,60,'ended','2023-07-01 11:07:20'),(5,4,60,'ended','2023-07-01 11:22:14'),(6,4,60,'ended','2023-07-01 11:26:53'),(7,4,1,'ended','2023-07-01 11:37:47'),(8,4,60,'ended',NULL),(9,4,60,'ended','2023-07-01 11:48:19'),(10,4,60,'ended','2023-07-01 11:50:29'),(11,4,60,'ended','2023-07-01 11:50:47'),(12,4,60,'ended','2023-07-01 12:06:04'),(13,4,60,'ended','2023-07-01 12:52:54'),(14,4,60,'ended','2023-07-01 13:01:15'),(15,4,60,'ended','2023-07-01 13:06:50'),(16,4,60,'ended','2023-07-01 13:13:39');
 /*!40000 ALTER TABLE `contest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +64,7 @@ CREATE TABLE `contest_player` (
   `progress` varchar(255) DEFAULT NULL,
   `finished_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +73,6 @@ CREATE TABLE `contest_player` (
 
 LOCK TABLES `contest_player` WRITE;
 /*!40000 ALTER TABLE `contest_player` DISABLE KEYS */;
-INSERT INTO `contest_player` VALUES (51,1,'Jackie','exited',NULL,NULL),(52,2,'Jackie','exited',NULL,NULL),(53,3,'JACKIE','exited',NULL,NULL),(54,4,'Jackie','joined',NULL,NULL),(55,5,'Jackie','exited',NULL,NULL),(56,6,'Jackie','joined',NULL,NULL),(57,8,'Jackie','exited',NULL,NULL),(58,9,'Jackie','joined',NULL,NULL),(59,11,'Jackie','joined',NULL,NULL),(60,12,'Jackie','exited',NULL,NULL),(61,12,'Jackie','exited',NULL,NULL),(62,12,'Jackie','exited',NULL,NULL),(63,12,'Jackie','joined',NULL,NULL),(64,14,'Jackie','joined',NULL,NULL);
 /*!40000 ALTER TABLE `contest_player` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,7 +88,7 @@ CREATE TABLE `contest_problem` (
   `contest_id` int DEFAULT NULL,
   `problem_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=137 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +97,6 @@ CREATE TABLE `contest_problem` (
 
 LOCK TABLES `contest_problem` WRITE;
 /*!40000 ALTER TABLE `contest_problem` DISABLE KEYS */;
-INSERT INTO `contest_problem` VALUES (109,1,25),(110,1,26),(111,2,25),(112,2,26),(113,3,25),(114,3,26),(115,4,25),(116,4,26),(117,5,25),(118,5,26),(119,6,25),(120,6,26),(121,7,25),(122,8,25),(123,8,27),(124,9,25),(125,9,26),(126,10,25),(127,11,25),(128,12,25),(129,12,26),(130,13,26),(131,14,25),(132,14,26),(133,15,25),(134,15,26),(135,16,25),(136,16,26);
 /*!40000 ALTER TABLE `contest_problem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,11 +114,12 @@ CREATE TABLE `problem` (
   `constraints` text,
   `difficulty` enum('Easy','Medium','Hard') DEFAULT NULL,
   `function_name` varchar(63) DEFAULT NULL,
+  `verify_variable` varchar(63) DEFAULT NULL,
   `input_keys` text,
   `boilerplate` text,
   `solution_video` varchar(63) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +128,7 @@ CREATE TABLE `problem` (
 
 LOCK TABLES `problem` WRITE;
 /*!40000 ALTER TABLE `problem` DISABLE KEYS */;
-INSERT INTO `problem` VALUES (25,'two-sum','<p>\n    Given an array of integers <code>nums</code> and an <code>integer</code>\n    target, <em> return indices of the two numbers such that they add up to </em> <code>target</code>.\n    </p>\n    <p>\n        You may assume that each input would have\n        <strong>exactly one solution</strong>, and you may not use the\n        same element twice.\n    </p>\n    <p>You can return the answer in any order.</p>','[\"<code> 2 <= nums.length <= 104</code> \",\"<code> -109 <= nums[i] <= 109 </code>\",\"<code> -109 <= target <= 109 </code>\",\"Only one valid answer exists.\"]','Easy','twoSum','[\"nums\",\"target\"]','\n    /**\n    * @param {number[]} nums\n    * @param {number} target\n    * @return {number[]}\n    */\n   var twoSum = function(nums, target) {\n       \n   };\n   ','KLlXCFG5TnA'),(26,'Valid Parentheses','\n    <p>Given a string <code>s</code> containing just the characters <code>\'(\'</code>, <code>\')\'</code>, <code>\'{\'</code>, <code>\'}\'</code>, <code>\'[\'</code> and <code>\']\'</code>, determine if the input string is valid.</p>\n    <ol>\n	<li>Open brackets must be closed by the same type of brackets.</li>\n	<li>Open brackets must be closed in the correct order.</li>\n	<li>Every close bracket has a corresponding open bracket of the same type.</li>\n    </ol>','[\"<code>1 &lt;= s.length &lt;= 10<sup>4</sup></code>\",\"<code>s</code> consists of parentheses only <code>\'()[]{}\'</code>\"]','Easy','isValid','[\"s\"]','\n    /**\n     * @param {string} s\n     * @return {boolean}\n     */\n    var isValid = function(s) {\n        \n    };\n   ','WTzjTskDFMg'),(27,'Number of Islands','\n    <p>Given an <code>m x n</code> 2D binary grid <code>grid</code> which represents a map of <code>\'1\'</code>s (land) and <code>\'0\'</code>s (water), return <em>the number of islands</em>.</p>\n    <p>An <strong>island</strong> is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.</p>','[\"<code>m == grid.length</code>\",\"<code>n == grid[i].length</code>\",\"<code>1 &lt;= m, n &lt;= 300</code>\",\"<code>grid[i][j]</code> is <code>\'0\'</code> or <code>\'1\'</code>.\"]','Easy','numIslands','[\"grid\"]','\n    /**\n     * @param {character[][]} grid\n     * @return {number}\n     */\n    var numIslands = function(grid) {\n        \n    };\n   ','pV2kpPD66nE');
+INSERT INTO `problem` VALUES (65,'Two sum','<p>\n    Given an array of integers <code>nums</code> and an <code>integer</code>\n    target, <em> return indices of the two numbers such that they add up to </em> <code>target</code>.\n    </p>\n    <p>\n        You may assume that each input would have\n        <strong>exactly one solution</strong>, and you may not use the\n        same element twice.\n    </p>\n    <p>You can return the answer in any order.</p>','[\"<code> 2 <= nums.length <= 104</code> \",\"<code> -109 <= nums[i] <= 109 </code>\",\"<code> -109 <= target <= 109 </code>\",\"Only one valid answer exists.\"]','Easy','twoSum',NULL,'[\"nums\",\"target\"]','/**\n    * @param {number[]} nums\n    * @param {number} target\n    * @return {number[]}\n    */\n   var twoSum = function(nums, target) {\n       \n   };\n   ','KLlXCFG5TnA'),(66,'Valid Parentheses','\n    <p>Given a string <code>s</code> containing just the characters <code>\'(\'</code>, <code>\')\'</code>, <code>\'{\'</code>, <code>\'}\'</code>, <code>\'[\'</code> and <code>\']\'</code>, determine if the input string is valid.</p>\n    <ol>\n	<li>Open brackets must be closed by the same type of brackets.</li>\n	<li>Open brackets must be closed in the correct order.</li>\n	<li>Every close bracket has a corresponding open bracket of the same type.</li>\n    </ol>','[\"<code>1 &lt;= s.length &lt;= 10<sup>4</sup></code>\",\"<code>s</code> consists of parentheses only <code>\'()[]{}\'</code>\"]','Easy','isValid',NULL,'[\"s\"]','/**\n     * @param {string} s\n     * @return {boolean}\n     */\n    var isValid = function(s) {\n        \n    };\n   ','WTzjTskDFMg'),(67,'Number of Islands','\n    <p>Given an <code>m x n</code> 2D binary grid <code>grid</code> which represents a map of <code>\'1\'</code>s (land) and <code>\'0\'</code>s (water), return <em>the number of islands</em>.</p>\n    <p>An <strong>island</strong> is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.</p>','[\"<code>m == grid.length</code>\",\"<code>n == grid[i].length</code>\",\"<code>1 &lt;= m, n &lt;= 300</code>\",\"<code>grid[i][j]</code> is <code>\'0\'</code> or <code>\'1\'</code>.\"]','Easy','numIslands',NULL,'[\"grid\"]','/**\n     * @param {character[][]} grid\n     * @return {number}\n     */\n    var numIslands = function(grid) {\n        \n    };\n   ','pV2kpPD66nE'),(68,'Unique Paths','<p>There is a robot on an <code>m x n</code> grid. The robot is initially located at the <strong>top-left corner</strong> (i.e., <code>grid[0][0]</code>). The robot tries to move to the <strong>bottom-right corner</strong> (i.e., <code>grid[m - 1][n - 1]</code>). The robot can only move either down or right at any point in time.</p>\n    <p>Given the two integers <code>m</code> and <code>n</code>, return <em>the number of possible unique paths that the robot can take to reach the bottom-right corner</em>.</p>\n    <p>The test cases are generated so that the answer will be less than or equal to <code>2 * 10<sup>9</sup></code>.</p>','[\"<code>1 &lt;= m, n &lt;= 100</code>\"]','Medium','uniquePaths',NULL,'[\"m\",\"n\"]','/**\n     * @param {number} m\n     * @param {number} n\n     * @return {number}\n     */\n    var uniquePaths = function(m, n) {\n        \n    };\n   ','IlEsdxuD4lY'),(69,'Merge Intervals','<p>Given an array&nbsp;of <code>intervals</code>&nbsp;where <code>intervals[i] = [start<sub>i</sub>, end<sub>i</sub>]</code>, merge all overlapping intervals, and return <em>an array of the non-overlapping intervals that cover all the intervals in the input</em>.</p>','[\"<code>1 &lt;= intervals.length &lt;= 10<sup>4</sup></code>\",\"<code>intervals[i].length == 2</code>\",\"<code>0 &lt;= start<sub>i</sub> &lt;= end<sub>i</sub> &lt;= 10<sup>4</sup></code>\"]','Medium','merge',NULL,'[\"intervals\"]','/**\n   * @param {number[][]} intervals\n   * @return {number[][]}\n   */\n  var merge = function(intervals) {\n      \n  };','44H3cEC2fFM'),(70,'Permutations','<p>Given an array <code>nums</code> of distinct integers, return <em>all the possible permutations</em>. You can return the answer in <strong>any order</strong>.</p>','[\"<code>1 &lt;= nums.length &lt;= 6</code>\",\"<code>-10 &lt;= nums[i] &lt;= 10</code>\",\"All the integers of <code>nums</code> are <strong>unique</strong>.\"]','Medium','permute','ignore order','[\"nums\"]','/**\n    * @param {number[]} nums\n    * @return {number[][]}\n    */\n   var permute = function(nums) {\n       \n   };','s7AvT7cGdSo'),(71,'Container With Most Water','<p>You are given an integer array <code>height</code> of length <code>n</code>. There are <code>n</code> vertical lines drawn such that the two endpoints of the <code>i<sup>th</sup></code> line are <code>(i, 0)</code> and <code>(i, height[i])</code>.</p>\n    <p>Find two lines that together with the x-axis form a container, such that the container contains the most water.</p>\n    <p>Return <em>the maximum amount of water a container can store</em>.</p>\n    <p><strong>Notice</strong> that you may not slant the container.</p>','[\"<code>n == height.length</code>\",\"<code>2 &lt;= n &lt;= 10<sup>5</sup></code>\",\"<code>0 &lt;= height[i] &lt;= 10<sup>4</sup></code>\"]','Medium','maxArea',NULL,'[\"height\"]','/**\n    * @param {number[]} height\n    * @return {number}\n    */\n   var maxArea = function(height) {\n       \n   };','UuiTKBwPgAo');
 /*!40000 ALTER TABLE `problem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +147,7 @@ CREATE TABLE `problem_example` (
   `explanation` text,
   `image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=335 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +156,7 @@ CREATE TABLE `problem_example` (
 
 LOCK TABLES `problem_example` WRITE;
 /*!40000 ALTER TABLE `problem_example` DISABLE KEYS */;
-INSERT INTO `problem_example` VALUES (65,25,'[[2,7,11,15],9]','[0,1]','Because nums[0] + nums[1] == 9, we return [0, 1].',NULL),(66,25,'[[3,2,4],6]','[1,2]',NULL,NULL),(67,25,'[[3,3],6]','[0,1]',NULL,NULL),(68,26,'[\"()[]{}\"]','true',NULL,NULL),(69,26,'[\"()\"]','true',NULL,NULL),(70,26,'[\"(]\"]','false',NULL,NULL),(71,27,'[[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','1',NULL,NULL),(72,27,'[[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]]','3',NULL,NULL);
+INSERT INTO `problem_example` VALUES (318,65,'[[2,7,11,15],9]','[0,1]','Because nums[0] + nums[1] == 9, we return [0, 1].',NULL),(319,65,'[[3,2,4],6]','[1,2]',NULL,NULL),(320,65,'[[3,3],6]','[0,1]',NULL,NULL),(321,66,'[\"()\"]','true',NULL,NULL),(322,66,'[\"()[]{}\"]','true',NULL,NULL),(323,66,'[\"(]\"]','false',NULL,NULL),(324,67,'[[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','1',NULL,NULL),(325,67,'[[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]]','3',NULL,NULL),(326,68,'[3,7]','28',NULL,'robot_maze.png'),(327,68,'[3,2]','3','From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:\n1. Right -> Down -> Down\n2. Down -> Down -> Right\n3. Down -> Right -> Down',NULL),(328,69,'[[[1,3],[2,6],[8,10],[15,18]]]','[[1,6],[8,10],[15,18]]','Since intervals [1,3] and [2,6] overlap, merge them into [1,6].',NULL),(329,69,'[[[1,4],[4,5]]]','[[1,5]]','Intervals [1,4] and [4,5] are considered overlapping.',NULL),(330,70,'[[1,2,3]]','[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]',NULL,NULL),(331,70,'[[0,1]]','[[0,1],[1,0]]',NULL,NULL),(332,70,'[[1]]','[[1]]',NULL,NULL),(333,71,'[[1,8,6,2,5,4,8,3,7]]','49','The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.','water_container.jpeg'),(334,71,'[[1,1]]','1',NULL,NULL);
 /*!40000 ALTER TABLE `problem_example` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +173,7 @@ CREATE TABLE `problem_testcase` (
   `input` text,
   `output` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=579 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +182,7 @@ CREATE TABLE `problem_testcase` (
 
 LOCK TABLES `problem_testcase` WRITE;
 /*!40000 ALTER TABLE `problem_testcase` DISABLE KEYS */;
-INSERT INTO `problem_testcase` VALUES (86,25,'[[3,2,4,1,9],12]','[0,4]'),(87,25,'[[2,1,3,9],5]','[0,2]'),(88,25,'[[1,9,13,20,47],10]','[0,1]'),(89,26,'[\"({[)})\"]','false'),(90,26,'[\"()(\"]','false'),(91,26,'[\"{[}]\"]','false'),(92,26,'[\"({)}\"]','false'),(93,27,'[[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','1'),(94,27,'[[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]]','3'),(95,27,'[[[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','0'),(96,27,'[[[\"1\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"0\"]]]','4');
+INSERT INTO `problem_testcase` VALUES (547,65,'[[1,9,13,20,47],10]','[0,1]'),(548,65,'[[3,2,4,1,9],12]','[0,4]'),(549,65,'[[2,1,3,9],5]','[0,2]'),(550,66,'[\"({[)})\"]','false'),(551,66,'[\"{[}]\"]','false'),(552,66,'[\"()(\"]','false'),(553,66,'[\"({)}\"]','false'),(554,67,'[[[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','1'),(555,67,'[[[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]]','3'),(556,67,'[[[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]]','0'),(557,67,'[[[\"1\",\"0\",\"0\",\"0\",\"0\"],[\"0\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"0\"]]]','4'),(558,68,'[1,1]','1'),(559,68,'[1,10]','1'),(560,68,'[2,2]','2'),(561,68,'[20,5]','8855'),(562,68,'[5,5]','70'),(563,68,'[16,16]','155117520'),(564,69,'[[[2,3],[9,12],[4,7],[6,8]]]','[[2,3],[4,8],[9,12]]'),(565,69,'[[[6,8],[1,5],[2,4]]]','[[1,5],[6,8]]'),(566,69,'[[[7,8],[2,6],[1,5],[3,4]]]','[[1,6],[7,8]]'),(567,69,'[[[5,6],[1,2],[3,4],[7,8]]]','[[1,2],[3,4],[5,6],[7,8]]'),(568,69,'[[[1,100]]]','[[1,100]]'),(569,69,'[[]]','[]'),(570,70,'[[1,6,2,10]]','[[1,6,2,10],[1,6,10,2],[1,2,6,10],[1,2,10,6],[1,10,6,2],[1,10,2,6],[6,1,2,10],[6,1,10,2],[6,2,1,10],[6,2,10,1],[6,10,1,2],[6,10,2,1],[2,1,6,10],[2,1,10,6],[2,6,1,10],[2,6,10,1],[2,10,1,6],[2,10,6,1],[10,1,6,2],[10,1,2,6],[10,6,1,2],[10,6,2,1],[10,2,1,6],[10,2,6,1]]'),(571,70,'[[9,6,7]]','[[9,6,7],[9,7,6],[6,9,7],[6,7,9],[7,9,6],[7,6,9]]'),(572,70,'[[5,4,3,2,1]]','[[5,4,3,2,1],[5,4,3,1,2],[5,4,2,3,1],[5,4,2,1,3],[5,4,1,3,2],[5,4,1,2,3],[5,3,4,2,1],[5,3,4,1,2],[5,3,2,4,1],[5,3,2,1,4],[5,3,1,4,2],[5,3,1,2,4],[5,2,4,3,1],[5,2,4,1,3],[5,2,3,4,1],[5,2,3,1,4],[5,2,1,4,3],[5,2,1,3,4],[5,1,4,3,2],[5,1,4,2,3],[5,1,3,4,2],[5,1,3,2,4],[5,1,2,4,3],[5,1,2,3,4],[4,5,3,2,1],[4,5,3,1,2],[4,5,2,3,1],[4,5,2,1,3],[4,5,1,3,2],[4,5,1,2,3],[4,3,5,2,1],[4,3,5,1,2],[4,3,2,5,1],[4,3,2,1,5],[4,3,1,5,2],[4,3,1,2,5],[4,2,5,3,1],[4,2,5,1,3],[4,2,3,5,1],[4,2,3,1,5],[4,2,1,5,3],[4,2,1,3,5],[4,1,5,3,2],[4,1,5,2,3],[4,1,3,5,2],[4,1,3,2,5],[4,1,2,5,3],[4,1,2,3,5],[3,5,4,2,1],[3,5,4,1,2],[3,5,2,4,1],[3,5,2,1,4],[3,5,1,4,2],[3,5,1,2,4],[3,4,5,2,1],[3,4,5,1,2],[3,4,2,5,1],[3,4,2,1,5],[3,4,1,5,2],[3,4,1,2,5],[3,2,5,4,1],[3,2,5,1,4],[3,2,4,5,1],[3,2,4,1,5],[3,2,1,5,4],[3,2,1,4,5],[3,1,5,4,2],[3,1,5,2,4],[3,1,4,5,2],[3,1,4,2,5],[3,1,2,5,4],[3,1,2,4,5],[2,5,4,3,1],[2,5,4,1,3],[2,5,3,4,1],[2,5,3,1,4],[2,5,1,4,3],[2,5,1,3,4],[2,4,5,3,1],[2,4,5,1,3],[2,4,3,5,1],[2,4,3,1,5],[2,4,1,5,3],[2,4,1,3,5],[2,3,5,4,1],[2,3,5,1,4],[2,3,4,5,1],[2,3,4,1,5],[2,3,1,5,4],[2,3,1,4,5],[2,1,5,4,3],[2,1,5,3,4],[2,1,4,5,3],[2,1,4,3,5],[2,1,3,5,4],[2,1,3,4,5],[1,5,4,3,2],[1,5,4,2,3],[1,5,3,4,2],[1,5,3,2,4],[1,5,2,4,3],[1,5,2,3,4],[1,4,5,3,2],[1,4,5,2,3],[1,4,3,5,2],[1,4,3,2,5],[1,4,2,5,3],[1,4,2,3,5],[1,3,5,4,2],[1,3,5,2,4],[1,3,4,5,2],[1,3,4,2,5],[1,3,2,5,4],[1,3,2,4,5],[1,2,5,4,3],[1,2,5,3,4],[1,2,4,5,3],[1,2,4,3,5],[1,2,3,5,4],[1,2,3,4,5]]'),(573,71,'[[1,1]]','1'),(574,71,'[[1,2,1]]','2'),(575,71,'[[4,3,2,1,4]]','16'),(576,71,'[[5,2,3,10,8,4]]','20'),(577,71,'[[1,2,3,4,5,6,7,8,9,10]]','25'),(578,71,'[[10,9,8,7,6,5,4,3,2,1]]','25');
 /*!40000 ALTER TABLE `problem_testcase` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +198,7 @@ CREATE TABLE `problem_to_tag` (
   `problem_id` int DEFAULT NULL,
   `tag_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +207,7 @@ CREATE TABLE `problem_to_tag` (
 
 LOCK TABLES `problem_to_tag` WRITE;
 /*!40000 ALTER TABLE `problem_to_tag` DISABLE KEYS */;
-INSERT INTO `problem_to_tag` VALUES (1,19,1),(2,21,5),(3,19,2),(4,21,3),(5,20,4),(6,24,8),(7,23,6),(8,22,7),(9,24,9),(10,26,10),(11,25,11),(12,27,12),(13,27,13);
+INSERT INTO `problem_to_tag` VALUES (131,65,131),(132,69,132),(133,66,134),(134,70,137),(135,67,136),(136,67,135),(137,71,133),(138,68,138);
 /*!40000 ALTER TABLE `problem_to_tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,7 +222,7 @@ CREATE TABLE `tag` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(63) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +231,7 @@ CREATE TABLE `tag` (
 
 LOCK TABLES `tag` WRITE;
 /*!40000 ALTER TABLE `tag` DISABLE KEYS */;
-INSERT INTO `tag` VALUES (1,'Hash Table'),(2,'Array'),(3,'DFS'),(4,'Stack'),(5,'BFS'),(6,'Stack'),(7,'HashMap'),(8,'DFS'),(9,'BFS'),(10,'Stack'),(11,'HashMap'),(12,'DFS'),(13,'BFS');
+INSERT INTO `tag` VALUES (131,'HashMap'),(132,'Sorting'),(133,'Two Pointers'),(134,'Stack'),(135,'BFS'),(136,'DFS'),(137,'Backtracking'),(138,'DP');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-01 13:14:17
+-- Dump completed on 2023-07-04 17:25:55
