@@ -82,7 +82,6 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       })
         .then((response) => response.json())
         .then((results) => {
-          console.log(results);
           setPlayersProgress(
             results.progress.map(
               (data: {
@@ -208,8 +207,6 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           problemTitle: string;
           code: string;
         }) {
-          console.log(data);
-
           setPlayersCode((prev) => {
             const playerIndex = prev.findIndex((p) => p.id === data.id);
             if (playerIndex !== -1) {
@@ -309,7 +306,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
             );
           })}
         </div>
-      </div>{" "}
+      </div>
       {!focusedPlayerId && (
         <div className=" shrink text-gray-50 grid grid-cols-2 gap-[12px] px-[14px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto">
           {playersCode.map((playerCode, id) => {

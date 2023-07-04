@@ -90,7 +90,6 @@ redisPubsub.subscribe(
 redisPubsub.on("message", (channel: string, message: string) => {
   const response = JSON.parse(message);
   if (channel === "ps-player-joinGame") {
-    console.log(response);
     io.to(String(response.contestId)).emit("ws-host-playerJoinGame", {
       id: response.id,
       name: response.name,
@@ -102,7 +101,6 @@ redisPubsub.on("message", (channel: string, message: string) => {
   } else if (channel === "ps-host-terminateGame") {
     io.to(String(response.contestId)).emit("ws-player-hostTerminateGame");
   } else if (channel === "ps-host-closeGame") {
-    console.log("close");
     io.to(String(response.contestId)).emit("ws-player-hostCloseGame");
   } else if (channel === "ps-host-startGame") {
     io.to(String(response.contestId)).emit("ws-player-hostStartGame");
