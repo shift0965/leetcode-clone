@@ -14,8 +14,8 @@ const ProblemsTable = () => {
     videoId: "",
   });
   const [problems, setProblems] = useState<Problem[]>([]);
-  const problemStatus = JSON.parse(
-    localStorage.getItem("problemStatus") || "{}"
+  const [problemStatus, setProblemStatus] = useState(
+    JSON.parse(localStorage.getItem("problemStatus") || "{}")
   );
   useEffect(() => {
     fetch(GET_ALL_PROBLEMS, {
@@ -50,9 +50,23 @@ const ProblemsTable = () => {
                     key={id}
                   >
                     <td className="pl-4 py-4 whitespace-nowrap text-dark-green-s">
-                      {problemStatus[problem.id] && (
-                        <BsCheckCircle width="18" />
-                      )}
+                      <div
+                        className=" cursor-pointer h-6"
+                        onClick={() => {
+                          setProblemStatus((prev: any) => {
+                            prev[problem.id] = !prev[problem.id];
+                            localStorage.setItem(
+                              "problemStatus",
+                              JSON.stringify(prev)
+                            );
+                            return { ...prev };
+                          });
+                        }}
+                      >
+                        {problemStatus[problem.id] && (
+                          <BsCheckCircle width="18" />
+                        )}
+                      </div>
                     </td>
 
                     <td className="px-3 py-4">
