@@ -7,9 +7,6 @@ import path from "path";
 
 import cors from "cors";
 import dotenv from "dotenv";
-
-//insert data
-// import { reInsertData } from "./devFolder/devFuncs.js";
 import { errorHandler } from "./helpers/errorHandler.js";
 
 dotenv.config();
@@ -27,11 +24,6 @@ app.use("/api/1.0", [
   contestRouter,
   userRouter,
 ]);
-
-// app.post("/reInsertData", async (req: Request, res: Response) => {
-//   await reInsertData();
-//   res.send("OK");
-// });
 
 app.use("/", express.static(path.resolve("../frontend/dist")));
 app.get("*", (req, res) => {

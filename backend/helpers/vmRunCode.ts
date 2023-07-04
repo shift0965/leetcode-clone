@@ -59,7 +59,7 @@ function formatConsoleLog(data: any) {
   if (typeof data === "string") {
     return data;
   } else if (typeof data === "object") {
-    return util.inspect(data);
+    return isCyclic(data) ? util.inspect(data) : JSON.stringify(data);
   } else {
     return String(data);
   }
@@ -121,14 +121,15 @@ function runJavaScript(
             ifRecordConsole && consoles.push(formatConsoleLog(data));
           },
         },
-        EXECUTION_INPUT: inputs,
+        //EXECUTION_INPUT: inputs,
       },
     });
     let result = vm.run(`${code}
-      const EXECUTE_USER_CODE = (cb) => {
-        return cb(...EXECUTION_INPUT)
-      }
-      EXECUTE_USER_CODE(${functionName})`);
+    const EXECUTE_USER_CODE = (cb) => {
+      const EXECUTION_INPUT = ${JSON.stringify(inputs)}
+      return cb(...EXECUTION_INPUT)
+    }
+    EXECUTE_USER_CODE(${functionName})`);
     return {
       result: isCyclic(result) ? util.inspect(result) : result,
       consoles,

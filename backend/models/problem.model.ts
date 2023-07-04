@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export async function getTestCasesByProblemId(problemId: number) {
   const results = await pool.query(
-    "SELECT p.function_name, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
+    "SELECT p.function_name, p.verify_variable, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
     [problemId]
   );
   const testCasesData = z.array(TestCasesDataSchema).parse(results[0]);
@@ -28,7 +28,6 @@ export async function getExampleCasesDataById(problemId: number) {
     [problemId]
   );
   const exampleCasesData = z.array(TestCasesDataSchema).parse(results[0]);
-  console.log(exampleCasesData);
   if (exampleCasesData.length === 0) return null;
 
   const runExampleDataParsed = {
