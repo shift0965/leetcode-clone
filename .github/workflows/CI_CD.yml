@@ -16,12 +16,12 @@ jobs:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.EC2_USERNAME }}
           script: |
-            echo "Hello from github action, start deploy main to ec2"
             cd /home/ubuntu/leetcode-clone
 
             #clean up
             docker-compose down
             docker system prune --force
+            sudo apt autoremove
 
             #pull change
             git pull origin main 
