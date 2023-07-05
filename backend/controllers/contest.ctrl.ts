@@ -47,11 +47,6 @@ export async function hostCheckContest(
       time &&
       time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
     ) {
-      console.log(
-        time.startedAt.getTime(),
-        time.timeLimit * 60000,
-        new Date().getTime()
-      );
       await closeContestById(contest.contestId);
       contest.state = "closed";
     }
@@ -376,12 +371,8 @@ export async function getContestResult(
     });
 
     playerResults.sort((a, b) => {
-      const scoreA = a.progress.reduce((acc, cur) => {
-        cur ? acc + 1 : acc;
-      }, 0);
-      const scoreB = b.progress.reduce((acc, cur) => {
-        cur ? acc + 1 : acc;
-      }, 0);
+      const scoreA = a.progress.reduce((acc, cur) => (cur ? acc + 1 : acc), 0);
+      const scoreB = b.progress.reduce((acc, cur) => (cur ? acc + 1 : acc), 0);
       if (scoreA !== scoreB) return scoreB - scoreA;
       else {
         if (a.timeUsed && b.timeUsed) {

@@ -308,33 +308,35 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
         </div>
       </div>
       {!focusedPlayerId && (
-        <div className="shrink text-gray-50 flex flex-wrap gap-[12px] px-[14px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto">
-          {playersCode.map((playerCode, id) => {
-            const problem =
-              playerCode.problems[playerCode.lastModifyedProblem || 0];
-            return (
-              <div
-                className="h-[300px] w-[calc(50%-16px)] relative rounded-lg bg-dark-layer-1 overflow-hidden cursor-pointer"
-                key={id}
-                onClick={() => setFocusedPlayerId(playerCode.id)}
-              >
-                <div className=" absolute bottom-0">
-                  <CodeMirror userCode={problem.code} readOnly={true} />
+        <div className="shrink text-gray-50 mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto">
+          <div className="flex flex-wrap gap-[12px] px-[14px]">
+            {playersCode.map((playerCode, id) => {
+              const problem =
+                playerCode.problems[playerCode.lastModifyedProblem || 0];
+              return (
+                <div
+                  className="h-[300px] w-[calc(50%-10px)] relative rounded-lg bg-dark-layer-1 overflow-hidden cursor-pointer"
+                  key={id}
+                  onClick={() => setFocusedPlayerId(playerCode.id)}
+                >
+                  <div className=" absolute bottom-0">
+                    <CodeMirror userCode={problem.code} readOnly={true} />
+                  </div>
+                  <div className=" absolute top-2 left-3 inline-flex bg-sky-900 items-center rounded-lg px-2 py-1">
+                    <img
+                      src={`${PLAYER_AVATAR_URL}&seed=${playerCode.name}`}
+                      alt="avatar"
+                      className=" h-[26px] mr-1"
+                    />
+                    {playerCode.name}
+                  </div>
+                  <div className=" absolute top-2 right-3 inline-flex bg-emerald-900  items-center rounded-lg px-2 py-1">
+                    {problem.title}
+                  </div>
                 </div>
-                <div className=" absolute top-2 left-3 inline-flex bg-sky-900 items-center rounded-lg px-2 py-1">
-                  <img
-                    src={`${PLAYER_AVATAR_URL}&seed=${playerCode.name}`}
-                    alt="avatar"
-                    className=" h-[26px] mr-1"
-                  />
-                  {playerCode.name}
-                </div>
-                <div className=" absolute top-2 right-3 inline-flex bg-emerald-900  items-center rounded-lg px-2 py-1">
-                  {problem.title}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
       {focusedPlayerId && (

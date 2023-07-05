@@ -42,9 +42,9 @@ const Profile = () => {
         <span className=" text-dark-yellow mr-[10px]">{userName}'s</span>Host
         History
       </div>
-      <div className="h-[420px] overflow-y-auto ">
+      <div className="h-[420px] overflow-y-auto">
         <table className="w-full">
-          <thead className="text-dark-gray-8 text-left border-b-[1px]">
+          <thead className="text-dark-gray-8 text-left border-b-[1px] h-[60px]">
             <tr>
               <th className="py-3 px-2 w-[10%]">GameId</th>
               <th className="py-3 px-2 w-[25%]">Problems</th>
@@ -52,7 +52,7 @@ const Profile = () => {
               <th className="py-3 px-2 w-[15%] text-center">Time</th>
             </tr>
           </thead>
-          <tbody className="text-dark-gray-8">
+          <tbody className="text-dark-gray-8 ">
             {hostHistory &&
               hostHistory.length > 0 &&
               hostHistory.map((contest, id) => (
@@ -69,18 +69,16 @@ const Profile = () => {
                   </td>
                   <td className="py-4 px-2 flex flex-wrap">
                     {contest.players.map((player, id) => (
-                      <>
-                        <div
-                          key={id}
-                          className="mr-[12px] mb-1 flex items-center"
-                        >
-                          <img
-                            src={`${PLAYER_AVATAR_URL}&seed=${player.name}`}
-                            className="h-[25px] mr-[4px]"
-                          ></img>
-                          {player.name}
-                        </div>
-                      </>
+                      <div
+                        key={id}
+                        className="mr-[12px] mb-1 flex items-center"
+                      >
+                        <img
+                          src={`${PLAYER_AVATAR_URL}&seed=${player.name}`}
+                          className="h-[25px] mr-[4px]"
+                        ></img>
+                        {player.name}
+                      </div>
                     ))}
                   </td>
                   <td className="py-3 text-center text-dark-gray-7">
