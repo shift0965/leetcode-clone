@@ -308,13 +308,13 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
         </div>
       </div>
       {!focusedPlayerId && (
-        <div className=" shrink text-gray-50 grid grid-cols-2 gap-[12px] px-[14px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto">
+        <div className="shrink text-gray-50 flex flex-wrap gap-[12px] px-[14px] mt-[8px] h-[calc(100vh-64px)] w-full overflow-y-auto">
           {playersCode.map((playerCode, id) => {
             const problem =
               playerCode.problems[playerCode.lastModifyedProblem || 0];
             return (
               <div
-                className="h-[300px] relative rounded-lg bg-dark-layer-1 overflow-hidden cursor-pointer"
+                className="h-[300px] w-[calc(50%-16px)] relative rounded-lg bg-dark-layer-1 overflow-hidden cursor-pointer"
                 key={id}
                 onClick={() => setFocusedPlayerId(playerCode.id)}
               >

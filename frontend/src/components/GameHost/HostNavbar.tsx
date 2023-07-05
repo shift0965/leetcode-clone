@@ -28,18 +28,25 @@ const HostNavbar = ({
 
   useEffect(() => {
     if (currentState === "GameWatching" && gameId) {
-      fetch(GET_TIME_LIMIT, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const msLeft = result.endedAt - new Date().getTime();
-          setTimeLeft(Math.floor(msLeft / 1000));
-        });
+      const fetchTime = () => {
+        fetch(GET_TIME_LIMIT, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            gameId: gameId,
+          }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            const msLeft = result.endedAt - new Date().getTime();
+            setTimeLeft(Math.floor(msLeft / 1000));
+          });
+      };
+      fetchTime();
+      const intervalId = setInterval(() => {
+        fetchTime();
+      }, 60000);
+      return () => clearInterval(intervalId);
     }
   }, [currentState, gameId]);
 
@@ -114,8 +121,7 @@ const HostNavbar = ({
   };
 
   useEffect(() => {
-    if (currentState === "GameWatching" && timeLeft === 0) {
-      console.log("Go");
+    if (currentState === "GameWatching" && timeLeft && timeLeft <= 0) {
       setCurrentState("GameResult");
     }
   }, [timeLeft, currentState]);

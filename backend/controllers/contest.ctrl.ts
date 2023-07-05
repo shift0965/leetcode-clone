@@ -109,6 +109,7 @@ export async function playerCheckContest(
     const playerId = req.body.playerId;
     const contestId = req.body.contestId;
     const contest = await checkContestStateByIdAndPlayerId(contestId, playerId);
+    if (!contest) return res.send({ founded: false });
     const time = await getTimeLimitAndStartAtById(contest.contestId);
     if (
       time &&
@@ -117,7 +118,6 @@ export async function playerCheckContest(
       await closeContestById(contest.contestId);
       contest.state = "closed";
     }
-    if (!contest) return res.send({ founded: false });
     res.send({
       founded: true,
       contestId: contest.contestId,
@@ -262,7 +262,6 @@ export async function playerSubmit(
         .status(200)
         .send({ ...result, progress: progress, finishedAt: finishedAt });
 
-    let newFinishedAt = null;
     if (result.passed) {
       progress.forEach((pro: Progress) => {
         if (pro.id === problemId && !pro.passed) {
@@ -271,16 +270,18 @@ export async function playerSubmit(
       });
     }
     setPlayerProgressById(playerId, JSON.stringify(progress));
-    if (
-      progress.reduce((acc: boolean, cur: Progress) => cur.passed && acc, false)
-    ) {
-      newFinishedAt = new Date();
-      setPlayerFinished(newFinishedAt, playerId);
-    }
-    publishPlayerUpdateProgress(gameId, playerId, progress, finishedAt);
+    const newFinishedAt = progress.reduce(
+      (acc: boolean, cur: Progress) => cur.passed && acc,
+      true
+    )
+      ? new Date()
+      : null;
+    if (newFinishedAt) setPlayerFinished(newFinishedAt, playerId);
+
+    publishPlayerUpdateProgress(gameId, playerId, progress, newFinishedAt);
     return res
       .status(200)
-      .send({ ...result, progress: progress, finishedAt: finishedAt });
+      .send({ ...result, progress: progress, finishedAt: newFinishedAt });
   } catch (err) {
     next(err);
   }

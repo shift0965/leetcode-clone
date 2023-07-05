@@ -45,23 +45,30 @@ const PlayerNavbar = ({
 
   useEffect(() => {
     if (currentState === "GamePlaying" && player) {
-      fetch(GET_TIME_LIMIT, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player.gameId,
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          const msLeft = result.endedAt - new Date().getTime();
-          setTimeLeft(Math.floor(msLeft / 1000));
-        });
+      const fetchTime = () => {
+        fetch(GET_TIME_LIMIT, {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            gameId: player.gameId,
+          }),
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            const msLeft = result.endedAt - new Date().getTime();
+            setTimeLeft(Math.floor(msLeft / 1000));
+          });
+      };
+      fetchTime();
+      const intervalId = setInterval(() => {
+        fetchTime();
+      }, 60000);
+      return () => clearInterval(intervalId);
     }
-  }, [currentState]);
+  }, [currentState, player]);
 
   useEffect(() => {
-    if (currentState === "GamePlaying" && timeLeft === 0) {
+    if (currentState === "GamePlaying" && timeLeft && timeLeft <= 0) {
       setCurrentState("GameResult");
     }
   }, [timeLeft, currentState]);
