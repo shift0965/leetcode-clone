@@ -21,6 +21,7 @@ app.get("/", (req: Request, res: Response) => {
 
 io.on("connection", (socket) => {
   socket.on("ws-host-joinGame", (msg) => {
+    console.log("hi");
     socket.join(String(msg.gameId));
   });
   socket.on("ws-player-joinGame", (msg) => {
@@ -111,7 +112,6 @@ redisPubsub.on("message", (channel: string, message: string) => {
       finishedAt: response.finishedAt,
     });
   } else if (channel === "ps-host-sendMessageToPlayer") {
-    console.log(response);
     io.to(String(response.contestId)).emit("ws-player-sendMessageToPlayer", {
       id: response.playerId,
       message: response.message,

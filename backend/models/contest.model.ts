@@ -256,7 +256,9 @@ export async function getContestHistoryByUser(userId: number) {
       name: player.playerName,
     });
   });
-  return Array.from(contestMap.values());
+  return Array.from(contestMap.values()).filter(
+    (contest) => contest.players.length > 0
+  );
 }
 
 const historyProblemResultsSchema = z.object({
