@@ -27,7 +27,7 @@ export function errorHandler(
   console.log(err);
   if (err instanceof ExecutionError) {
     return res
-      .status(400)
+      .status(480)
       .json({ name: err.name, line: err.line, message: err.message });
   }
 

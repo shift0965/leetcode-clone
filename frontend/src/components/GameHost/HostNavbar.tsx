@@ -66,11 +66,11 @@ const HostNavbar = ({
       }).then((response) => {
         if (response.status === 200) {
           toast("🔥 Game Started !");
+          setCurrentState("GameWatching");
         } else {
           toast.error("Start Game failed");
         }
       });
-      setCurrentState("GameWatching");
     }
   };
 

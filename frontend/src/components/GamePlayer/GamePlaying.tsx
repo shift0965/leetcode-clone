@@ -79,9 +79,9 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
       });
 
     socket.emit("ws-player-joinGame", { gameId: player.gameId });
-    socket.on("ws-player-hostCloseGame", function () {
-      setCurrentState("GameResult");
-    });
+    // socket.on("ws-player-hostCloseGame", function () {
+    //   setCurrentState("GameResult");
+    // });
     socket.on(
       "ws-host-playerJoinGame",
       function (newPlayer: { id: number; name: string }) {
@@ -234,7 +234,10 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
               0
             );
             return (
-              <div className="w-full h-[56px] flex items-center px-[12px] mt-[8px]">
+              <div
+                className="w-full h-[56px] flex items-center px-[12px] mt-[8px]"
+                key={id}
+              >
                 <div
                   className={`text-xl font-semibold ${
                     playerProgress.id === player.id

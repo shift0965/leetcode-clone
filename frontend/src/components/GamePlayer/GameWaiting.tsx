@@ -64,7 +64,6 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
           setPlayers((prev) =>
             prev.filter((player) => player.id != exitedPlayer.id)
           );
-          console.log("Leaved");
         }
       );
 

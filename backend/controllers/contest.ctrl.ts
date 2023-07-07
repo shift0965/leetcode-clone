@@ -239,6 +239,12 @@ export async function playerSubmit(
 ) {
   const { problemId, language, code, gameId, playerId, progress, finishedAt } =
     req.body;
+
+  //check if contest is started
+  const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
+  if (!contest || contest.state !== "started")
+    return res.status(404).send({ errors: "Game is not started" });
+
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
@@ -308,6 +314,12 @@ export async function getTimeLimit(
 ) {
   try {
     const contestId = req.body.gameId;
+    const contest = await checkContestStateById(contestId);
+    if (!contest || contest.state !== "started") {
+      return res.send({
+        endedAt: new Date().getTime(),
+      });
+    }
     const time = await getTimeLimitAndStartAtById(contestId);
     return res.send({
       endedAt: time.startedAt.getTime() + time.timeLimit * 60000,

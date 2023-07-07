@@ -45,7 +45,6 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
         };
         setPlayer(playerData);
         localStorage.setItem("playerData", JSON.stringify(playerData));
-        console.log(result.gameState);
         if (result.gameState === "created") setCurrentState("GameWaiting");
         else if (result.gameState === "started") {
           toast("🔥 Game is started !");

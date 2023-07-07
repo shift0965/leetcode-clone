@@ -25,8 +25,8 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
     socket.on(
       "ws-player-sendMessageToPlayer",
       function (item: { id: number; message: string }) {
-        console.log(item);
         if (item.id === -1 || item.id === player.id) {
+          console.log("Host message", item.message);
           sendBullet(item.message);
         }
       }

@@ -48,7 +48,7 @@ const GameHost = () => {
 
   return (
     <>
-      {currentState === "GameCreating" ? (
+      {currentState === "GameCreating" || currentState === "Loading" ? (
         <Navbar />
       ) : (
         <HostNavbar

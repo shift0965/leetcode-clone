@@ -23,7 +23,6 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       })
         .then((response) => response.json())
         .then((results) => {
-          console.log(results);
           setPlayers(results.players);
         });
 
@@ -31,7 +30,6 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       socket.on(
         "ws-host-playerJoinGame",
         function (newPlayer: { id: number; name: string }) {
-          console.log(newPlayer);
           setPlayers((prev) => [
             ...prev,
             { id: newPlayer.id, name: newPlayer.name, gameId: gameId },
@@ -44,7 +42,6 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
           setPlayers((prev) =>
             prev.filter((player) => player.id != exitedPlayer.id)
           );
-          console.log("Leaved");
         }
       );
 
