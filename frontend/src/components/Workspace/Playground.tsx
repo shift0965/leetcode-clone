@@ -20,7 +20,6 @@ import {
   PLAYER_SUBMIT,
 } from "../../api.const";
 import { toast } from "react-toastify";
-import Loading from "../Loading";
 
 type PlaygroundProps = {
   problem: ProblemDetails;
