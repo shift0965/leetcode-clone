@@ -3,6 +3,7 @@ import { useState } from "react";
 import { GamePlayerState } from "../../types.const";
 import { toast } from "react-toastify";
 import { Player } from "../../types.const";
+import { motion as m } from "framer-motion";
 
 interface GameJoiningProps {
   setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
@@ -59,7 +60,12 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mx-auto mt-10 text-dark-gray-8">
+    <m.div
+      className="flex flex-col items-center justify-center mx-auto mt-10 text-dark-gray-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <h1 className="text-2xl text-center">Join Game</h1>
       <div className="mt-8">
         <div className="text-lg">Game Id</div>
@@ -90,7 +96,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
       >
         Join Game
       </button>
-    </div>
+    </m.div>
   );
 };
 

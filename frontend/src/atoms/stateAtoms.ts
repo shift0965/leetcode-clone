@@ -10,3 +10,8 @@ export const bulletSwitchState = atom<boolean>({
   key: "bulletSwitchState",
   default: true,
 });
+
+export const loadingState = atom<boolean>({
+  key: "loadingState",
+  default: true,
+});

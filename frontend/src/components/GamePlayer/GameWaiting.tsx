@@ -9,6 +9,7 @@ import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import PlayersLobby from "../GameHost/PlayersLobby";
+import { motion as m } from "framer-motion";
 
 interface GameWaitingProps {
   player: Player | undefined;
@@ -88,7 +89,12 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
   }, []);
 
   return (
-    <div className="w-11/12 md:w-9/12 mx-auto text-dark-gray-8">
+    <m.div
+      className="w-11/12 md:w-9/12 mx-auto text-dark-gray-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="mt-10">
         <h1 className="blink text-xl text-center text-dark-gray-7">
           Game is about to start...
@@ -97,7 +103,7 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
           <PlayersLobby players={players} />
         </div>
       </div>
-    </div>
+    </m.div>
   );
 };
 

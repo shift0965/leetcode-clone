@@ -7,14 +7,20 @@ import Playground from "../components/Workspace/Playground";
 import Description from "../components/Workspace/Description";
 import { ProblemDetails } from "../types.const";
 import { toast } from "react-toastify";
+import Loading from "../components/Loading";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../atoms/stateAtoms";
+import { motion as m } from "framer-motion";
 
 const Workspace = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [problem, setProblem] = useState<ProblemDetails>();
+  const [loading, setLoading] = useRecoilState(loadingState);
   const id = searchParams.get("id") || 0;
 
   useEffect(() => {
+    setLoading(true);
     fetch(`${GET_PROBLEM_DETAILS}?id=${id}`)
       .then((response) => {
         if (response.status !== 200) {
@@ -27,18 +33,27 @@ const Workspace = () => {
       })
       .then((result) => {
         setProblem(result);
+        setLoading(false);
       });
   }, []);
 
   return (
     <>
       <Navbar isWorkspace={true} />
-      {problem && (
-        <Split minSize={0} snapOffset={100} className="split">
-          <Description problem={problem} />
-          <Playground problem={problem} />
-        </Split>
-      )}
+      <Loading />
+      <m.div
+        className={`${loading && "opacity-0"} transition-all`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {problem && (
+          <Split minSize={0} snapOffset={100} className="split">
+            <Description problem={problem} />
+            <Playground problem={problem} />
+          </Split>
+        )}
+      </m.div>
     </>
   );
 };

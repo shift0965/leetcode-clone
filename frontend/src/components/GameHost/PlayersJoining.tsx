@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { GET_CONTEST_PLAYERS, WEB_SOCKET_URL } from "../../api.const";
 import { Player } from "../../types.const";
 import PlayersLobby from "./PlayersLobby";
+import { motion as m } from "framer-motion";
 
 interface PlayersJoiningProps {
   gameId: number | undefined;
@@ -53,7 +54,12 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
   }, [gameId]);
 
   return (
-    <div className="text-dark-gray-8">
+    <m.div
+      className="text-dark-gray-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="mt-14">
         <h1 className="text-4xl text-center">
           Game Id - <strong className=" text-dark-pink">{gameId}</strong>
@@ -65,7 +71,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       <div className=" mt-16">
         <PlayersLobby players={players} />
       </div>
-    </div>
+    </m.div>
   );
 };
 

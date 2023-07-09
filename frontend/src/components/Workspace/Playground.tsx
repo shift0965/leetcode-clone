@@ -20,6 +20,7 @@ import {
   PLAYER_SUBMIT,
 } from "../../api.const";
 import { toast } from "react-toastify";
+import Loading from "../Loading";
 
 type PlaygroundProps = {
   problem: ProblemDetails;
@@ -91,19 +92,18 @@ const Playground = ({
       }),
     })
       .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then((error) => {
-            throw error;
-          });
-        }
         return response.json();
       })
       .then((result) => {
-        console.log(result);
-        setRunResults(result);
+        if (result.type === "error") {
+          setExecError(result.data);
+        } else {
+          setRunResults(result.data);
+        }
       })
       .catch((error) => {
-        setExecError(error);
+        toast.error("run failed");
+        console.log(error);
       })
       .finally(() => {
         pendingStop();
@@ -137,17 +137,17 @@ const Playground = ({
       ),
     })
       .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then((error) => {
-            throw error;
-          });
-        }
         return response.json();
       })
       .then((result) => {
-        setSubmitResult(result);
+        console.log(result);
+        if (result.type === "error") {
+          setExecError(result.data);
+        } else {
+          setSubmitResult(result.data);
+        }
 
-        if (result.passed) {
+        if (result.data.passed) {
           toast.success("Passed !");
           const problemStatus = JSON.parse(
             localStorage.getItem("problemStatus") || "{}"
@@ -165,7 +165,8 @@ const Playground = ({
         }
       })
       .catch((error) => {
-        setExecError(error);
+        toast.error("submit failed");
+        console.log(error);
       })
       .finally(() => {
         pendingStop();

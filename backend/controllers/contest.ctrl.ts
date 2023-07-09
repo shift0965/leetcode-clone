@@ -31,7 +31,7 @@ import {
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
-import { verifyTestCases } from "../helpers/vmRunCode.js";
+import { runCodeByWorker } from "../helpers/runcode.js";
 
 export async function hostCheckContest(
   req: Request,
@@ -251,19 +251,21 @@ export async function playerSubmit(
   const { functionName, testCases, verifyVariable } = testCasesData;
   type Progress = { id: number; passed: boolean };
   try {
-    const result = verifyTestCases(
+    const result = await runCodeByWorker(
+      false,
       testCases,
       code,
       functionName,
       verifyVariable
     );
-
     if (finishedAt)
-      return res
-        .status(200)
-        .send({ ...result, progress: progress, finishedAt: finishedAt });
+      return res.status(200).send({
+        data: result.data,
+        progress: progress,
+        finishedAt: finishedAt,
+      });
 
-    if (result.passed) {
+    if (result.data.passed) {
       progress.forEach((pro: Progress) => {
         if (pro.id === problemId && !pro.passed) {
           pro.passed = true;

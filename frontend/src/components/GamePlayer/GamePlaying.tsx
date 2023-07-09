@@ -21,6 +21,7 @@ import BulletScreen from "./BulletScreen";
 import { useRecoilValue } from "recoil";
 import { bulletSwitchState } from "../../atoms/stateAtoms";
 import { BsChevronUp } from "react-icons/bs";
+import { motion as m } from "framer-motion";
 
 interface GamePlayingProps {
   player: Player;
@@ -79,9 +80,9 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
       });
 
     socket.emit("ws-player-joinGame", { gameId: player.gameId });
-    // socket.on("ws-player-hostCloseGame", function () {
-    //   setCurrentState("GameResult");
-    // });
+    socket.on("ws-player-hostCloseGame", function () {
+      setCurrentState("GameResult");
+    });
     socket.on(
       "ws-host-playerJoinGame",
       function (newPlayer: { id: number; name: string }) {
@@ -195,7 +196,12 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
   const debounceUpdateCode = useCallback(debounce(updateCode, 500), []);
 
   return (
-    <div className="relative flex w-full">
+    <m.div
+      className="relative flex w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       {bulletSwitch && <BulletScreen player={player} />}
       <div
         className={`transform transition-all duration-500 ease-in-out flex items-center justify-center h-20 w-5
@@ -318,7 +324,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
           </Split>
         )}
       </div>
-    </div>
+    </m.div>
   );
 };
 

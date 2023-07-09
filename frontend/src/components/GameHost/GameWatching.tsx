@@ -11,6 +11,7 @@ import {
   WEB_SOCKET_URL,
 } from "../../api.const";
 import FocusedPlayer from "./FocusedPlayer";
+import { motion as m } from "framer-motion";
 
 interface GameWatchingProps {
   gameId: number;
@@ -232,7 +233,12 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
   }, [problems]);
 
   return (
-    <div className="flex relative">
+    <m.div
+      className="flex relative"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div
         className={`transform transition-all duration-500 ease-in-out flex items-center justify-center h-20 w-5
              absolute rounded-r-lg  bg-slate-700 hover:bg-slate-500 bg-opacity-80 cursor-pointer z-10 top-[50%] -translate-y-1/2
@@ -348,7 +354,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           setFocusedPlayerId={setFocusedPlayerId}
         />
       )}
-    </div>
+    </m.div>
   );
 };
 

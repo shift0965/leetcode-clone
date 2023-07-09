@@ -4,7 +4,7 @@ import {
   getTestCasesByProblemId,
 } from "../models/problem.model.js";
 import { validationResult } from "express-validator";
-import { verifyExampleCases, verifyTestCases } from "../helpers/vmRunCode.js";
+import { runCodeByWorker } from "../helpers/runcode.js";
 
 export async function runExampleCases(
   req: Request,
@@ -20,15 +20,15 @@ export async function runExampleCases(
   if (exampleCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
   const { functionName, exampleCases, verifyVariable } = exampleCasesData;
-
   try {
-    const results = verifyExampleCases(
+    const result = await runCodeByWorker(
+      true,
       exampleCases,
       code,
       functionName,
       verifyVariable
     );
-    return res.status(200).send(results);
+    res.send(result);
   } catch (err) {
     next(err);
   }
@@ -48,14 +48,16 @@ export async function runTestCases(
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
   const { functionName, testCases, verifyVariable } = testCasesData;
+
   try {
-    const result = verifyTestCases(
+    const result = await runCodeByWorker(
+      false,
       testCases,
       code,
       functionName,
       verifyVariable
     );
-    return res.status(200).send(result);
+    res.send(result);
   } catch (err) {
     next(err);
   }

@@ -2,11 +2,11 @@ import { Redis } from "ioredis";
 import dotenv from "dotenv";
 dotenv.config();
 
-const redisPubsub = new Redis({
+export const redisSub = new Redis({
   host: process.env.REDIS_HOST || "localhost",
   port: Number(process.env.REDIS_PORT) || 6379,
 });
-const redisClient = new Redis({
+export const redisClient = new Redis({
   host: process.env.REDIS_HOST || "localhost",
   port: Number(process.env.REDIS_PORT) || 6379,
 });
@@ -16,7 +16,7 @@ export function publishPlayerJoinContest(
   playerId: number,
   name: string
 ) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-player-joinGame",
     JSON.stringify({
       contestId: contestId,
@@ -30,7 +30,7 @@ export async function publishPlayerExitContest(
   contestId: number,
   playerId: number
 ) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-player-exitGame",
     JSON.stringify({
       contestId: contestId,
@@ -40,7 +40,7 @@ export async function publishPlayerExitContest(
 }
 
 export async function publishHostTerminateContest(contestId: number) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-host-terminateGame",
     JSON.stringify({
       contestId: contestId,
@@ -49,7 +49,7 @@ export async function publishHostTerminateContest(contestId: number) {
 }
 
 export async function publishHostCloseContest(contestId: number) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-host-closeGame",
     JSON.stringify({
       contestId: contestId,
@@ -58,7 +58,7 @@ export async function publishHostCloseContest(contestId: number) {
 }
 
 export async function publishHostStartContest(contestId: number) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-host-startGame",
     JSON.stringify({
       contestId: contestId,
@@ -72,7 +72,7 @@ export async function publishPlayerUpdateProgress(
   progress: Progress,
   finishedAt: Date | null
 ) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-player-updateProgress",
     JSON.stringify({
       contestId: contestId,
@@ -100,7 +100,7 @@ export async function publishHostMessageToPlayer(
   playerId: number,
   message: string
 ) {
-  redisPubsub.publish(
+  redisClient.publish(
     "ps-host-sendMessageToPlayer",
     JSON.stringify({
       contestId: contestId,

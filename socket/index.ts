@@ -21,7 +21,6 @@ app.get("/", (req: Request, res: Response) => {
 
 io.on("connection", (socket) => {
   socket.on("ws-host-joinGame", (msg) => {
-    console.log("hi");
     socket.join(String(msg.gameId));
   });
   socket.on("ws-player-joinGame", (msg) => {

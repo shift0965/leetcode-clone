@@ -4,6 +4,7 @@ import { HOST_CREATE_GAME, GET_ALL_PROBLEMS } from "../../api.const";
 import { GameHostState } from "../../types.const";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
+import { motion as m } from "framer-motion";
 
 interface GameCreatingProps {
   setCurrentState: React.Dispatch<React.SetStateAction<GameHostState>>;
@@ -81,7 +82,12 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
   };
 
   return (
-    <div className="w-11/12 md:w-9/12 mx-auto mt-10 text-dark-gray-8">
+    <m.div
+      className="w-11/12 md:w-9/12 mx-auto mt-10 text-dark-gray-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <h1 className="text-2xl text-center">Create Game</h1>
       <h1 className="text-xl mt-6 ml-1">Questions</h1>
       <div className="mt-3">
@@ -187,7 +193,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
           Create Game
         </button>
       </div>
-    </div>
+    </m.div>
   );
 };
 

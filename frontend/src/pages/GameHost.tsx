@@ -57,6 +57,7 @@ const GameHost = () => {
           setCurrentState={setCurrentState}
         />
       )}
+
       {currentState === "GameCreating" && (
         <GameCreating setGameId={setGameId} setCurrentState={setCurrentState} />
       )}
