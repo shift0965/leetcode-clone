@@ -1,0 +1,15 @@
+version: "3"
+
+networks:
+  my-net:
+    driver: bridge
+
+services:
+  worker:
+    build:
+      context: ./worker/
+      dockerfile: Dockerfile
+    ports:
+      - 80:3002
+    networks:
+      - my-net
