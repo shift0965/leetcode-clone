@@ -193,7 +193,14 @@ const Playground = ({
   };
 
   const resetUserCode = () => {
-    if (problem) setUserCode(problem.boilerplate.replace(/\n\s+/g, "\n"));
+    if (problem) {
+      const code = problem.boilerplate.replace(/\n\s+/g, "\n");
+      setUserCode(code);
+      localStorage.setItem(
+        `code?problem_id=${problem.id}&${gameMode && "gameMode"}`,
+        code
+      );
+    }
   };
 
   useEffect(() => {

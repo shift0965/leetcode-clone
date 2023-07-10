@@ -6,7 +6,6 @@ import Confetti from "react-confetti";
 import { motion as m } from "framer-motion";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../../atoms/stateAtoms";
-import Loading from "../Loading";
 
 interface GameResultProps {
   gameId: number;
@@ -56,89 +55,89 @@ const GameResult = ({ gameId }: GameResultProps) => {
   };
 
   return (
-    <m.div
-      className=" w-[700px] mx-auto"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Loading />
-      <div className={`${loading && "opacity-0"} transition-all`}>
-        <div className="flex justify-center relative h-[400px] w-[600px] mx-auto ">
-          <Confetti numberOfPieces={70} width={600} height={400} />
-          {players[0] && (
-            <div className=" absolute top-[75px]">
-              <PlayerAvatar name={players[0].name} place={1} />
-            </div>
-          )}
-          {players[1] && (
-            <div className=" absolute top-[126px] left-[124px]">
-              <PlayerAvatar name={players[1].name} place={2} />
-            </div>
-          )}
-          {players[2] && (
-            <div className=" absolute top-[149px] left-[380px]">
-              <PlayerAvatar name={players[2].name} place={3} />
-            </div>
-          )}
-          <img
-            src="podium.png"
-            alt=""
-            className=" h-[200px] mt-auto"
-            color="orange"
-          />
-        </div>
-        <div>
-          <table className="w-full mx-auto mt-8">
-            <thead className=" text-gray-300 border-b text-left">
-              <tr>
-                <th className="px-3 py-3 w-[10%] font-semibold">Place</th>
-                <th className="px-3 py-3 w-[20%] font-semibold">Name</th>
+    <div className=" w-[700px] mx-auto">
+      {!loading && (
+        <m.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex justify-center relative h-[400px] w-[600px] mx-auto ">
+            <Confetti numberOfPieces={70} width={600} height={400} />
+            {players[0] && (
+              <div className=" absolute top-[75px]">
+                <PlayerAvatar name={players[0].name} place={1} />
+              </div>
+            )}
+            {players[1] && (
+              <div className=" absolute top-[126px] left-[124px]">
+                <PlayerAvatar name={players[1].name} place={2} />
+              </div>
+            )}
+            {players[2] && (
+              <div className=" absolute top-[149px] left-[380px]">
+                <PlayerAvatar name={players[2].name} place={3} />
+              </div>
+            )}
+            <img
+              src="podium.png"
+              alt=""
+              className=" h-[200px] mt-auto"
+              color="orange"
+            />
+          </div>
+          <div>
+            <table className="w-full mx-auto mt-8">
+              <thead className=" text-gray-300 border-b text-left">
+                <tr>
+                  <th className="px-3 py-3 w-[10%] font-semibold">Place</th>
+                  <th className="px-3 py-3 w-[20%] font-semibold">Name</th>
 
-                {problems.map((problem, id) => (
-                  <th
-                    className={`px-3 py-3 w-[20%] font-semibold text-sm`}
-                    key={id}
-                  >
-                    {id + 1}-{problem.title}
-                  </th>
-                ))}
-                <th className="px-3 py-3 w-[15%] font-semibold">Time</th>
-              </tr>
-            </thead>
-            <tbody className="text-white">
-              {players.map((player, place) => (
-                <tr
-                  className={`${place % 2 === 1 ? "bg-dark-layer-1" : ""}`}
-                  key={place}
-                >
-                  <td className="pl-8 py-4 text-dark-yellow font-bold">
-                    {place + 1}
-                  </td>
-                  <td className="pl-3 py-4 font-bold">{player.name}</td>
-                  {player.progress.map((progress, id) => (
-                    <td className="pl-3 py-4 text-center" key={id}>
-                      {progress ? (
-                        <span className="text-dark-green-s">
-                          <BsCheckCircle />
-                        </span>
-                      ) : (
-                        <div className="text-dark-pink w-fit">
-                          <BsXCircle />
-                        </div>
-                      )}
-                    </td>
+                  {problems.map((problem, id) => (
+                    <th
+                      className={`px-3 py-3 w-[20%] font-semibold text-sm`}
+                      key={id}
+                    >
+                      {id + 1}-{problem.title}
+                    </th>
                   ))}
-                  <td className="px-3 py-4 text-dark-gray-7">
-                    {player.timeUsed ? formatTime(player.timeUsed) : "-"}
-                  </td>
+                  <th className="px-3 py-3 w-[15%] font-semibold">Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </m.div>
+              </thead>
+              <tbody className="text-white">
+                {players.map((player, place) => (
+                  <tr
+                    className={`${place % 2 === 1 ? "bg-dark-layer-1" : ""}`}
+                    key={place}
+                  >
+                    <td className="pl-8 py-4 text-dark-yellow font-bold">
+                      {place + 1}
+                    </td>
+                    <td className="pl-3 py-4 font-bold">{player.name}</td>
+                    {player.progress.map((progress, id) => (
+                      <td className="pl-3 py-4 text-center" key={id}>
+                        {progress ? (
+                          <span className="text-dark-green-s">
+                            <BsCheckCircle />
+                          </span>
+                        ) : (
+                          <div className="text-dark-pink w-fit">
+                            <BsXCircle />
+                          </div>
+                        )}
+                      </td>
+                    ))}
+                    <td className="px-3 py-4 text-dark-gray-7">
+                      {player.timeUsed ? formatTime(player.timeUsed) : "-"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </m.div>
+      )}
+    </div>
   );
 };
 

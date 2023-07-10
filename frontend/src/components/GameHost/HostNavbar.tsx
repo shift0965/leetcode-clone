@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { GameHostState } from "../../types.const";
 import { useEffect, useState } from "react";
 import CountDown from "../NavBars/CountDown";
+import { motion as m } from "framer-motion";
 
 interface HostNavbarProps {
   gameId: number | undefined;
@@ -127,7 +128,12 @@ const HostNavbar = ({
   }, [timeLeft, currentState]);
 
   return (
-    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+    <m.nav
+      className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="flex w-full items-center justify-between">
         <div className="flex-1 flex items-center text-white text-lg">
           <Link to="/" className=" block w-[100px]">
@@ -183,7 +189,7 @@ const HostNavbar = ({
           )}
         </div>
       </div>
-    </nav>
+    </m.nav>
   );
 };
 export default HostNavbar;
