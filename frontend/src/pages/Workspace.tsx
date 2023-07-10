@@ -39,19 +39,18 @@ const Workspace = () => {
   return (
     <>
       <Navbar isWorkspace={true} />
-      <m.div
-        className={`${loading && "opacity-0"} transition-all`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        {problem && (
+      {!loading && problem && (
+        <m.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <Split minSize={0} snapOffset={100} className="split">
             <Description problem={problem} />
             <Playground problem={problem} />
           </Split>
-        )}
-      </m.div>
+        </m.div>
+      )}
     </>
   );
 };
