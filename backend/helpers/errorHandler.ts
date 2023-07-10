@@ -25,12 +25,6 @@ export function errorHandler(
   next: NextFunction
 ) {
   console.log(err);
-  if (err instanceof ExecutionError) {
-    return res
-      .status(480)
-      .json({ name: err.name, line: err.line, message: err.message });
-  }
-
   if (err instanceof ValidationError) {
     return res.status(401).json({ errors: err.message });
   }

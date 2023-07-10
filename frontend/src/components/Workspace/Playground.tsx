@@ -94,6 +94,7 @@ const Playground = ({
         return response.json();
       })
       .then((result) => {
+        if (result.errors) throw new Error(result.errors);
         if (result.type === "error") {
           setExecError(result.data);
         } else {
@@ -101,8 +102,7 @@ const Playground = ({
         }
       })
       .catch((error) => {
-        toast.error("run failed");
-        console.log(error);
+        toast.error(error.message || "run failed");
       })
       .finally(() => {
         pendingStop();
@@ -139,33 +139,35 @@ const Playground = ({
         return response.json();
       })
       .then((result) => {
-        console.log(result);
+        if (result.errors) throw new Error(result.errors);
         if (result.type === "error") {
           setExecError(result.data);
         } else {
           setSubmitResult(result.data);
-        }
 
-        if (result.data.passed) {
-          toast.success("Passed !");
-          const problemStatus = JSON.parse(
-            localStorage.getItem("problemStatus") || "{}"
-          );
-          problemStatus[problem.id] = true;
-          localStorage.setItem("problemStatus", JSON.stringify(problemStatus));
-          if (gameMode) {
-            gameData?.setMyProgress({
-              id: gameData.myProgress.id,
-              name: gameData.myProgress.name,
-              progress: result.progress,
-              finishedAt: result.finishedAt,
-            });
+          if (result.data.passed) {
+            toast.success("Passed !");
+            const problemStatus = JSON.parse(
+              localStorage.getItem("problemStatus") || "{}"
+            );
+            problemStatus[problem.id] = true;
+            localStorage.setItem(
+              "problemStatus",
+              JSON.stringify(problemStatus)
+            );
+            if (gameMode) {
+              gameData?.setMyProgress({
+                id: gameData.myProgress.id,
+                name: gameData.myProgress.name,
+                progress: result.progress,
+                finishedAt: result.finishedAt,
+              });
+            }
           }
         }
       })
       .catch((error) => {
-        toast.error("submit failed");
-        console.log(error);
+        toast.error(error.message || "run failed");
       })
       .finally(() => {
         pendingStop();
