@@ -9,7 +9,6 @@ import GamePlaying from "../components/GamePlayer/GamePlaying";
 import GameResult from "../components/GameResult/GameResult";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../atoms/stateAtoms";
-import Loading from "../components/Loading";
 import { motion as m } from "framer-motion";
 
 const GamePlayer = () => {
@@ -56,7 +55,6 @@ const GamePlayer = () => {
 
   return (
     <>
-      <Loading />
       {currentState === "GameJoining" ? (
         <Navbar />
       ) : (

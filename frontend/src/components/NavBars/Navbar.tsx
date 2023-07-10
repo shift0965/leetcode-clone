@@ -6,6 +6,7 @@ import Timer from "./Timer";
 import { useRecoilState } from "recoil";
 import { authModalState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
+import { motion as m } from "framer-motion";
 
 const Navbar = ({ isWorkspace = false }) => {
   const handleLogout = () => {
@@ -34,7 +35,12 @@ const Navbar = ({ isWorkspace = false }) => {
   }, []);
 
   return (
-    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+    <m.nav
+      className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div
         className={`flex w-full items-center justify-between ${
           !isWorkspace ? "max-w-[1200px] mx-auto" : ""
@@ -79,7 +85,7 @@ const Navbar = ({ isWorkspace = false }) => {
           )}
         </div>
       </div>
-    </nav>
+    </m.nav>
   );
 };
 export default Navbar;

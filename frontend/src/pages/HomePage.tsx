@@ -5,12 +5,10 @@ import { motion as m } from "framer-motion";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { authModalState, loadingState } from "../atoms/stateAtoms";
-import Loading from "../components/Loading";
+import { authModalState } from "../atoms/stateAtoms";
 
 const HomePage = () => {
   const authModal = useRecoilValue(authModalState);
-  const loading = useRecoilValue(loadingState);
   const navigate = useNavigate();
 
   const handleCreateGame = () => {
@@ -23,7 +21,6 @@ const HomePage = () => {
   return (
     <div>
       <Navbar />
-      <Loading />
       <m.div
         className="block h-[calc(100vh-48px)] overflow-y-auto"
         initial={{ opacity: 0 }}
@@ -58,11 +55,7 @@ const HomePage = () => {
             </div>
           </div>
           <div className="mt-12">
-            <h1
-              className={`text-xl text-left text-gray-200 ml-1 mt-5 ${
-                loading && "opacity-0"
-              } transition-all`}
-            >
+            <h1 className="text-xl text-left text-gray-200 ml-1 mt-5">
               Problems
             </h1>
             <ProblemList />

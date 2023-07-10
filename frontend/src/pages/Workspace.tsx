@@ -7,7 +7,6 @@ import Playground from "../components/Workspace/Playground";
 import Description from "../components/Workspace/Description";
 import { ProblemDetails } from "../types.const";
 import { toast } from "react-toastify";
-import Loading from "../components/Loading";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../atoms/stateAtoms";
 import { motion as m } from "framer-motion";
@@ -40,7 +39,6 @@ const Workspace = () => {
   return (
     <>
       <Navbar isWorkspace={true} />
-      <Loading />
       <m.div
         className={`${loading && "opacity-0"} transition-all`}
         initial={{ opacity: 0 }}

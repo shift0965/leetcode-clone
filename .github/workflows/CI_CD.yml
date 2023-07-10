@@ -19,7 +19,7 @@ jobs:
             cd /home/ubuntu/leetcode-clone
 
             # clean up
-            docker-compose -f docker-compose-main down
+            docker-compose -f docker-compose-main.yml down
             docker system prune -a -f
             docker volume prune -f
 
