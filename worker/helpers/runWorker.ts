@@ -11,11 +11,11 @@ const redisClient = new Redis({
   host: process.env.REDIS_HOST || "localhost",
   port: Number(process.env.REDIS_PORT) || 6379,
 });
-const waitOneSecond = async () => {
+const waitOneSecond = async (ms: number) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(true);
-    }, 1000);
+    }, ms);
   });
 };
 
@@ -25,14 +25,14 @@ let runningProcess = 0;
 
 export async function runWorker() {
   while (true) {
-    if (runningProcess > MAX_CONCURRENT_PROCESSES) {
-      await waitOneSecond();
+    if (runningProcess >= MAX_CONCURRENT_PROCESSES) {
+      await waitOneSecond(300);
       continue;
     }
 
     const runCodeRequest = await redisClient.rpop("ps-runCode");
     if (runCodeRequest === null) {
-      await waitOneSecond();
+      await waitOneSecond(1000);
       continue;
     }
 
@@ -61,7 +61,9 @@ export async function runWorker() {
         } else {
           redisClient.publish(`ps-runCodeResult-${id}`, stdout);
         }
-        runningProcess--;
+        setTimeout(() => {
+          runningProcess--;
+        }, 100);
       }
     );
   }

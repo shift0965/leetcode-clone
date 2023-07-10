@@ -4,13 +4,19 @@ import { authModalState } from "../../atoms/stateAtoms";
 import { useSetRecoilState } from "recoil";
 import { HOST_GET_HISTORY } from "../../api.const";
 import { contestHistory } from "../../types.const";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PLAYER_AVATAR_URL } from "../../api.const";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
   const setAuthModal = useSetRecoilState(authModalState);
   const [hostHistory, setHostHistory] = useState<contestHistory[]>();
+
+  const navigate = useNavigate();
+  const handleClickProblem = (id: number) => {
+    setAuthModal((prev) => ({ ...prev, isOpen: false }));
+    navigate(`/problem?id=${id}`);
+  };
 
   useEffect(() => {
     const userDataJson = localStorage.getItem("userData");
@@ -28,6 +34,7 @@ const Profile = () => {
       })
         .then((response) => response.json())
         .then((result) => {
+          console.log(result);
           setHostHistory(result);
         });
     } else {
@@ -56,14 +63,19 @@ const Profile = () => {
             {hostHistory &&
               hostHistory.length > 0 &&
               hostHistory.map((contest, id) => (
-                <tr className={`${id % 2 === 1 ? "bg-dark-fill-3" : ""}`}>
+                <tr
+                  className={`${id % 2 === 1 ? "bg-dark-fill-3" : ""}`}
+                  key={id}
+                >
                   <td className="py-3 px-3">{contest.contestId}</td>
                   <td className="py-3 px-2">
                     {contest.problems.map((problem, id) => (
-                      <div className="  font-semibold leading-7 hover:text-blue-500 transition-all">
-                        <Link to={`/problem?id=${problem.id}`} key={id}>
-                          {problem.title}
-                        </Link>
+                      <div
+                        className="font-semibold leading-7 hover:text-blue-500 transition-all cursor-pointer"
+                        onClick={() => handleClickProblem(problem.id)}
+                        key={id}
+                      >
+                        {problem.title}
                       </div>
                     ))}
                   </td>

@@ -18,6 +18,7 @@ export function runCodeByWorker(
   return new Promise(async (resolve, reject) => {
     try {
       const count = await redisClient.llen("ps-runCode");
+
       if (count >= WORKER_QUEUE_LENGTH_LIMIT)
         reject(new Error("Server busy. Please try again later."));
 

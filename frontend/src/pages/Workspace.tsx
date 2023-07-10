@@ -34,7 +34,7 @@ const Workspace = () => {
         setProblem(result);
         setLoading(false);
       });
-  }, []);
+  }, [id]);
 
   return (
     <>
