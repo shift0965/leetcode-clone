@@ -12,7 +12,18 @@ export function runCodeByWorker(
   const id = randomUUID();
   return new Promise((resolve, reject) => {
     try {
-      redisClient.publish(
+      // redisClient.publish(
+      //   "ps-runCode",
+      //   JSON.stringify({
+      //     id: id,
+      //     runExample,
+      //     cases,
+      //     code,
+      //     functionName,
+      //     verifyVariable,
+      //   })
+      // );
+      redisClient.lpush(
         "ps-runCode",
         JSON.stringify({
           id: id,

@@ -14,10 +14,26 @@ const redisPub = new Redis({
 const port = process.env.PORT;
 const app = express();
 app.use(express.json());
-redisSub.subscribe("ps-runCode");
-redisSub.on("message", async (channel, message) => {
-    if (channel === "ps-runCode") {
-        const { id, runExample, cases, code, functionName, verifyVariable } = JSON.parse(message);
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+});
+const MAX_CONCURRENT_PROCESSES = 10000;
+let runningProcess = 0;
+while (true && runningProcess < MAX_CONCURRENT_PROCESSES) {
+    const runCodeRequest = await redisPub.rpop("ps-runCode");
+    if (runCodeRequest === null) {
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(true);
+            }, 1000);
+        });
+    }
+    else {
+        const { id, runExample, cases, code, functionName, verifyVariable } = JSON.parse(runCodeRequest);
+        runningProcess++;
         execFile("node", [
             "dist/helpers/workerFile.js",
             JSON.stringify({
@@ -30,15 +46,12 @@ redisSub.on("message", async (channel, message) => {
         ], (error, stdout, stderr) => {
             if (error) {
                 console.error(`error: ${error}`);
-                return;
             }
-            redisPub.publish(`ps-runCodeResult-${id}`, stdout);
+            else {
+                redisPub.publish(`ps-runCodeResult-${id}`, stdout);
+            }
+            runningProcess--;
         });
     }
-});
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-});
+    console.log(runCodeRequest);
+}
