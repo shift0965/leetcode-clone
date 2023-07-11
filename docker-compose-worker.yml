@@ -7,7 +7,7 @@ networks:
 services:
   worker:
     build:
-      context: ./worker/
+      context: ./bunWorker/
       dockerfile: Dockerfile
     ports:
       - 80:3002
