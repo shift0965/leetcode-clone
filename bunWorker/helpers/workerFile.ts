@@ -193,14 +193,12 @@ const INPUT_ARG: {
   verifyVariable: string | null;
 } = JSON.parse(process.argv[2]);
 
-process.stdout.write(
-  JSON.stringify(
-    await verifyCases(
-      INPUT_ARG.runExample,
-      INPUT_ARG.inputCases,
-      INPUT_ARG.code,
-      INPUT_ARG.functionName,
-      INPUT_ARG.verifyVariable
-    )
-  )
+const result = await verifyCases(
+  INPUT_ARG.runExample,
+  INPUT_ARG.inputCases,
+  INPUT_ARG.code,
+  INPUT_ARG.functionName,
+  INPUT_ARG.verifyVariable
 );
+process.stdout.write(JSON.stringify(result));
+process.exit(0);

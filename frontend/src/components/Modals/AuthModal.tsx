@@ -14,7 +14,7 @@ const AuthModal = () => {
   return (
     <div>
       <div
-        className={`z-10 absolute top-0 w-full h-full flex items-center justify-center bg-black transition-all duration-500 ${
+        className={`z-40 absolute top-0 w-full h-full flex items-center justify-center bg-black transition-all duration-500 ${
           authModal.isOpen ? " opacity-50 " : "pointer-events-none opacity-0"
         }`}
         onClick={closeModal}

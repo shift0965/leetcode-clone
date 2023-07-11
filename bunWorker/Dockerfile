@@ -1,4 +1,4 @@
-FROM oven/bun
+FROM oven/bun:0.6
 WORKDIR /usr/app
 
 COPY ./ ./
