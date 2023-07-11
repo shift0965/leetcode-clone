@@ -20,7 +20,7 @@ const waitOneSecond = async (ms: number) => {
 };
 
 const MAX_CONCURRENT_PROCESSES =
-  Number(process.env.MAX_CONCURRENT_PROCESSES) || 20;
+  Number(process.env.MAX_CONCURRENT_PROCESSES) || 4;
 let runningProcess = 0;
 
 export async function runWorker() {

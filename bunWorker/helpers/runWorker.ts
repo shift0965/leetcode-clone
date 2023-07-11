@@ -20,7 +20,7 @@ const waitOneSecond = async (ms: number) => {
 };
 
 const MAX_CONCURRENT_PROCESSES =
-  Number(process.env.MAX_CONCURRENT_PROCESSES) || 20;
+  Number(process.env.MAX_CONCURRENT_PROCESSES) || 8;
 let runningProcess = 0;
 
 export async function runWorker() {
@@ -69,9 +69,7 @@ export async function runWorker() {
         } else {
           redisClient.publish(`ps-runCodeResult-${id}`, stdout);
         }
-        setTimeout(() => {
-          runningProcess--;
-        }, 100);
+        runningProcess--;
       }
     );
   }
