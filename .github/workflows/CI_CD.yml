@@ -28,10 +28,10 @@ jobs:
             git reset --hard origin/main
 
             # update db
-            # docker run --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
-            # docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < /home/ubuntu/leetcode-clone/backend/dbBackup/leetclone.sql
-            # docker container stop mysql
-            # docker container rm mysql
+            docker run --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
+            docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < /home/ubuntu/leetcode-clone/backend/dbBackup/leetclone.sql
+            docker container stop mysql
+            docker container rm mysql
 
             # compose
             docker-compose -f docker-compose-main.yml build --no-cache

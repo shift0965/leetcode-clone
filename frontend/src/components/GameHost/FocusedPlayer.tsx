@@ -31,8 +31,12 @@ const FocusedPlayer = ({
     (progress) => progress.id === player?.id
   )?.progress;
 
-  const handleSendMessage = () => {
-    if (player) {
+  const handleSendMessage = (e: any) => {
+    e.preventDefault();
+    if (message === "") return;
+    setMessage("");
+
+    if (e.nativeEvent.submitter.name === "sendMessage" && player) {
       fetch(HOST_SEND_MESSAGE, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -42,21 +46,17 @@ const FocusedPlayer = ({
           message: message,
         }),
       });
+    } else if (e.nativeEvent.submitter.name === "sendGroupMessage") {
+      fetch(HOST_SEND_MESSAGE, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          gameId: gameId,
+          playerId: -1,
+          message: message,
+        }),
+      });
     }
-    setMessage("");
-  };
-
-  const handleSendGroupMessage = () => {
-    fetch(HOST_SEND_MESSAGE, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        gameId: gameId,
-        playerId: -1,
-        message: message,
-      }),
-    });
-    setMessage("");
   };
 
   return (
@@ -111,32 +111,31 @@ const FocusedPlayer = ({
               <div className="h-14 flex items-center px-3 text-dark-gray-8 text-lg border-t-[1px] border-dark-fill-2">
                 Send Message
               </div>
-              <div className="px-2">
-                <input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDownCapture={(e) => {
-                    {
-                      e.key === "Enter" && handleSendMessage();
-                    }
-                  }}
-                  className=" w-full bg-dark-fill-2 rounded-lg outline-none text-lg px-3 py-2 resize-none"
-                ></input>
-              </div>
-              <div className="flex px-3 mt-3">
-                <button
-                  className=" px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-gray-6 hover:bg-opacity-80 rounded-lg"
-                  onClick={handleSendGroupMessage}
-                >
-                  Send Group
-                </button>
-                <button
-                  className="ml-auto px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-green-s hover:bg-opacity-80 rounded-lg"
-                  onClick={handleSendMessage}
-                >
-                  Send
-                </button>
-              </div>
+              <form onSubmit={handleSendMessage}>
+                <div className="px-2">
+                  <input
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className=" w-full bg-dark-fill-2 rounded-lg outline-none text-lg px-3 py-2 resize-none"
+                  ></input>
+                </div>
+                <div className="flex px-3 mt-3">
+                  <button
+                    type="submit"
+                    name="sendMessage"
+                    className=" px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-green-s hover:bg-opacity-80 rounded-lg"
+                  >
+                    Send
+                  </button>
+                  <button
+                    type="submit"
+                    name="sendGroupMessage"
+                    className="ml-auto px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-gray-6 hover:bg-opacity-80 rounded-lg"
+                  >
+                    Send Group
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
 
