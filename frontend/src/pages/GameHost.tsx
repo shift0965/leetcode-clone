@@ -58,18 +58,23 @@ const GameHost = () => {
         />
       )}
 
-      {currentState === "GameCreating" && (
-        <GameCreating setGameId={setGameId} setCurrentState={setCurrentState} />
-      )}
-      {currentState === "PlayersJoining" && gameId && (
-        <PlayerJoining gameId={gameId} />
-      )}
-      {currentState === "GameWatching" && gameId && (
-        <GameWatching gameId={gameId} />
-      )}
-      {currentState === "GameResult" && gameId && (
-        <GameResult gameId={gameId} />
-      )}
+      <div className="h-[calc(100vh-48px)] overflow-y-auto">
+        {currentState === "GameCreating" && (
+          <GameCreating
+            setGameId={setGameId}
+            setCurrentState={setCurrentState}
+          />
+        )}
+        {currentState === "PlayersJoining" && gameId && (
+          <PlayerJoining gameId={gameId} />
+        )}
+        {currentState === "GameWatching" && gameId && (
+          <GameWatching gameId={gameId} />
+        )}
+        {currentState === "GameResult" && gameId && (
+          <GameResult gameId={gameId} />
+        )}
+      </div>
     </>
   );
 };

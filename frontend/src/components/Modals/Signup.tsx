@@ -10,44 +10,51 @@ const Signup = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    if (!loading) {
+      e.preventDefault();
 
-    if (userName === "") return toast.error("Name can not be empty");
-    if (userEmail === "") return toast.error("Email can not be empty");
-    if (userPassword === "") return toast.error("Password can not be empty");
-    if (confirmPassword !== userPassword)
-      return toast.error("Passwords are not matched");
+      if (userName === "") return toast.error("Name can not be empty");
+      if (userEmail === "") return toast.error("Email can not be empty");
+      if (userPassword === "") return toast.error("Password can not be empty");
+      if (confirmPassword !== userPassword)
+        return toast.error("Passwords are not matched");
+      setLoading(true);
 
-    fetch(USER_SIGNUP, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: userName,
-        email: userEmail,
-        password: userPassword,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.errors) {
-          toast.error(result.errors);
-        } else {
-          toast.success("Sign Up Successfully");
-          localStorage.setItem("userData", JSON.stringify(result.data));
-          setUserName("");
-          setUserEmail("");
-          setUserPassword("");
-          setConfirmPassword("");
-          setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
-        }
+      fetch(USER_SIGNUP, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userName,
+          email: userEmail,
+          password: userPassword,
+        }),
       })
-      .catch((error) => {
-        toast.error(error.errors);
-      });
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.errors) {
+            toast.error(result.errors);
+          } else {
+            toast.success("Sign Up Successfully");
+            localStorage.setItem("userData", JSON.stringify(result.data));
+            setUserName("");
+            setUserEmail("");
+            setUserPassword("");
+            setConfirmPassword("");
+            setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
+          }
+        })
+        .catch((error) => {
+          toast.error(error.errors);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -99,9 +106,10 @@ const Signup = () => {
           w-full placeholder-gray-400 text-white"
             placeholder="******"
           />
-        </div>{" "}
+        </div>
         <button
-          className=" mt-5 w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s"
+          disabled={loading}
+          className=" mt-5 w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s disabled:opacity-60"
           type="submit"
         >
           Submit

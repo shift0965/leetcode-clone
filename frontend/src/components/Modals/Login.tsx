@@ -8,42 +8,45 @@ const Login = () => {
   const setAuthModal = useSetRecoilState(authModalState);
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    if (!loading) {
+      e.preventDefault();
+      if (userEmail === "") return toast.error("Email can not be empty");
+      if (userPassword === "") return toast.error("Password can not be empty");
+      setLoading(true);
 
-    if (userEmail === "") return toast.error("Email can not be empty");
-    if (userPassword === "") return toast.error("Password can not be empty");
-
-    fetch(USER_SIGNIN, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        provider: "native",
-        email: userEmail,
-        password: userPassword,
-      }),
-    })
-      .then((response) => {
-        if (response.status !== 200) {
-          return response.json().then((error) => {
-            throw error;
-          });
-        }
-        return response.json();
+      fetch(USER_SIGNIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          provider: "native",
+          email: userEmail,
+          password: userPassword,
+        }),
       })
-      .then((data) => {
-        toast.success("Sign In Successfully");
-        localStorage.setItem("userData", JSON.stringify(data.data));
-        setUserEmail("");
-        setUserPassword("");
-        setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
-      })
-      .catch((error) => {
-        toast.error(error.errors);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.errors) {
+            toast.error(data.errors);
+          } else {
+            toast.success("Sign In Successfully");
+            localStorage.setItem("userData", JSON.stringify(data.data));
+            setUserEmail("");
+            setUserPassword("");
+            setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
 
   return (
@@ -80,7 +83,8 @@ const Login = () => {
           />
         </div>
         <button
-          className="w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s mt-6"
+          disabled={loading}
+          className="w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s mt-6 disabled:opacity-60"
           type="submit"
         >
           Submit

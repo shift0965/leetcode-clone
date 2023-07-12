@@ -65,26 +65,30 @@ const GamePlayer = () => {
         />
       )}
       <m.div
-        className={`text-dark-gray-8 ${loading && "opacity-0"} transition-all`}
+        className={`text-dark-gray-8 ${
+          loading && "opacity-0"
+        } h-[calc(100vh-48px)] overflow-y-auto transition-all`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {currentState === "GameJoining" && (
-          <GameJoining
-            setCurrentState={setCurrentState}
-            setPlayer={setPlayer}
-          />
-        )}
-        {currentState === "GameWaiting" && player && (
-          <GameWaiting setCurrentState={setCurrentState} player={player} />
-        )}
-        {currentState === "GamePlaying" && player && (
-          <GamePlaying setCurrentState={setCurrentState} player={player} />
-        )}
-        {currentState === "GameResult" && player && (
-          <GameResult gameId={player.gameId} />
-        )}
+        <div className="h-[calc(100vh-48px)] overflow-y-auto">
+          {currentState === "GameJoining" && (
+            <GameJoining
+              setCurrentState={setCurrentState}
+              setPlayer={setPlayer}
+            />
+          )}
+          {currentState === "GameWaiting" && player && (
+            <GameWaiting setCurrentState={setCurrentState} player={player} />
+          )}
+          {currentState === "GamePlaying" && player && (
+            <GamePlaying setCurrentState={setCurrentState} player={player} />
+          )}
+          {currentState === "GameResult" && player && (
+            <GameResult gameId={player.gameId} />
+          )}
+        </div>
       </m.div>
     </>
   );

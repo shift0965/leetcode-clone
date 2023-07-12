@@ -216,7 +216,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
         <BsChevronUp className="text-white rotate-90" />
       </div>
       <div
-        className={`text-dark-gray-8  shrink-0 bg-dark-layer-2 h-[calc(100vh-48px)] transition-all duration-500
+        className={`text-dark-gray-8  shrink-0 bg-dark-layer-2 transition-all duration-500
         ${
           openPlayersBar
             ? "translate-x-0 w-[260px]"
