@@ -27,7 +27,11 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
   }, []);
 
   const handleAddProblem = () => {
-    setSelectedProblemIds((prev) => [...prev, 0]);
+    if (selectedProblemIds.length >= 5) {
+      toast.error("At most 5 questions!");
+    } else {
+      setSelectedProblemIds((prev) => [...prev, 0]);
+    }
   };
 
   const handleSelect = (problemId: number, id: number) => {

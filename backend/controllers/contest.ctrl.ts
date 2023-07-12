@@ -258,33 +258,37 @@ export async function playerSubmit(
       functionName,
       verifyVariable
     );
-    if (finishedAt)
-      return res.status(200).send({
-        data: result.data,
-        progress: progress,
-        finishedAt: finishedAt,
-      });
 
-    if (result.data.passed) {
+    //if there is no error and the result is correct
+    if (result.type === "test" && result.data.passed) {
+      let makeNewProgress = false;
       progress.forEach((pro: Progress) => {
+        //if use make a progress
         if (pro.id === problemId && !pro.passed) {
           pro.passed = true;
+          makeNewProgress = true;
         }
       });
-    }
-    setPlayerProgressById(playerId, JSON.stringify(progress));
-    const newFinishedAt = progress.reduce(
-      (acc: boolean, cur: Progress) => cur.passed && acc,
-      true
-    )
-      ? new Date()
-      : null;
-    if (newFinishedAt) setPlayerFinished(newFinishedAt, playerId);
 
-    publishPlayerUpdateProgress(gameId, playerId, progress, newFinishedAt);
-    return res
-      .status(200)
-      .send({ ...result, progress: progress, finishedAt: newFinishedAt });
+      if (makeNewProgress) {
+        const currentDate = new Date();
+        setPlayerProgressById(playerId, JSON.stringify(progress));
+        setPlayerFinished(currentDate, playerId);
+        publishPlayerUpdateProgress(gameId, playerId, progress, currentDate);
+        return res.status(200).send({
+          type: "test",
+          data: result.data,
+          progress: progress,
+          finishedAt: currentDate,
+        });
+      }
+    }
+    return res.status(200).send({
+      type: result.type,
+      data: result.data,
+      progress: progress,
+      finishedAt: finishedAt,
+    });
   } catch (err) {
     next(err);
   }

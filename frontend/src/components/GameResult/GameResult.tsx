@@ -38,6 +38,7 @@ const GameResult = ({ gameId }: GameResultProps) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        //data.players.progress = data.players.progress.slice(0, 2);
         setPlayers(data.players);
         setProblems(data.problems);
         setLoading(false);
@@ -55,7 +56,7 @@ const GameResult = ({ gameId }: GameResultProps) => {
   };
 
   return (
-    <div className=" w-[700px] mx-auto">
+    <div className="">
       {!loading && (
         <m.div
           initial={{ opacity: 0 }}
@@ -86,55 +87,57 @@ const GameResult = ({ gameId }: GameResultProps) => {
               color="orange"
             />
           </div>
-          <div>
-            <table className="w-full mx-auto mt-8">
-              <thead className=" text-gray-300 border-b text-left">
-                <tr>
-                  <th className="px-3 py-3 w-[10%] font-semibold">Place</th>
-                  <th className="px-3 py-3 w-[20%] font-semibold">Name</th>
+          <table
+            className={`${
+              problems.length > 3 ? "w-[960px]" : "w-[700px]"
+            }  mx-auto mt-8`}
+          >
+            <thead className=" text-gray-300 border-b text-left">
+              <tr>
+                <th className="px-3 py-3 w-[10%] font-semibold">Place</th>
+                <th className="px-3 py-3 w-[15%] font-semibold">Name</th>
 
-                  {problems.map((problem, id) => (
-                    <th
-                      className={`px-3 py-3 w-[20%] font-semibold text-sm`}
-                      key={id}
-                    >
-                      {id + 1}-{problem.title}
-                    </th>
-                  ))}
-                  <th className="px-3 py-3 w-[15%] font-semibold">Time</th>
-                </tr>
-              </thead>
-              <tbody className="text-white">
-                {players.map((player, place) => (
-                  <tr
-                    className={`${place % 2 === 1 ? "bg-dark-layer-1" : ""}`}
-                    key={place}
+                {problems.map((problem, id) => (
+                  <th
+                    className={`px-3 py-3 w-[12%] font-semibold text-sm`}
+                    key={id}
                   >
-                    <td className="pl-8 py-4 text-dark-yellow font-bold">
-                      {place + 1}
-                    </td>
-                    <td className="pl-3 py-4 font-bold">{player.name}</td>
-                    {player.progress.map((progress, id) => (
-                      <td className="pl-3 py-4 text-center" key={id}>
-                        {progress ? (
-                          <span className="text-dark-green-s">
-                            <BsCheckCircle />
-                          </span>
-                        ) : (
-                          <div className="text-dark-pink w-fit">
-                            <BsXCircle />
-                          </div>
-                        )}
-                      </td>
-                    ))}
-                    <td className="px-3 py-4 text-dark-gray-7">
-                      {player.timeUsed ? formatTime(player.timeUsed) : "-"}
-                    </td>
-                  </tr>
+                    {id + 1}-{problem.title}
+                  </th>
                 ))}
-              </tbody>
-            </table>
-          </div>
+                <th className="px-3 py-3 w-[12%] font-semibold">Time</th>
+              </tr>
+            </thead>
+            <tbody className="text-white">
+              {players.map((player, place) => (
+                <tr
+                  className={`${place % 2 === 1 ? "bg-dark-layer-1" : ""}`}
+                  key={place}
+                >
+                  <td className="pl-8 py-4 text-dark-yellow font-bold">
+                    {place + 1}
+                  </td>
+                  <td className="pl-3 py-4 font-bold">{player.name}</td>
+                  {player.progress.map((progress, id) => (
+                    <td className="pl-3 py-4 text-center" key={id}>
+                      {progress ? (
+                        <span className="text-dark-green-s">
+                          <BsCheckCircle />
+                        </span>
+                      ) : (
+                        <div className="text-dark-pink w-fit">
+                          <BsXCircle />
+                        </div>
+                      )}
+                    </td>
+                  ))}
+                  <td className="px-3 py-4 text-dark-gray-7">
+                    {player.timeUsed ? formatTime(player.timeUsed) : "-"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </m.div>
       )}
     </div>

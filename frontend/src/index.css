@@ -19,6 +19,11 @@ body {
   background-color: rgb(26, 26, 26);
   background-repeat: no-repeat;
   background-position: 50%;
+  @apply transition-all;
+}
+
+.gutter:hover {
+  @apply bg-blue-300 bg-opacity-50;
 }
 
 .gutter.gutter-horizontal {
@@ -64,6 +69,17 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-dark-gray-6;
+}
+
+/* no scroll bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 /* code editor */

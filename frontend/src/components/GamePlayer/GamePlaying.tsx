@@ -281,7 +281,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
         {problems.length > 0 && myProgress && (
           <Split minSize={0} snapOffset={100} className="split">
             <div className="bg-dark-layer-1">
-              <div className="flex h-10 w-full items-end bg-dark-layer-2 text-white overflow-x-hidden">
+              <div className="flex h-10 w-full items-end bg-dark-layer-2 text-white overflow-x-auto no-scrollbar">
                 {problems.map((problem, id) => (
                   <div
                     className={`flex items-center rounded-t-[5px] px-4 py-[7px] text-sm cursor-pointer ${
@@ -305,7 +305,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
                           <BsCheck2Circle />
                         </span>
                       ))}
-                    <span>Prob {id + 1}</span>
+                    <span className="  whitespace-nowrap">Prob {id + 1}</span>
                   </div>
                 ))}
               </div>
