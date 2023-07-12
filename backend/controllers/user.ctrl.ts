@@ -27,7 +27,7 @@ export async function signUp(req: Request, res: Response) {
       .json({
         data: {
           access_token: token,
-          access_expired: EXPIRE_TIME,
+          access_expired: new Date().getTime() / 1000 + EXPIRE_TIME,
           user: {
             id: userId,
             provider: userProviderModel.PROVIDER.NATIVE,

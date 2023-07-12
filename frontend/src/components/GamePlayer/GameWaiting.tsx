@@ -86,7 +86,7 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
         socket.off("ws-player-hostStartGame");
       };
     }
-  }, []);
+  }, [socket]);
 
   return (
     <m.div

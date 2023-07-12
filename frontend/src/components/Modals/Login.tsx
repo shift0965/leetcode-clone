@@ -9,7 +9,9 @@ const Login = () => {
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (userEmail === "") return toast.error("Email can not be empty");
     if (userPassword === "") return toast.error("Password can not be empty");
 
@@ -35,6 +37,8 @@ const Login = () => {
       .then((data) => {
         toast.success("Sign In Successfully");
         localStorage.setItem("userData", JSON.stringify(data.data));
+        setUserEmail("");
+        setUserPassword("");
         setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
       })
       .catch((error) => {
@@ -45,39 +49,43 @@ const Login = () => {
   return (
     <div className="px-8 pb-4 flex flex-col bg-gradient-to-b from-brand-orange-s to-dark-layer-1 pt-10 w-[340px]">
       <h3 className="text-2xl font-medium block mb-2 text-white">Sign In</h3>
-      <div className=" mt-4">
-        <label className="block mb-2 text-dark-gray-8">Your Email</label>
-        <input
-          type="text"
-          value={userEmail}
-          onChange={(e) => {
-            setUserEmail(e.target.value);
-          }}
-          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+      <form onSubmit={handleSubmit}>
+        <div className=" mt-4">
+          <label className="block mb-2 text-dark-gray-8">Your Email</label>
+          <input
+            type="text"
+            value={userEmail}
+            name="email"
+            onChange={(e) => {
+              setUserEmail(e.target.value);
+            }}
+            className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
                      w-full placeholder-gray-400 text-white"
-          placeholder="name@email.com"
-        />
-      </div>
-      <div className=" mt-4">
-        <label className="block mb-2 text-dark-gray-8">Your Password</label>
-        <input
-          type="password"
-          value={userPassword}
-          onChange={(e) => {
-            setUserPassword(e.target.value);
-          }}
-          className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
-                     w-full placeholder-gray-400 text-white"
-          placeholder="******"
-        />
-      </div>
+            placeholder="name@email.com"
+          />
+        </div>
 
-      <button
-        className="w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s mt-6"
-        onClick={handleSubmit}
-      >
-        Submit
-      </button>
+        <div className=" mt-4">
+          <label className="block mb-2 text-dark-gray-8">Your Password</label>
+          <input
+            type="password"
+            value={userPassword}
+            name="password"
+            onChange={(e) => {
+              setUserPassword(e.target.value);
+            }}
+            className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
+                     w-full placeholder-gray-400 text-white"
+            placeholder="******"
+          />
+        </div>
+        <button
+          className="w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s mt-6"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
 
       <div className=" text-sm text-dark-gray-8 mt-5">
         Not Registered?

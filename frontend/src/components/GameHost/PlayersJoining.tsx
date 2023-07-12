@@ -51,7 +51,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
         socket.off("ws-host-playerJoinGame");
       };
     }
-  }, [gameId]);
+  }, [gameId, socket]);
 
   return (
     <m.div

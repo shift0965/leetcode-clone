@@ -22,6 +22,7 @@ import { useRecoilValue } from "recoil";
 import { bulletSwitchState } from "../../atoms/stateAtoms";
 import { BsChevronUp } from "react-icons/bs";
 import { motion as m } from "framer-motion";
+import { toast } from "react-toastify";
 
 interface GamePlayingProps {
   player: Player;
@@ -82,6 +83,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
     socket.emit("ws-player-joinGame", { gameId: player.gameId });
     socket.on("ws-player-hostCloseGame", function () {
       setCurrentState("GameResult");
+      toast.info("Host terminated game");
     });
     socket.on(
       "ws-host-playerJoinGame",
@@ -126,7 +128,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
       socket.off("ws-host-playerJoinGame");
       socket.off("ws-host-updateProgress");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (problems.length > 0 && player) {

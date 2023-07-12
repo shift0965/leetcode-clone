@@ -148,21 +148,22 @@ async function runJavaScript(
         consoles,
       });
     } catch (error: any) {
-      // if (error.message === "Script execution timed out after 1000ms") {
-      //   reject(
-      //     new ExecutionError("Runtime Error", "Time Limit Exceeded", undefined)
-      //   );
-      // } else
       if (error.name === "ReferenceError") {
         let split = error.stack.split("\n");
         const line = split[1].split(":")[split[1].split(":").length - 2];
         const message = split[0];
         reject(new ExecutionError("Reference Error", message, line));
       } else if (error.name === "SyntaxError") {
-        let split = error.stack.split("\n");
-        const line = split[0].split(":")[split[0].split(":").length - 1];
-        const message = split[4];
-        reject(new ExecutionError("Syntax Error", message, line));
+        // let split = error.stack.split("\n");
+        // const line = split[0].split(":")[split[0].split(":").length - 1];
+        // const message = split[4];
+        reject(
+          new ExecutionError(
+            "Syntax Error",
+            "Unexpected EOF while executing code",
+            undefined
+          )
+        );
       } else {
         reject(new ExecutionError("Execution Error", error.message, undefined));
       }

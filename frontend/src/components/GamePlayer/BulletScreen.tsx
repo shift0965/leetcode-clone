@@ -35,7 +35,7 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
     return () => {
       socket.off("ws-player-sendMessageToPlayer");
     };
-  }, []);
+  }, [socket]);
 
   const sendBullet = (message: string) => {
     const randomHeight = 0 + Math.random() * 400;

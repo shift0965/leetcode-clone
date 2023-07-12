@@ -34,7 +34,6 @@ const Profile = () => {
       })
         .then((response) => response.json())
         .then((result) => {
-          console.log(result);
           setHostHistory(result);
         });
     } else {

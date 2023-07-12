@@ -70,7 +70,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       });
 
     socket.emit("ws-host-joinGame", { gameId: gameId });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (problems.length > 0) {
@@ -230,7 +230,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
       socket.off("ws-host-playerExitGame");
       socket.off("ws-host-playerUpdateCode");
     };
-  }, [problems]);
+  }, [problems, socket]);
 
   return (
     <m.div
