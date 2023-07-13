@@ -30,7 +30,7 @@ function App() {
           <Route path="problem" element={<Workspace />} />
           <Route path="gameHost" element={<GameHost />} />
           <Route path="gamePlayer" element={<GamePlayer />} />
-          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+          <Route path="*" element={<HomePage />} />
         </Routes>
       </div>
     </BrowserRouter>

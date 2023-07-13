@@ -73,7 +73,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
           type="text"
           className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
           value={gameId}
-          onChange={(e) => setGameId(e.target.value)}
+          onChange={(e) => setGameId(e.target.value.trim())}
         />
       </div>
       <div className="mt-4">
@@ -82,7 +82,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
           type="text"
           className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
           value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
+          onChange={(e) => setPlayerName(e.target.value.trim())}
           onKeyDownCapture={(e) => {
             {
               e.key === "Enter" && handleJoinRoom();

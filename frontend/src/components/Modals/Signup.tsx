@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { authModalState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 import { USER_SIGNUP } from "../../api.const";
+import { validateEmail } from "../../types.const";
 
 const Signup = () => {
   const setAuthModal = useSetRecoilState(authModalState);
@@ -19,8 +20,17 @@ const Signup = () => {
       if (userName === "") return toast.error("Name can not be empty");
       if (userEmail === "") return toast.error("Email can not be empty");
       if (userPassword === "") return toast.error("Password can not be empty");
+
+      if (userName.length > 30) return toast.error("UserName too long");
+      if (userEmail.length > 30) return toast.error("Email too long");
+      if (userPassword.length > 30) return toast.error("Password too long");
+
+      if (!validateEmail(userEmail))
+        return toast.error("Please enter a valid email");
+
       if (confirmPassword !== userPassword)
         return toast.error("Passwords are not matched");
+
       setLoading(true);
 
       fetch(USER_SIGNUP, {
@@ -66,7 +76,7 @@ const Signup = () => {
           <input
             type="name"
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={(e) => setUserName(e.target.value.trim())}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="name"
@@ -77,7 +87,7 @@ const Signup = () => {
           <input
             type="text"
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value)}
+            onChange={(e) => setUserEmail(e.target.value.trim())}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="name@email.com"
@@ -88,7 +98,7 @@ const Signup = () => {
           <input
             type="password"
             value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value)}
+            onChange={(e) => setUserPassword(e.target.value.trim())}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="******"
@@ -101,7 +111,7 @@ const Signup = () => {
           <input
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value.trim())}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="******"

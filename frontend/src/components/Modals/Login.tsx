@@ -3,6 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { authModalState } from "../../atoms/stateAtoms";
 import { USER_SIGNIN } from "../../api.const";
 import { toast } from "react-toastify";
+import { validateEmail } from "../../types.const";
 
 const Login = () => {
   const setAuthModal = useSetRecoilState(authModalState);
@@ -13,10 +14,15 @@ const Login = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!loading) {
       e.preventDefault();
-      if (userEmail === "") return toast.error("Email can not be empty");
-      if (userPassword === "") return toast.error("Password can not be empty");
-      setLoading(true);
+      if (userEmail.trim() === "") return toast.error("Email can not be empty");
+      if (!validateEmail(userEmail))
+        return toast.error("Please enter a valid email");
+      if (userPassword.trim() === "")
+        return toast.error("Password can not be empty");
+      if (userEmail.length > 30) return toast.error("Email too long");
+      if (userPassword.length > 30) return toast.error("Password too long");
 
+      setLoading(true);
       fetch(USER_SIGNIN, {
         method: "POST",
         headers: {
@@ -60,7 +66,7 @@ const Login = () => {
             value={userEmail}
             name="email"
             onChange={(e) => {
-              setUserEmail(e.target.value);
+              setUserEmail(e.target.value.trim());
             }}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
                      w-full placeholder-gray-400 text-white"
@@ -75,7 +81,7 @@ const Login = () => {
             value={userPassword}
             name="password"
             onChange={(e) => {
-              setUserPassword(e.target.value);
+              setUserPassword(e.target.value.trim());
             }}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
                      w-full placeholder-gray-400 text-white"
