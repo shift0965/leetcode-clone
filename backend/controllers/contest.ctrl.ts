@@ -28,6 +28,7 @@ import {
   getContestResultsById,
   closeContestById,
   getContestHistoryByUser,
+  clearContestHistoryByUser,
 } from "../models/contest.model.js";
 
 import { getProblemDetailsById } from "../models/problem.model.js";
@@ -42,13 +43,16 @@ export async function hostCheckContest(
     const userId = res.locals.userId;
     const contest = await checkContestStateByUser(userId);
     if (!contest) return res.send({ founded: false });
-    const time = await getTimeLimitAndStartAtById(contest.contestId);
-    if (
-      time &&
-      time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
-    ) {
-      await closeContestById(contest.contestId);
-      contest.state = "closed";
+
+    if (contest.state === "started") {
+      const time = await getTimeLimitAndStartAtById(contest.contestId);
+      if (
+        time &&
+        time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
+      ) {
+        await closeContestById(contest.contestId);
+        contest.state = "closed";
+      }
     }
     return res.send({
       founded: true,
@@ -68,6 +72,10 @@ export async function hostCreateContest(
   try {
     const { timeLimit, problemList } = req.body;
     const userId = res.locals.userId;
+    const currentContest = await checkContestStateByUser(userId);
+    if (currentContest) {
+      return res.status(400).send({ errors: "You are running a contest now!" });
+    }
     const contestId = await createContest(userId, timeLimit, problemList);
     res.send({ gameId: contestId });
   } catch (err) {
@@ -102,17 +110,20 @@ export async function playerCheckContest(
 ) {
   try {
     const playerId = req.body.playerId;
-    const contestId = req.body.contestId;
+    const contestId = req.body.gameId;
     const contest = await checkContestStateByIdAndPlayerId(contestId, playerId);
     if (!contest) return res.send({ founded: false });
-    const time = await getTimeLimitAndStartAtById(contest.contestId);
-    if (
-      time &&
-      time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
-    ) {
-      await closeContestById(contest.contestId);
-      contest.state = "closed";
+    if (contest.state === "started") {
+      const time = await getTimeLimitAndStartAtById(contest.contestId);
+      if (
+        time &&
+        time.startedAt.getTime() + time.timeLimit * 60000 < new Date().getTime()
+      ) {
+        await closeContestById(contest.contestId);
+        contest.state = "closed";
+      }
     }
+
     res.send({
       founded: true,
       contestId: contest.contestId,
@@ -148,20 +159,20 @@ export async function playerJoinContest(
     const gameId = req.body.gameId;
     const name = req.body.playerName;
 
-    const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
+    const contest = await checkContestStateById(gameId);
     if (
-      contest === undefined ||
-      contest.state === "ended" ||
-      contest.state === "closed"
-    )
+      contest &&
+      (contest.state === "created" || contest.state === "started")
+    ) {
+      const playerId = await insertPlayerIntoContest(contest.contestId, name);
+      if (playerId === null)
+        return res.status(500).send({ errors: "Insert Failed" });
+
+      publishPlayerJoinContest(contest.contestId, playerId, name);
+      res.send({ playerId: playerId, gameState: contest.state });
+    } else {
       return res.status(404).send({ errors: "Game Id not exist" });
-
-    const playerId = await insertPlayerIntoContest(contest.contestId, name);
-    if (playerId === null)
-      return res.status(500).send({ errors: "Insert Failed" });
-
-    publishPlayerJoinContest(contest.contestId, playerId, name);
-    res.send({ playerId: playerId, gameState: contest.state });
+    }
   } catch (err) {
     next(err);
   }
@@ -205,7 +216,6 @@ export async function getProblems(
   next: NextFunction
 ) {
   try {
-    const userId = res.locals.userId;
     const contestId = req.body.gameId;
     const problems = await getContestProblemsById(contestId);
     const problemDetails = await Promise.all(
@@ -243,7 +253,7 @@ export async function playerSubmit(
   //check if contest is started
   const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
   if (!contest || contest.state !== "started")
-    return res.status(404).send({ errors: "Game is not started" });
+    return res.status(404).send({ errors: "Game is not available" });
 
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)
@@ -300,11 +310,13 @@ export async function hostGetPlayersCode(
   next: NextFunction
 ) {
   try {
-    const contestId = req.body.gameId;
-    const players = await getPlayersByContestId(contestId);
+    const userId = res.locals.userId;
+    const contest = await checkContestStateByUser(userId);
+    if (!contest) return res.status(404).send({ errors: "No contest found" });
+    const players = await getPlayersByContestId(contest.contestId);
     const playersCode = await Promise.all(
       players.map((player) =>
-        getCodeByGameIdAndPlayerId(contestId, player.id, player.name)
+        getCodeByGameIdAndPlayerId(contest.contestId, player.id, player.name)
       )
     );
     res.send({ playersCode: playersCode });
@@ -417,7 +429,7 @@ export async function hostCloseContest(
     const players = await getPlayersByContestId(contestId);
     if (players.length === 0) {
       await endContestByIdAndUserId(contestId, userId);
-      return res.sendStatus(400);
+      return res.status(400).send({ errors: "Game room not found" });
     }
     publishHostCloseContest(contestId);
     res.sendStatus(200);
@@ -435,6 +447,20 @@ export async function hostGetHistory(
     const userId = res.locals.userId;
     const hostHistory = await getContestHistoryByUser(userId);
     res.send(hostHistory);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function hostClearHistory(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const userId = res.locals.userId;
+    await clearContestHistoryByUser(userId);
+    res.sendStatus(200);
   } catch (err) {
     next(err);
   }

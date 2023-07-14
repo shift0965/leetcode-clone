@@ -1,26 +1,37 @@
-import { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { authModalState } from "../../atoms/stateAtoms";
 import { USER_SIGNIN } from "../../api.const";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../types.const";
 
 const Login = () => {
-  const setAuthModal = useSetRecoilState(authModalState);
+  const [authModal, setAuthModal] = useRecoilState(authModalState);
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (authModal.isOpen) {
+      resetForm();
+    }
+  }, [authModal]);
+  const resetForm = () => {
+    setUserEmail("");
+    setUserPassword("");
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!loading) {
       e.preventDefault();
-      if (userEmail.trim() === "") return toast.error("Email can not be empty");
+      if (userEmail === "") return toast.error("Email can not be empty");
       if (!validateEmail(userEmail))
         return toast.error("Please enter a valid email");
-      if (userPassword.trim() === "")
-        return toast.error("Password can not be empty");
-      if (userEmail.length > 30) return toast.error("Email too long");
-      if (userPassword.length > 30) return toast.error("Password too long");
+      if (userPassword === "") return toast.error("Password can not be empty");
+      if (userEmail.length > 40)
+        return toast.error("Email can not exceed 40 characters");
+      if (userPassword.length > 30)
+        return toast.error("Password can not exceed 30 characters");
 
       setLoading(true);
       fetch(USER_SIGNIN, {
@@ -41,8 +52,7 @@ const Login = () => {
           } else {
             toast.success("Sign In Successfully");
             localStorage.setItem("userData", JSON.stringify(data.data));
-            setUserEmail("");
-            setUserPassword("");
+            resetForm();
             setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
           }
         })
@@ -66,7 +76,7 @@ const Login = () => {
             value={userEmail}
             name="email"
             onChange={(e) => {
-              setUserEmail(e.target.value.trim());
+              setUserEmail(e.target.value);
             }}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
                      w-full placeholder-gray-400 text-white"
@@ -81,7 +91,7 @@ const Login = () => {
             value={userPassword}
             name="password"
             onChange={(e) => {
-              setUserPassword(e.target.value.trim());
+              setUserPassword(e.target.value);
             }}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
                      w-full placeholder-gray-400 text-white"

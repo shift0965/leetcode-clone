@@ -1,26 +1,57 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { authModalState } from "../../atoms/stateAtoms";
-import { useSetRecoilState } from "recoil";
-import { HOST_GET_HISTORY } from "../../api.const";
+import { useRecoilState } from "recoil";
+import { HOST_CLEAR_HISTORY, HOST_GET_HISTORY } from "../../api.const";
 import { contestHistory } from "../../types.const";
 import { useNavigate } from "react-router-dom";
 import { PLAYER_AVATAR_URL } from "../../api.const";
 
 const Profile = () => {
   const [userName, setUserName] = useState("");
-  const setAuthModal = useSetRecoilState(authModalState);
+  const [authModal, setAuthModal] = useRecoilState(authModalState);
   const [hostHistory, setHostHistory] = useState<contestHistory[]>();
 
   const navigate = useNavigate();
+
   const handleClickProblem = (id: number) => {
     setAuthModal((prev) => ({ ...prev, isOpen: false }));
     navigate(`/problem?id=${id}`);
   };
 
-  useEffect(() => {
+  const handleClear = () => {
     const userDataJson = localStorage.getItem("userData");
-    if (userDataJson) {
+    if (!userDataJson) {
+      toast.error("Login timeout");
+      setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: false }));
+      return;
+    }
+    const userData = JSON.parse(userDataJson);
+    const userToken = userData.access_token;
+
+    fetch(HOST_CLEAR_HISTORY, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${userToken}`,
+      },
+    }).then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        setHostHistory([]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (authModal.isOpen) {
+      const userDataJson = localStorage.getItem("userData");
+      if (!userDataJson) {
+        toast.error("Login timeout");
+        setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: false }));
+        return;
+      }
+
       const userData = JSON.parse(userDataJson);
       setUserName(userData.user.name);
       const userToken = userData.access_token;
@@ -36,17 +67,20 @@ const Profile = () => {
         .then((result) => {
           setHostHistory(result);
         });
-    } else {
-      toast.error("Login timeout");
-      setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: false }));
     }
-  }, []);
+  }, [authModal]);
 
   return (
     <div className=" w-[800px] h-[560px] bg-dark-layer-1 px-10">
       <div className=" h-[100px] mt-[20px] px-3 text-white font-semibold text-2xl flex items-center tracking-wide">
-        <span className=" text-dark-yellow mr-[10px]">{userName}'s</span>Host
-        History
+        <span className=" text-dark-yellow mr-[10px]">{userName}'s</span>
+        Host History
+        <button
+          onClick={handleClear}
+          className="ml-auto mr-3 py-1 px-3 cursor-pointer rounded bg-dark-fill-3 hover:bg-dark-fill-2 transition-all font-medium text-base text-dark-pink"
+        >
+          Clear
+        </button>
       </div>
       <div className="h-[420px] overflow-y-auto">
         <table className="w-full">

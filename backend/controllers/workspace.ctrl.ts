@@ -11,10 +11,6 @@ export async function runExampleCases(
   res: Response,
   next: NextFunction
 ) {
-  const validResult = validationResult(req);
-  if (!validResult.isEmpty()) {
-    return res.status(400).send({ errors: validResult.array() });
-  }
   const { problemId, language, code } = req.body;
   const exampleCasesData = await getExampleCasesDataById(problemId);
   if (exampleCasesData === null)
@@ -39,10 +35,6 @@ export async function runTestCases(
   res: Response,
   next: NextFunction
 ) {
-  const validResult = validationResult(req);
-  if (!validResult.isEmpty()) {
-    return res.status(400).send({ errors: validResult.array() });
-  }
   const { problemId, language, code } = req.body;
   const testCasesData = await getTestCasesByProblemId(problemId);
   if (testCasesData === null)

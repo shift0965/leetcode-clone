@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import CountDown from "../NavBars/CountDown";
 import { useRecoilState } from "recoil";
 import { bulletSwitchState } from "../../atoms/stateAtoms";
-import { motion as m } from "framer-motion";
+import { toast } from "react-toastify";
 
 interface PlayerNavbarProps {
   player: Player | undefined;
@@ -28,7 +28,7 @@ const PlayerNavbar = ({
 
   const navigate = useNavigate();
   const handleExitGame = () => {
-    if (currentState === "GamePlaying" || currentState === "GameWaiting")
+    if (currentState === "GamePlaying" || currentState === "GameWaiting") {
       if (player) {
         fetch(PLAYER_EXIT_GAME, {
           method: "post",
@@ -37,10 +37,15 @@ const PlayerNavbar = ({
             gameId: player.gameId,
             playerId: player.id,
           }),
+        }).then((response) => {
+          if (response.status === 200) {
+            localStorage.removeItem("playerData");
+          } else {
+            toast.error("Failed to exit game");
+          }
         });
-        localStorage.removeItem("playerData");
       }
-    localStorage.removeItem("playerData");
+    }
     navigate("/");
   };
 
@@ -75,12 +80,7 @@ const PlayerNavbar = ({
   }, [timeLeft, currentState]);
 
   return (
-    <m.nav
-      className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-    >
+    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
       <div className="flex w-full items-center justify-between">
         <div className="flex-1 flex items-center text-white text-lg">
           <Link to="/" className=" block w-[100px]">
@@ -137,7 +137,7 @@ const PlayerNavbar = ({
           </>
         )}
       </div>
-    </m.nav>
+    </nav>
   );
 };
 export default PlayerNavbar;

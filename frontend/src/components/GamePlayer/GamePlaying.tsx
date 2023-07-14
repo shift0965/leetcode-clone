@@ -255,7 +255,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
                 >
                   {id + 1}
                 </div>
-                <div className="h-11 w-11 bg-dark-fill-2 rounded-full flex justify-center items-center overflow-hidden ml-3">
+                <div className="h-10 w-10 shrink-0 bg-dark-fill-2 rounded-full flex justify-center items-center overflow-hidden ml-[10px]">
                   <img
                     src={`${PLAYER_AVATAR_URL}&seed=${playerProgress.name}`}
                     alt="avatar"
@@ -263,7 +263,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
                   />
                 </div>
                 <div
-                  className={`text-lg ml-3 ${
+                  className={`text-md ml-3 truncate ${
                     playerProgress.id === player.id
                       ? "font-semibold"
                       : "font-normal"

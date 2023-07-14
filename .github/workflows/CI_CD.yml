@@ -33,6 +33,9 @@ jobs:
             docker container stop mysql
             docker container rm mysql
 
+            # clear redis
+            docker run -it --rm redis redis-cli -h cache-leetclone.1nyq2c.ng.0001.apn3.cache.amazonaws.com -p 6379 flushall
+
             # compose
             docker-compose -f docker-compose-main.yml build --no-cache
             docker-compose -f docker-compose-main.yml up -d

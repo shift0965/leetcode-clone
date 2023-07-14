@@ -26,6 +26,7 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
       "ws-player-sendMessageToPlayer",
       function (item: { id: number; message: string }) {
         if (item.id === -1 || item.id === player.id) {
+          console.log(new Date().toLocaleString());
           console.log("Host message", item.message);
           sendBullet(item.message);
         }
@@ -40,7 +41,7 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
   const sendBullet = (message: string) => {
     const randomHeight = 0 + Math.random() * 400;
     const id = uniqueId();
-    const duration = 16 + Math.floor(Math.random() * 8);
+    const duration = 15 + Math.floor(Math.random() * 8);
     const colorName =
       colorNameArray[Math.floor(Math.random() * colorNameArray.length)];
     setBullets((prev) => [
@@ -71,7 +72,7 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
             key={bullet.id}
           >
             <div
-              className={`bg-opacity-50 ${bullet.colorName} flex shrink-0 items-center py-0.5 pl-3 pr-2 rounded-l-3xl rounded-r-lg`}
+              className={`bg-opacity-50 ${bullet.colorName} flex shrink-0 items-center py-0.5 pl-3 pr-2 rounded-l-3xl rounded-r-lg truncate max-w-[800px]`}
             >
               <img src="./gameHost.png" alt="GameHost" className="h-7 mr-2" />
               {bullet.message}

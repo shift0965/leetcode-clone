@@ -1,6 +1,7 @@
 import pool from "./databasePool.js";
 import { z } from "zod";
 import { ResultSetHeader } from "mysql2";
+import { OkPacket } from "mysql2";
 
 function instanceOfSetHeader(object: any): object is ResultSetHeader {
   return "insertId" in object;
@@ -8,8 +9,8 @@ function instanceOfSetHeader(object: any): object is ResultSetHeader {
 
 export async function checkContestStateByUser(userId: number) {
   const results = await pool.query(
-    "SELECT id AS contestId, state FROM contest WHERE user_id = ? AND state != ?",
-    [userId, "ended"]
+    "SELECT id AS contestId, state FROM contest WHERE user_id = ? AND state IN ('created', 'started', 'closed')",
+    [userId]
   );
   const contests = z.array(ContestIdSchema).parse(results[0]);
   return contests[0];
@@ -20,7 +21,6 @@ export async function checkContestStateById(contestId: number) {
     "SELECT id AS contestId, state FROM contest WHERE id = ?",
     [contestId]
   );
-
   const contests = z.array(ContestIdSchema).parse(results[0]);
   return contests[0];
 }
@@ -30,8 +30,8 @@ export async function checkContestStateByIdAndPlayerId(
   playerId: number
 ) {
   const results = await pool.query(
-    "SELECT c.id AS contestId, c.state FROM contest AS c JOIN contest_player AS cp ON c.id = cp.contest_id WHERE cp.id = ? AND c.id = ? AND c.state != ? AND cp.state = ?",
-    [playerId, contestId, "ended", "joined"]
+    "SELECT c.id AS contestId, c.state FROM contest AS c JOIN contest_player AS cp ON c.id = cp.contest_id WHERE cp.id = ? AND c.id = ? AND cp.state = ?",
+    [playerId, contestId, "joined"]
   );
   const contests = z.array(ContestIdSchema).parse(results[0]);
   return contests[0];
@@ -42,6 +42,17 @@ export async function createContest(
   timeLimit: number,
   problemIds: number[]
 ) {
+  const problemsResult = await pool.query(
+    "select id from problem where id in ?",
+    [[problemIds]]
+  );
+  if (
+    z.array(z.object({ id: z.number() })).parse(problemsResult[0]).length !==
+    problemIds.length
+  ) {
+    throw new Error("Problems not found");
+  }
+
   const insertContest = await pool.query(
     "insert into contest (user_id, time_limit_mins, state) VALUES (?,?,?)",
     [userId, timeLimit, "created"]
@@ -49,7 +60,6 @@ export async function createContest(
   if (Array.isArray(insertContest) && instanceOfSetHeader(insertContest[0])) {
     const contestId = insertContest[0].insertId;
     const problemBulk = problemIds.map((problemId) => [contestId, problemId]);
-
     await pool.query(
       "insert into contest_problem (contest_id, problem_id) values ?",
       [problemBulk]
@@ -98,19 +108,21 @@ export async function getPlayersByContestId(contestId: number) {
 
 export async function endContestByIdAndUserId(
   contestId: number,
-  userId: string
+  userId: number
 ) {
-  const results = await pool.query(
+  const results = await pool.query<OkPacket>(
     "UPDATE contest SET state = ? WHERE id = ? AND user_id = ?",
     ["ended", contestId, userId]
   );
+  if (results[0].affectedRows === 0) throw new Error("Game Not Found");
 }
 
 export async function closeContestById(contestId: number) {
-  const results = await pool.query(
+  const results = await pool.query<OkPacket>(
     "UPDATE contest SET state = ? WHERE id = ?",
     ["closed", contestId]
   );
+  if (results[0].affectedRows === 0) throw new Error("Game Not Found");
 }
 
 export async function ExitContestByIdAndPlayerId(
@@ -127,16 +139,17 @@ export async function startContestByIdAndUserId(
   contestId: number,
   userId: string
 ) {
-  const results = await pool.query(
+  const results = await pool.query<OkPacket>(
     "UPDATE contest SET state = ?, started_at = ? WHERE id = ? AND user_id = ? AND state = ?",
     ["started", new Date(), contestId, userId, "created"]
   );
+  if (results[0].affectedRows === 0) throw new Error("Game Not Found");
 }
 
 export async function getContestProblemsById(contestId: number) {
   const results = await pool.query(
-    "SELECT cp.problem_id AS id FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id WHERE c.id = ? AND c.state != ?",
-    [contestId, "ended"]
+    "SELECT cp.problem_id AS id FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id WHERE c.id = ?",
+    [contestId]
   );
   const problems = z.array(ProblemIdSchema).parse(results[0]);
   return problems.map((problem) => problem.id);
@@ -198,8 +211,8 @@ export async function getContestResultsById(contestId: number) {
 
 export async function getContestHistoryByUser(userId: number) {
   const contestProblemsResults = await pool.query(
-    "SELECT c.id AS contestId, c.started_at AS startedAt, p.id AS problemId, p.title as problemTitle FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id JOIN problem AS p on cp.problem_id = p.id WHERE c.started_at IS NOT NULL AND c.user_id = ?",
-    [userId]
+    "SELECT c.id AS contestId, c.started_at AS startedAt, p.id AS problemId, p.title as problemTitle FROM contest AS c JOIN contest_problem AS cp ON c.id = cp.contest_id JOIN problem AS p on cp.problem_id = p.id WHERE c.started_at IS NOT NULL AND c.user_id = ? AND c.state = ? ORDER BY c.started_at DESC",
+    [userId, "ended"]
   );
   const problems = z
     .array(historyProblemResultsSchema)
@@ -259,6 +272,14 @@ export async function getContestHistoryByUser(userId: number) {
   return Array.from(contestMap.values()).filter(
     (contest) => contest.players.length > 0
   );
+}
+
+export async function clearContestHistoryByUser(userId: number) {
+  const results = await pool.query<OkPacket>(
+    "UPDATE contest SET state = ? WHERE user_id = ?",
+    ["cleared", userId]
+  );
+  if (results[0].affectedRows === 0) throw new Error("Game Not Found");
 }
 
 const historyProblemResultsSchema = z.object({

@@ -1,4 +1,4 @@
-import { Router, Response, Request } from "express";
+import { Router } from "express";
 import { body } from "express-validator";
 import {
   signUp,
@@ -6,39 +6,25 @@ import {
   //   fbLogin,
   //   getProfile,
 } from "../controllers/user.ctrl.js";
-import { PROVIDER } from "../models/userProvider.model.js";
 import { handleResult } from "../middleware/validator.js";
-import branch from "../middleware/branch.js";
-import authentication from "../middleware/authentication.js";
+// import branch from "../middleware/branch.js";
 
 const router = Router();
 
-router.route("/user/signup").post([
-  body("email").exists().notEmpty(), //.isEmail().normalizeEmail(),
-  body("name").exists().notEmpty().trim(),
-  body("password").exists().notEmpty(),
+router.route("/user/signup").post(
+  body("email").notEmpty(), //.isEmail().normalizeEmail(),
+  body("name").notEmpty().trim(),
+  body("password").notEmpty(),
   handleResult,
-  signUp,
-]);
+  signUp
+);
 
-router.route("/user/signin").post([
-  branch(
-    (req) => req.body.provider === PROVIDER.NATIVE,
-    [
-      body("email").exists().notEmpty(), //.isEmail().normalizeEmail(),
-      body("password").exists().notEmpty(),
-      handleResult,
-      signIn,
-    ]
-  ),
-  //   branch(
-  //     (req) => req.body.provider === PROVIDER.FACEBOOK,
-  //     [body("access_token").exists().notEmpty(), fbLogin]
-  //   ),
-  //   (req: Request, res: Response) => {
-  //     res.status(400).json({ errors: "invalid provider" });
-  //   },
-]);
+router.route("/user/signin").post(
+  body("email").notEmpty(), //.isEmail().normalizeEmail(),
+  body("password").notEmpty(),
+  handleResult,
+  signIn
+);
 
 // router.route("/user/profile").get([authentication, getProfile]);
 

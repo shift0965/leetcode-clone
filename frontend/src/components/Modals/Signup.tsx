@@ -1,32 +1,51 @@
-import { useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { authModalState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 import { USER_SIGNUP } from "../../api.const";
-import { validateEmail } from "../../types.const";
+import { hasWhiteSpace, validateEmail } from "../../types.const";
 
 const Signup = () => {
-  const setAuthModal = useSetRecoilState(authModalState);
+  const [authModal, setAuthModal] = useRecoilState(authModalState);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (authModal.isOpen) {
+      resetForm();
+    }
+  }, [authModal]);
+
+  const resetForm = () => {
+    setUserName("");
+    setUserEmail("");
+    setUserPassword("");
+    setConfirmPassword("");
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     if (!loading) {
       e.preventDefault();
+      if (hasWhiteSpace(userName))
+        toast.error("Name should not contain spaces");
+      if (hasWhiteSpace(userPassword))
+        toast.error("Password should not contain spaces");
 
       if (userName === "") return toast.error("Name can not be empty");
       if (userEmail === "") return toast.error("Email can not be empty");
-      if (userPassword === "") return toast.error("Password can not be empty");
-
-      if (userName.length > 30) return toast.error("UserName too long");
-      if (userEmail.length > 30) return toast.error("Email too long");
-      if (userPassword.length > 30) return toast.error("Password too long");
-
       if (!validateEmail(userEmail))
         return toast.error("Please enter a valid email");
+      if (userPassword === "") return toast.error("Password can not be empty");
+
+      if (userName.length > 30)
+        return toast.error("UserName should not exceed 30 characters");
+      if (userEmail.length > 40)
+        return toast.error("Email should not exceed 40 characters");
+      if (userPassword.length > 30)
+        return toast.error("Password shoule not exceed 30 characters");
 
       if (confirmPassword !== userPassword)
         return toast.error("Passwords are not matched");
@@ -51,10 +70,7 @@ const Signup = () => {
           } else {
             toast.success("Sign Up Successfully");
             localStorage.setItem("userData", JSON.stringify(result.data));
-            setUserName("");
-            setUserEmail("");
-            setUserPassword("");
-            setConfirmPassword("");
+            resetForm();
             setAuthModal((prev) => ({ ...prev, isOpen: false, isLogin: true }));
           }
         })
@@ -76,7 +92,7 @@ const Signup = () => {
           <input
             type="name"
             value={userName}
-            onChange={(e) => setUserName(e.target.value.trim())}
+            onChange={(e) => setUserName(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="name"
@@ -87,7 +103,7 @@ const Signup = () => {
           <input
             type="text"
             value={userEmail}
-            onChange={(e) => setUserEmail(e.target.value.trim())}
+            onChange={(e) => setUserEmail(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="name@email.com"
@@ -98,7 +114,7 @@ const Signup = () => {
           <input
             type="password"
             value={userPassword}
-            onChange={(e) => setUserPassword(e.target.value.trim())}
+            onChange={(e) => setUserPassword(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="******"
@@ -111,7 +127,7 @@ const Signup = () => {
           <input
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value.trim())}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
           w-full placeholder-gray-400 text-white"
             placeholder="******"

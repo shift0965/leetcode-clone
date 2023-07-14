@@ -1,6 +1,6 @@
 import { PLAYER_JOIN_GAME } from "../../api.const";
 import { useState } from "react";
-import { GamePlayerState } from "../../types.const";
+import { GamePlayerState, hasWhiteSpace } from "../../types.const";
 import { toast } from "react-toastify";
 import { Player } from "../../types.const";
 import { motion as m } from "framer-motion";
@@ -13,13 +13,19 @@ interface GameJoiningProps {
 const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
   const [playerName, setPlayerName] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleJoinRoom = () => {
+  const handleJoinRoom = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     if (playerName === "") return toast.error("Name can not be empty");
-    if (playerName.length > 20) return toast.error("Name too long");
-    if (gameId === "") return toast.error("Game id can not be empty");
-    if (Number(gameId) > 100000 || Number(gameId) < 0)
+    if (hasWhiteSpace(playerName))
+      return toast.error("Name can not have whitespace");
+    if (playerName.length > 20)
+      return toast.error("Name can not exceed 20 characters");
+    if (!Number(gameId) || Number(gameId) > 100000 || Number(gameId) < 0)
       return toast.error("Invalid game id");
+    setLoading(true);
 
     fetch(PLAYER_JOIN_GAME, {
       method: "POST",
@@ -29,7 +35,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
         playerName: playerName,
       }),
     })
-      .then((response) => {
+      .then(async (response) => {
         if (response.status !== 200)
           return response.json().then((error) => {
             throw error;
@@ -55,7 +61,11 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
         }
       })
       .catch((error) => {
-        toast.error(error.errors);
+        console.error(error);
+        toast.error(error.errors || "Join game failed");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -67,35 +77,32 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
       transition={{ duration: 0.5 }}
     >
       <h1 className="text-2xl text-center">Join Game</h1>
-      <div className="mt-8">
-        <div className="text-lg">Game Id</div>
-        <input
-          type="text"
-          className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
-          value={gameId}
-          onChange={(e) => setGameId(e.target.value.trim())}
-        />
-      </div>
-      <div className="mt-4">
-        <div className="text-lg">Name </div>
-        <input
-          type="text"
-          className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value.trim())}
-          onKeyDownCapture={(e) => {
-            {
-              e.key === "Enter" && handleJoinRoom();
-            }
-          }}
-        />
-      </div>
-      <button
-        onClick={handleJoinRoom}
-        className="mt-8 bg-dark-green-s hover:bg-opacity-60 transition-all px-5 py-2 rounded-lg text-white font-semibold"
-      >
-        Join Game
-      </button>
+      <form onSubmit={handleJoinRoom}>
+        <div className="mt-8">
+          <div className="text-lg">Game Id</div>
+          <input
+            type="text"
+            className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
+            value={gameId}
+            onChange={(e) => setGameId(e.target.value)}
+          />
+        </div>
+        <div className="mt-4">
+          <div className="text-lg">Name </div>
+          <input
+            type="text"
+            className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+        </div>
+        <button
+          disabled={loading}
+          className="mt-8 bg-dark-green-s hover:bg-opacity-60 transition-all px-5 py-2 rounded-lg text-white font-semibold"
+        >
+          Join Game
+        </button>
+      </form>
     </m.div>
   );
 };

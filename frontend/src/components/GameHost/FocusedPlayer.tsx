@@ -4,6 +4,7 @@ import CodeMirror from "../Workspace/CodeMirror";
 import { BsCheck2Circle } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import { HOST_SEND_MESSAGE } from "../../api.const";
+import { toast } from "react-toastify";
 
 interface FocusedPlayerProps {
   gameId: number;
@@ -33,7 +34,10 @@ const FocusedPlayer = ({
 
   const handleSendMessage = (e: any) => {
     e.preventDefault();
+    setMessage((prev) => prev.trim());
     if (message === "") return;
+    if (message.length > 30)
+      return toast.error("Message cannot be longer than 30 characters");
     setMessage("");
 
     if (e.nativeEvent.submitter.name === "sendMessage" && player) {

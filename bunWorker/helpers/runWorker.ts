@@ -69,44 +69,22 @@ export async function runWorker() {
         }),
       ]);
       proc.kill();
+      if (result.length > 100000) {
+        redisClient.publish(
+          `ps-runCodeResult-${id}`,
+          JSON.stringify({
+            type: "error",
+            data: {
+              name: "Output Limit Exceeded",
+              message: "The size of output data is too large",
+              line: undefined,
+            },
+          })
+        );
+      }
       redisClient.publish(`ps-runCodeResult-${id}`, result);
       runningProcess--;
       resolve(true);
     });
-
-    // const childProcess = execFile(
-    //   "bun",
-    //   [
-    //     path.join(__dirname, "workerFile.ts"),
-    //     JSON.stringify({
-    //       runExample: runExample,
-    //       inputCases: cases,
-    //       code: code,
-    //       functionName: functionName,
-    //       verifyVariable: verifyVariable,
-    //     }),
-    //   ],
-    //   { timeout: 1500 },
-    //   async (error, stdout, stderr) => {
-    //     if (error) {
-    //       // console.error(`error: ${error}`);
-    //       await redisClient.publish(
-    //         `ps-runCodeResult-${id}`,
-    //         JSON.stringify({
-    //           type: "error",
-    //           data: {
-    //             name: "Runtime Error",
-    //             message: "Time Limit Exceeded",
-    //             line: undefined,
-    //           },
-    //         })
-    //       );
-    //     } else {
-    //       await redisClient.publish(`ps-runCodeResult-${id}`, stdout);
-    //     }
-    //     runningProcess--;
-    //     childProcess.kill();
-    //   }
-    // );
   }
 }

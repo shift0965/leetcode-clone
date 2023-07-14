@@ -11,10 +11,10 @@ const PlayerAvatar = ({ name, place }: PlayerAvatarProps) => {
       <img
         src={`${PLAYER_AVATAR_URL}&seed=${name}`}
         alt="avatar"
-        className="w-24"
+        className="w-24 mx-auto"
       />
       <div
-        className={`rounded-lg text-center py-[3px] text-dark-layer-1 font-semibold  ${
+        className={`rounded-lg text-center py-[3px] px-[3px] text-dark-layer-1 font-semibold truncate max-w-[120px] ${
           place === 1
             ? "bg-amber-200"
             : place === 2

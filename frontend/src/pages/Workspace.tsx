@@ -21,11 +21,10 @@ const Workspace = () => {
   useEffect(() => {
     setLoading(true);
     fetch(`${GET_PROBLEM_DETAILS}?id=${id}`)
-      .then((response) => {
+      .then(async (response) => {
         if (response.status !== 200) {
-          response.json().then((error) => {
-            toast.error(error.errors);
-            navigate("/");
+          return response.json().then((error) => {
+            throw error;
           });
         }
         return response.json();
@@ -33,6 +32,11 @@ const Workspace = () => {
       .then((result) => {
         setProblem(result);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Problem not found");
+        navigate("/");
       });
   }, [id]);
 

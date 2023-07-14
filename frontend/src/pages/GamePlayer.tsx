@@ -7,22 +7,15 @@ import { PLAYER_CHECK_GAME } from "../api.const";
 import PlayerNavbar from "../components/GamePlayer/PlayerNavbar";
 import GamePlaying from "../components/GamePlayer/GamePlaying";
 import GameResult from "../components/GameResult/GameResult";
-import { useRecoilState } from "recoil";
-import { loadingState } from "../atoms/stateAtoms";
-import { motion as m } from "framer-motion";
 
 const GamePlayer = () => {
-  const [loading, setLoading] = useRecoilState(loadingState);
-  const [currentState, setCurrentState] =
-    useState<GamePlayerState>("GameJoining");
+  const [currentState, setCurrentState] = useState<GamePlayerState>("Loading");
   const [player, setPlayer] = useState<Player>();
 
   useEffect(() => {
-    setLoading(true);
     const playerDataJSON = localStorage.getItem("playerData");
     if (!playerDataJSON) {
       setCurrentState("GameJoining");
-      setLoading(false);
     } else {
       const playerData: Player = JSON.parse(playerDataJSON);
       fetch(PLAYER_CHECK_GAME, {
@@ -30,13 +23,12 @@ const GamePlayer = () => {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           playerId: playerData.id,
-          contestId: playerData.gameId,
+          gameId: playerData.gameId,
         }),
       })
         .then((response) => response.json())
         .then((result) => {
           setPlayer(playerData);
-          setLoading(false);
           if (result.founded) {
             setCurrentState(() => {
               if (result.state === "created") return "GameWaiting";
@@ -55,7 +47,7 @@ const GamePlayer = () => {
 
   return (
     <>
-      {currentState === "GameJoining" ? (
+      {currentState === "GameJoining" || currentState === "Loading" ? (
         <Navbar />
       ) : (
         <PlayerNavbar
@@ -64,32 +56,24 @@ const GamePlayer = () => {
           setCurrentState={setCurrentState}
         />
       )}
-      <m.div
-        className={`text-dark-gray-8 ${
-          loading && "opacity-0"
-        } h-[calc(100vh-48px)] overflow-y-auto transition-all`}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="h-[calc(100vh-48px)] overflow-y-auto">
-          {currentState === "GameJoining" && (
-            <GameJoining
-              setCurrentState={setCurrentState}
-              setPlayer={setPlayer}
-            />
-          )}
-          {currentState === "GameWaiting" && player && (
-            <GameWaiting setCurrentState={setCurrentState} player={player} />
-          )}
-          {currentState === "GamePlaying" && player && (
-            <GamePlaying setCurrentState={setCurrentState} player={player} />
-          )}
-          {currentState === "GameResult" && player && (
-            <GameResult gameId={player.gameId} />
-          )}
-        </div>
-      </m.div>
+
+      <div className="h-[calc(100vh-48px)] overflow-y-auto">
+        {currentState === "GameJoining" && (
+          <GameJoining
+            setCurrentState={setCurrentState}
+            setPlayer={setPlayer}
+          />
+        )}
+        {currentState === "GameWaiting" && player && (
+          <GameWaiting setCurrentState={setCurrentState} player={player} />
+        )}
+        {currentState === "GamePlaying" && player && (
+          <GamePlaying setCurrentState={setCurrentState} player={player} />
+        )}
+        {currentState === "GameResult" && player && (
+          <GameResult gameId={player.gameId} />
+        )}
+      </div>
     </>
   );
 };

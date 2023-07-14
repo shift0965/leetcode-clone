@@ -78,6 +78,10 @@ const Playground = ({
   };
 
   const handleRun = () => {
+    if (userCode.length > 10000) {
+      return toast.error("Codes should be less than 10000 characters");
+    }
+
     pendingStart();
     fetch(RUN_EXAMPLE_CASES, {
       method: "POST",
@@ -110,6 +114,10 @@ const Playground = ({
   };
 
   const handleSubmit = () => {
+    if (userCode.length > 10000) {
+      return toast.error("Codes should be less than 10000 characters");
+    }
+
     pendingStart();
     const endPoint = gameMode ? PLAYER_SUBMIT : RUN_TEST_CASES;
     fetch(endPoint, {
@@ -246,9 +254,6 @@ const Playground = ({
                     <AiOutlineFullscreenExit />
                   )}
                 </div>
-                {/* <div className="absolute p-2 right-0 top-5 group-hover:scale-100 scale-0 bg-gray-200 text-dark-layer-2 duration-100 translate-x-3 whitespace-nowrap ">
-          Full Screen
-        </div> */}
               </button>
             </div>
           </div>

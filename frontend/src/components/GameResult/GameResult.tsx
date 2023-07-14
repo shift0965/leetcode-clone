@@ -89,7 +89,7 @@ const GameResult = ({ gameId }: GameResultProps) => {
           </div>
           <table
             className={`${
-              problems.length > 3 ? "w-[960px]" : "w-[700px]"
+              problems.length > 3 ? "w-[960px]" : "w-[740px]"
             }  mx-auto mt-8`}
           >
             <thead className=" text-gray-300 border-b text-left">

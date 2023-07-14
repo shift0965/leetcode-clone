@@ -22,6 +22,7 @@ const GameHost = () => {
       toast.error("Sign In Time Out");
     } else {
       const userToken = JSON.parse(userDataJSON).access_token;
+
       fetch(HOST_CHECK_GAME, {
         method: "GET",
         headers: {
@@ -42,6 +43,9 @@ const GameHost = () => {
           } else {
             setCurrentState("GameCreating");
           }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   }, []);
@@ -57,7 +61,6 @@ const GameHost = () => {
           setCurrentState={setCurrentState}
         />
       )}
-
       <div className="h-[calc(100vh-48px)] overflow-y-auto">
         {currentState === "GameCreating" && (
           <GameCreating

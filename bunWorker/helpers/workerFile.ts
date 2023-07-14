@@ -160,7 +160,7 @@ async function runJavaScript(
         reject(
           new ExecutionError(
             "Syntax Error",
-            "Unexpected EOF while executing code",
+            "There are Syntax Error found while executing code",
             undefined
           )
         );
