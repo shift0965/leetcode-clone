@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
         }
         redisClient.set(key, JSON.stringify(playerCode));
       }
+      redisClient.expire(key, 3600, "GT");
 
       socket.to(String(msg.gameId)).emit("ws-host-playerUpdateCode", {
         id: msg.playerId,
