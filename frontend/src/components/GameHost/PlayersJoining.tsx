@@ -60,7 +60,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mt-14">
+      <div className="mt-12">
         <h1 className="text-4xl text-center">
           Game Id - <strong className=" text-dark-pink">{gameId}</strong>
         </h1>
@@ -68,7 +68,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
           Waiting For Players To Join...
         </h1>
       </div>
-      <div className=" mt-16">
+      <div className=" mt-2">
         <PlayersLobby players={players} />
       </div>
     </m.div>

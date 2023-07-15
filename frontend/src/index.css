@@ -153,3 +153,39 @@ code {
     right: 100%;
   }
 }
+
+.glitch span {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.glitch span:first-of-type {
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  animation: glitch steps(1) 3s infinite;
+}
+
+.glitch span:last-of-type {
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  animation: glitch steps(1) 2.3s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0px);
+  }
+  55% {
+    transform: translate(0px) skew(4deg);
+  }
+  60% {
+    transform: translateX(-8px);
+  }
+  65% {
+    transform: translate(-4px, -4px);
+  }
+  90% {
+    transform: translate(6px, 2px) skew(-4deg);
+  }
+  100% {
+    transform: translate(10px, 2px);
+  }
+}

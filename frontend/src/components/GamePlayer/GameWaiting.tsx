@@ -13,9 +13,10 @@ import { motion as m } from "framer-motion";
 
 interface GameWaitingProps {
   player: Player | undefined;
+  gameId: number | undefined;
   setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
 }
-const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
+const GameWaiting = ({ player, setCurrentState, gameId }: GameWaitingProps) => {
   const socket = useRef(io(WEB_SOCKET_URL)).current;
   const [players, setPlayers] = useState<Player[]>([]);
   const navigate = useNavigate();
@@ -95,11 +96,12 @@ const GameWaiting = ({ player, setCurrentState }: GameWaitingProps) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mt-10">
+      <div className="mt-12">
         <h1 className="blink text-xl text-center text-dark-gray-7">
-          Game is about to start...
+          Game <strong className=" text-dark-pink mx-1">{gameId}</strong> is
+          about to start...
         </h1>
-        <div className="mt-16">
+        <div className="mt-2">
           <PlayersLobby players={players} />
         </div>
       </div>

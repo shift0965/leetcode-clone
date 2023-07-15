@@ -65,7 +65,11 @@ const GamePlayer = () => {
           />
         )}
         {currentState === "GameWaiting" && player && (
-          <GameWaiting setCurrentState={setCurrentState} player={player} />
+          <GameWaiting
+            setCurrentState={setCurrentState}
+            player={player}
+            gameId={player.gameId}
+          />
         )}
         {currentState === "GamePlaying" && player && (
           <GamePlaying setCurrentState={setCurrentState} player={player} />
