@@ -5,11 +5,11 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build_express_and_socket:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: pull and deploy main server
+      - name: Deploy express and socket server
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.EC2_SSH_KEY }}
@@ -18,32 +18,29 @@ jobs:
           script: |
             cd /home/ubuntu/leetcode-clone
 
-            # clean up
+            # Clean up
             docker-compose -f docker-compose-main.yml down
             docker system prune -a -f
             docker volume prune -f
 
-            # pull change
+            # Pull change
             git fetch origin main
             git reset --hard origin/main
 
-            # update db
+            # Update database
             docker run --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
-            docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < /home/ubuntu/leetcode-clone/backend/dbBackup/leetclone.sql
+            docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < backend/dbBackup/leetclone.sql
             docker container stop mysql
             docker container rm mysql
 
-            # clear redis
+            # Clear Redis
             docker run -it --rm redis redis-cli -h cache-leetclone.1nyq2c.ng.0001.apn3.cache.amazonaws.com -p 6379 flushall
 
-            # compose
+            # Compose
             docker-compose -f docker-compose-main.yml build --no-cache
             docker-compose -f docker-compose-main.yml up -d
 
-            #test
-            docker exec express_server /bin/bash -c "cd backend && npm run productionTest";
-
-      - name: pull and deploy worker server
+      - name: Deploy worker server
         uses: appleboy/ssh-action@master
         with:
           key: ${{ secrets.EC2_SSH_KEY }}
@@ -52,15 +49,25 @@ jobs:
           script: |
             cd /home/ubuntu/leetcode-clone
 
-            # clean up
+            #Clean up
             docker-compose -f docker-compose-worker.yml down
             docker system prune -a -f
             docker volume prune -f
 
-            # pull change
+            #Pull change    
             git fetch origin main
             git reset --hard origin/main
 
-            # compose
+            #Compose
             docker-compose -f docker-compose-worker.yml build --no-cache
             docker-compose -f docker-compose-worker.yml up -d
+
+      - name: Test express server
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS_MAIN }}
+          username: ${{ secrets.EC2_USERNAME }}
+          script: |
+            # Test
+            docker exec express_server /bin/bash -c "cd backend && npm run productionTest"
