@@ -8,5 +8,4 @@ COPY frontend/dist frontend/dist
 COPY backend/ backend/
 COPY backend/.env backend/
 RUN cd backend && npm install && npm run build
-
-CMD cd backend && node dist/index.js
+CMD cd backend && npm run start

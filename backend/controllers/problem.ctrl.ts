@@ -24,13 +24,7 @@ export async function getProblemDetails(
   next: NextFunction
 ) {
   try {
-    const validResult = validationResult(req);
-    if (!validResult.isEmpty()) {
-      return res.status(400).send({ errors: validResult.array() });
-    }
     const problemId = Number(req.query.id);
-    if (!problemId)
-      return res.status(404).send({ errors: "Problem not found" });
     const problemDetails = await getProblemDetailsById(problemId);
     if (problemDetails === null)
       return res.status(404).send({ errors: "Problem not found" });

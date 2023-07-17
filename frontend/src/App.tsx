@@ -1,5 +1,5 @@
 import Workspace from "./pages/Workspace";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import GameHost from "./pages/GameHost";
 import GamePlayer from "./pages/GamePlayer";
 import HomePage from "./pages/HomePage";
@@ -30,7 +30,7 @@ function App() {
           <Route path="problem" element={<Workspace />} />
           <Route path="gameHost" element={<GameHost />} />
           <Route path="gamePlayer" element={<GamePlayer />} />
-          <Route path="*" element={<HomePage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
     </BrowserRouter>
