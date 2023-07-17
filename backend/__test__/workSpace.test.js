@@ -1,4 +1,4 @@
-import { RUN_EXAMPLE_CASES, RUN_TEST_CASES } from "./apis.test.js";
+import { RUN_EXAMPLE_CASES, RUN_TEST_CASES } from "./apis.js";
 
 describe("Problems route", () => {
   test("Runcode Success", async () => {

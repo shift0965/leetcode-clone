@@ -40,6 +40,9 @@ jobs:
             docker-compose -f docker-compose-main.yml build --no-cache
             docker-compose -f docker-compose-main.yml up -d
 
+            #test
+            docker exec express_server /bin/bash -c "cd backend && npm run productionTest";
+
       - name: pull and deploy worker server
         uses: appleboy/ssh-action@master
         with:

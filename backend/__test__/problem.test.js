@@ -1,4 +1,4 @@
-import { GET_ALL_PROBLEMS, GET_PROBLEM_DETAILS } from "./apis.test.js";
+import { GET_ALL_PROBLEMS, GET_PROBLEM_DETAILS } from "./apis.js";
 
 describe("Problems route", () => {
   test("Get Problems Success: normal", async () => {
