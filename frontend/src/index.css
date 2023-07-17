@@ -104,10 +104,10 @@ code {
   border-radius: 5px;
   border-width: 1px;
   font-family: sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 500;
   line-height: 1rem;
-  padding: 0.125rem;
+  padding: 0.15rem;
   letter-spacing: 1px;
   white-space: pre-wrap;
   background-color: hsla(0, 0%, 100%, 0.07);

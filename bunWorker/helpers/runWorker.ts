@@ -69,7 +69,7 @@ export async function runWorker() {
         }),
       ]);
       proc.kill();
-      if (result.length > 100000) {
+      if (result.length > 300000) {
         redisClient.publish(
           `ps-runCodeResult-${id}`,
           JSON.stringify({

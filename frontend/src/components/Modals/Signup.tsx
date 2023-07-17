@@ -30,23 +30,22 @@ const Signup = () => {
     if (!loading) {
       e.preventDefault();
       if (hasWhiteSpace(userName))
-        toast.error("Name should not contain spaces");
-      if (hasWhiteSpace(userPassword))
-        toast.error("Password should not contain spaces");
-
+        return toast.error("Name should not contain spaces");
       if (userName === "") return toast.error("Name can not be empty");
+      if (userName.length > 30)
+        return toast.error("UserName should not exceed 30 characters");
+
       if (userEmail === "") return toast.error("Email can not be empty");
       if (!validateEmail(userEmail))
         return toast.error("Please enter a valid email");
-      if (userPassword === "") return toast.error("Password can not be empty");
-
-      if (userName.length > 30)
-        return toast.error("UserName should not exceed 30 characters");
       if (userEmail.length > 40)
         return toast.error("Email should not exceed 40 characters");
+
+      if (userPassword === "") return toast.error("Password can not be empty");
+      if (hasWhiteSpace(userPassword))
+        return toast.error("Password should not contain spaces");
       if (userPassword.length > 30)
         return toast.error("Password shoule not exceed 30 characters");
-
       if (confirmPassword !== userPassword)
         return toast.error("Passwords are not matched");
 

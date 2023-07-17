@@ -66,7 +66,7 @@ router
   .post(
     body("gameId").isNumeric(),
     body("playerId").isNumeric(),
-    body("message").isString().isLength({ min: 1, max: 30 }),
+    body("message").isString().isLength({ min: 1, max: 50 }),
     handleResult,
     hostSendMessage
   );

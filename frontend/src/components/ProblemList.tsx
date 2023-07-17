@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BsCheckCircle } from "react-icons/bs";
+import { BsCheckCircle, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { AiFillYoutube } from "react-icons/ai";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
@@ -13,6 +13,8 @@ import { motion as m } from "framer-motion";
 
 const ProblemList = () => {
   const [loading, setLoading] = useRecoilState(loadingState);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const PROBLEM_PER_PAGE = 6;
 
   const [youtubePlayer, setYoutubePlayer] = useState({
     isOpen: false,
@@ -33,6 +35,28 @@ const ProblemList = () => {
         setLoading(false);
       });
   }, []);
+
+  const problemsPages = () => {
+    const totalPages = Math.floor(problems.length / PROBLEM_PER_PAGE);
+    const pagesDiv = [];
+    for (let i = 0; i <= totalPages; i++) {
+      console.log(currentPage, i);
+      pagesDiv.push(
+        <div
+          onClick={() => {
+            setCurrentPage(i);
+          }}
+          className={`${
+            currentPage === i ? "bg-dark-fill-2" : "bg-dark-layer-1"
+          }  h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded text-white hover:bg-dark-fill-2 transition-all mx-1`}
+        >
+          {i}
+        </div>
+      );
+    }
+    return pagesDiv;
+  };
+
   const closeModal = () => {
     setYoutubePlayer({ isOpen: false, videoId: "" });
   };
@@ -61,82 +85,91 @@ const ProblemList = () => {
               </thead>
               <tbody className="text-white">
                 {problems !== undefined &&
-                  problems.map((problem, id) => {
-                    const difficulyColor =
-                      problem.difficulty === "Easy"
-                        ? "text-dark-green-s"
-                        : problem.difficulty === "Medium"
-                        ? "text-dark-yellow"
-                        : "text-dark-pink";
+                  problems
+                    .slice(
+                      currentPage * PROBLEM_PER_PAGE,
+                      (currentPage + 1) * PROBLEM_PER_PAGE
+                    )
+                    .map((problem, id) => {
+                      const difficulyColor =
+                        problem.difficulty === "Easy"
+                          ? "text-dark-green-s"
+                          : problem.difficulty === "Medium"
+                          ? "text-dark-yellow"
+                          : "text-dark-pink";
 
-                    return (
-                      <tr
-                        className={`${id % 2 === 1 ? "bg-dark-layer-1" : ""}`}
-                        key={id}
-                      >
-                        <td className="pl-4 py-4 whitespace-nowrap text-dark-green-s">
-                          <div
-                            className=" cursor-pointer h-6"
-                            onClick={() => {
-                              setProblemStatus((prev: any) => {
-                                prev[problem.id] = !prev[problem.id];
-                                localStorage.setItem(
-                                  "problemStatus",
-                                  JSON.stringify(prev)
-                                );
-                                return { ...prev };
-                              });
-                            }}
-                          >
-                            {problemStatus[problem.id] && (
-                              <BsCheckCircle width="18" />
+                      return (
+                        <tr
+                          className={`${
+                            id % 2 === 1
+                              ? "bg-dark-layer-1"
+                              : " bg-dark-layer-2"
+                          }`}
+                          key={id}
+                        >
+                          <td className="pl-4 py-4 whitespace-nowrap text-dark-green-s">
+                            <div
+                              className=" cursor-pointer h-6"
+                              onClick={() => {
+                                setProblemStatus((prev: any) => {
+                                  prev[problem.id] = !prev[problem.id];
+                                  localStorage.setItem(
+                                    "problemStatus",
+                                    JSON.stringify(prev)
+                                  );
+                                  return { ...prev };
+                                });
+                              }}
+                            >
+                              {problemStatus[problem.id] && (
+                                <BsCheckCircle width="18" />
+                              )}
+                            </div>
+                          </td>
+
+                          <td className="px-3 py-4">
+                            <Link
+                              className="hover:text-blue-600"
+                              to={`/problem?id=${problem.id}`}
+                            >
+                              {problem.title}
+                            </Link>
+                          </td>
+
+                          <td className={"px-2"}>
+                            <div className="flex">
+                              {problem.tags.map((tag) => (
+                                <div
+                                  key={tag.id}
+                                  className="mr-3 bg-dark-fill-2 px-2 py-[2px] rounded-lg "
+                                >
+                                  {tag.title}
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+                          <td className={`px-3 py-4 ${difficulyColor}`}>
+                            {problem.difficulty}
+                          </td>
+                          <td className={"px-3 py-4"}>
+                            {problem.solutionVideo ? (
+                              <AiFillYoutube
+                                fontSize={"28"}
+                                className="cursor-pointer hover:text-red-600"
+                                onClick={() =>
+                                  setYoutubePlayer({
+                                    isOpen: true,
+                                    videoId: problem.solutionVideo,
+                                  })
+                                }
+                              />
+                            ) : (
+                              <p className="text-gray-400">Coming soon</p>
                             )}
-                          </div>
-                        </td>
-
-                        <td className="px-3 py-4">
-                          <Link
-                            className="hover:text-blue-600"
-                            to={`/problem?id=${problem.id}`}
-                          >
-                            {problem.title}
-                          </Link>
-                        </td>
-
-                        <td className={"px-2"}>
-                          <div className="flex">
-                            {problem.tags.map((tag) => (
-                              <div
-                                key={tag.id}
-                                className="mr-3 bg-dark-fill-2 px-2 py-[2px] rounded-lg "
-                              >
-                                {tag.title}
-                              </div>
-                            ))}
-                          </div>
-                        </td>
-                        <td className={`px-3 py-4 ${difficulyColor}`}>
-                          {problem.difficulty}
-                        </td>
-                        <td className={"px-3 py-4"}>
-                          {problem.solutionVideo ? (
-                            <AiFillYoutube
-                              fontSize={"28"}
-                              className="cursor-pointer hover:text-red-600"
-                              onClick={() =>
-                                setYoutubePlayer({
-                                  isOpen: true,
-                                  videoId: problem.solutionVideo,
-                                })
-                              }
-                            />
-                          ) : (
-                            <p className="text-gray-400">Coming soon</p>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                          </td>
+                        </tr>
+                      );
+                    })}
               </tbody>
               {youtubePlayer.isOpen && (
                 <tfoot className="fixed top-0 left-0 h-screen w-screen flex items-center justify-center">
@@ -164,6 +197,28 @@ const ProblemList = () => {
               )}
             </table>
           )}
+
+          <div className=" flex items-center justify-center mt-8">
+            <button
+              disabled={currentPage === 0}
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              className="bg-dark-layer-1 h-[32px] w-[40px] flex items-center justify-center cursor-pointer rounded 
+                         text-dark-gray-8 font-bold hover:bg-dark-fill-2 transition-all mx-1 disabled:opacity-50"
+            >
+              <BsChevronLeft />
+            </button>
+            {problemsPages()}
+            <button
+              disabled={
+                currentPage >= Math.floor(problems.length / PROBLEM_PER_PAGE)
+              }
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              className="bg-dark-layer-1 h-[32px] w-[40px] flex items-center justify-center cursor-pointer rounded 
+                         text-dark-gray-8 font-bold hover:bg-dark-fill-2 transition-all mx-1 disabled:opacity-50"
+            >
+              <BsChevronRight />
+            </button>
+          </div>
         </m.div>
       )}
     </>

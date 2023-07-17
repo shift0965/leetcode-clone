@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authModalState } from "../atoms/stateAtoms";
+import Footer from "../components/Footer";
 
 const HomePage = () => {
   const authModal = useRecoilValue(authModalState);
@@ -22,7 +23,7 @@ const HomePage = () => {
     <div>
       <Navbar />
       <m.div
-        className="block h-[calc(100vh-48px)] overflow-y-auto"
+        className="block pb-10 min-h-[calc(100vh-104px)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -62,6 +63,7 @@ const HomePage = () => {
           </div>
         </div>
       </m.div>
+      <Footer />
     </div>
   );
 };

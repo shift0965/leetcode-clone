@@ -36,8 +36,8 @@ const FocusedPlayer = ({
     e.preventDefault();
     setMessage((prev) => prev.trim());
     if (message === "") return;
-    if (message.length > 30)
-      return toast.error("Message cannot be longer than 30 characters");
+    if (message.length > 50)
+      return toast.error("Message cannot be longer than 50 characters");
     setMessage("");
 
     if (e.nativeEvent.submitter.name === "sendMessage" && player) {
