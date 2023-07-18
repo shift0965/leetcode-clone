@@ -4,6 +4,8 @@ import { GamePlayerState, hasWhiteSpace } from "../../types.const";
 import { toast } from "react-toastify";
 import { Player } from "../../types.const";
 import { motion as m } from "framer-motion";
+import { useSetRecoilState } from "recoil";
+import { bulletSwitchState } from "../../atoms/stateAtoms";
 
 interface GameJoiningProps {
   setCurrentState: React.Dispatch<React.SetStateAction<GamePlayerState>>;
@@ -14,6 +16,8 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
   const [playerName, setPlayerName] = useState<string>("");
   const [gameId, setGameId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const setBulletSwitch = useSetRecoilState(bulletSwitchState);
+  setBulletSwitch(true);
 
   const handleJoinRoom = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,7 +81,10 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
       transition={{ duration: 0.5 }}
     >
       <h1 className="text-2xl text-center">Join Game</h1>
-      <form onSubmit={handleJoinRoom}>
+      <form
+        onSubmit={handleJoinRoom}
+        className="flex flex-col items-center justify-center "
+      >
         <div className="mt-8">
           <div className="text-lg">Game Id</div>
           <input
