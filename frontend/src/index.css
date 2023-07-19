@@ -154,7 +154,7 @@ code {
   }
 }
 
-.glitch span {
+/* .glitch span {
   position: absolute;
   top: 0;
   left: 0;
@@ -218,4 +218,4 @@ code {
   80% {
     transform: translate(0px, 0px);
   }
-}
+} */
