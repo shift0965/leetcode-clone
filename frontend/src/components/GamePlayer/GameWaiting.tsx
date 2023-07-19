@@ -91,12 +91,12 @@ const GameWaiting = ({ player, setCurrentState, gameId }: GameWaitingProps) => {
 
   return (
     <m.div
-      className="w-11/12 md:w-9/12 mx-auto text-dark-gray-8"
+      className="mx-auto text-dark-gray-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mt-12">
+      <div className="py-12">
         <h1 className="blink text-xl text-center text-dark-gray-7">
           Game <strong className=" text-dark-pink mx-1">{gameId}</strong> is
           about to start...

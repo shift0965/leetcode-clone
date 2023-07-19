@@ -60,21 +60,19 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="mt-12">
+      <div className="py-12">
         <h1 className="text-4xl text-center">
           Game Id - <strong className=" text-dark-pink">{gameId}</strong>
         </h1>
         <h1 className="blink text-xl text-center text-dark-gray-7 mt-6">
           Waiting For Players To Join...
         </h1>
-      </div>
-      <div className=" mt-2">
-        <PlayersLobby players={players} />
+        <div className="mt-2">
+          <PlayersLobby players={players} />
+        </div>
       </div>
     </m.div>
   );
 };
 
 export default PlayersJoining;
-
-// ${id === 12 && " ml-[306px]"}

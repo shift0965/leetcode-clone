@@ -62,6 +62,7 @@ const GameResult = ({ gameId }: GameResultProps) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
+          className="pb-14"
         >
           <div className="flex justify-center relative h-[400px] w-[600px] mx-auto ">
             <Confetti numberOfPieces={70} width={600} height={400} />

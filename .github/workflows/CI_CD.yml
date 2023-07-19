@@ -28,10 +28,10 @@ jobs:
             git reset --hard origin/main
 
             # Update database
-            docker run --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
-            docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < backend/dbBackup/leetclone.sql
-            docker container stop mysql
-            docker container rm mysql
+            # docker run --name mysql -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} -d mysql:8.0.33
+            # docker exec -i mysql sh -c 'exec mysql -h db-leetclone.c6iiblrlfvab.ap-northeast-3.rds.amazonaws.com -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} leetclone' < backend/dbBackup/leetclone.sql
+            # docker container stop mysql
+            # docker container rm mysql
 
             # Clear Redis
             docker run -it --rm redis redis-cli -h cache-leetclone.1nyq2c.ng.0001.apn3.cache.amazonaws.com -p 6379 flushall

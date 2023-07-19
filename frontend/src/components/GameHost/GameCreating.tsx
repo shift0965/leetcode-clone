@@ -115,7 +115,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
     <>
       {!loading && (
         <m.div
-          className="w-11/12 md:w-9/12 mx-auto mt-10 text-dark-gray-8"
+          className="w-11/12 md:w-9/12 mx-auto py-10 text-dark-gray-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}

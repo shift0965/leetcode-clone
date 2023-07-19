@@ -45,7 +45,7 @@ const PlayersLobby = ({ players }: PlayerLobbyProps) => {
   });
 
   return (
-    <div className=" glitch relative w-[760px] mx-auto">
+    <div className=" glitch relative w-[740px] mx-auto">
       <div className="flex flex-wrap w-full justify-left py-[60px]">
         {Players}
       </div>

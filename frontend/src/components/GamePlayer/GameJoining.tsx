@@ -75,7 +75,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
 
   return (
     <m.div
-      className="flex flex-col items-center justify-center mx-auto mt-10 text-dark-gray-8"
+      className="flex flex-col items-center justify-center mx-auto py-10 text-dark-gray-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
