@@ -3,7 +3,6 @@ import {
   getExampleCasesDataById,
   getTestCasesByProblemId,
 } from "../models/problem.model.js";
-import { validationResult } from "express-validator";
 import { runCodeByWorker } from "../helpers/runcode.js";
 
 export async function runExampleCases(

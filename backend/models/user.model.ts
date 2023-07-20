@@ -2,16 +2,6 @@ import { ResultSetHeader } from "mysql2";
 import { z } from "zod";
 import pool from "./databasePool.js";
 
-/*
-  id bigint unsigned NOT NULL AUTO_INCREMENT
-  email varchar(127) NOT NULL UNIQUE
-  name varchar(127) NOT NULL
-  picture varchar(255)
-  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  providers
-**/
-
 function instanceOfSetHeader(object: any): object is ResultSetHeader {
   return "insertId" in object;
 }

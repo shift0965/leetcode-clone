@@ -49,21 +49,6 @@ const PlayersLobby = ({ players }: PlayerLobbyProps) => {
       <div className="flex flex-wrap w-full justify-left py-[60px]">
         {Players}
       </div>
-      {/* <span>
-        <div className="flex flex-wrap w-full justify-left py-[60px]">
-          {Players}
-        </div>
-      </span>
-      <span>
-        <div className="flex flex-wrap w-full justify-left py-[60px]">
-          {Players}
-        </div>
-      </span>
-      <span>
-        <div className="flex flex-wrap w-full justify-left py-[60px]">
-          {Players}
-        </div>
-      </span> */}
     </div>
   );
 };

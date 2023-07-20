@@ -145,14 +145,6 @@ const TagSchema = z.object({
   title: z.string(),
 });
 
-// //run example cases
-// const ExampleCasesDataSchema = z.object({
-//   function_name: z.string(),
-//   verify_variable: z.string(),
-//   input: z.string(),
-//   output: z.string(),
-// });
-
 //run test cases
 const TestCasesDataSchema = z.object({
   function_name: z.string(),
