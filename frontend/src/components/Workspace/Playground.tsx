@@ -16,7 +16,7 @@ import {
 } from "../../types.const";
 import {
   RUN_EXAMPLE_CASES,
-  RUN_TEST_CASES,
+  RUN_HIDDEN_CASES,
   PLAYER_SUBMIT,
 } from "../../api.const";
 import { toast } from "react-toastify";
@@ -119,7 +119,7 @@ const Playground = ({
     }
 
     pendingStart();
-    const endPoint = gameMode ? PLAYER_SUBMIT : RUN_TEST_CASES;
+    const endPoint = gameMode ? PLAYER_SUBMIT : RUN_HIDDEN_CASES;
     fetch(endPoint, {
       method: "POST",
       headers: {

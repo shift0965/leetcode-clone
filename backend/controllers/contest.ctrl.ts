@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { getTestCasesByProblemId } from "../models/problem.model.js";
+import { getTestCasesByProblemIdAndType } from "../models/problem.model.js";
 import {
   publishPlayerJoinContest,
   publishPlayerExitContest,
@@ -255,7 +255,10 @@ export async function playerSubmit(
   if (!contest || contest.state !== "started")
     return res.status(404).send({ errors: "Game is not available" });
 
-  const testCasesData = await getTestCasesByProblemId(problemId);
+  const testCasesData = await getTestCasesByProblemIdAndType(
+    problemId,
+    "hidden"
+  );
   if (testCasesData === null)
     return res.status(400).send({ errors: "Problem not found" });
   const { functionName, testCases, verifyVariable } = testCasesData;

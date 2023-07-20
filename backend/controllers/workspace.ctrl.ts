@@ -1,54 +1,33 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  getExampleCasesDataById,
-  getTestCasesByProblemId,
-} from "../models/problem.model.js";
+import { getTestCasesByProblemIdAndType } from "../models/problem.model.js";
 import { runCodeByWorker } from "../helpers/runcode.js";
 
-export async function runExampleCases(
+export async function runCodeCases(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   const { problemId, language, code } = req.body;
-  const exampleCasesData = await getExampleCasesDataById(problemId);
-  if (exampleCasesData === null)
-    return res.status(400).send({ errors: "Problem not found" });
-  const { functionName, exampleCases, verifyVariable } = exampleCasesData;
-  try {
-    const result = await runCodeByWorker(
-      true,
-      exampleCases,
-      code,
-      functionName,
-      verifyVariable
-    );
-    res.send(result);
-  } catch (err) {
-    next(err);
-  }
-}
+  const type = <"example" | "hidden">req.params.type;
+  const testCaseData = await getTestCasesByProblemIdAndType(problemId, type);
 
-export async function runTestCases(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  const { problemId, language, code } = req.body;
-  const testCasesData = await getTestCasesByProblemId(problemId);
-  if (testCasesData === null)
+  if (!testCaseData)
     return res.status(400).send({ errors: "Problem not found" });
-  const { functionName, testCases, verifyVariable } = testCasesData;
+  const { functionName, testCases, verifyVariable } = testCaseData;
 
   try {
-    const result = await runCodeByWorker(
-      false,
-      testCases,
-      code,
-      functionName,
-      verifyVariable
-    );
-    res.send(result);
+    if (language === "js") {
+      const result = await runCodeByWorker(
+        type === "example",
+        testCases,
+        code,
+        functionName,
+        verifyVariable
+      );
+      res.send(result);
+    } else {
+      return res.status(400).send({ errors: "Language not found" });
+    }
   } catch (err) {
     next(err);
   }

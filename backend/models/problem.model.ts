@@ -1,17 +1,27 @@
 import pool from "./databasePool.js";
 import { z } from "zod";
 
-export async function getTestCasesByProblemId(problemId: number) {
-  const results = await pool.query(
-    "SELECT p.function_name, p.verify_variable, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
-    [problemId]
-  );
+export async function getTestCasesByProblemIdAndType(
+  problemId: number,
+  type: string
+) {
+  const results =
+    type === "example"
+      ? await pool.query(
+          "SELECT p.function_name, p.verify_variable, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
+          [problemId]
+        )
+      : await pool.query(
+          "SELECT p.function_name, p.verify_variable, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
+          [problemId]
+        );
+
   const testCasesData = z.array(TestCasesDataSchema).parse(results[0]);
   if (testCasesData.length === 0) return null;
 
   const runTestCasesData = {
-    functionName: testCasesData[0]?.function_name,
-    verifyVariable: testCasesData[0]?.verify_variable,
+    functionName: testCasesData[0].function_name,
+    verifyVariable: testCasesData[0].verify_variable,
     testCases: testCasesData.map((testCase) => {
       return {
         input: JSON.parse(testCase.input),
@@ -20,28 +30,6 @@ export async function getTestCasesByProblemId(problemId: number) {
     }),
   };
   return runTestCasesData;
-}
-
-export async function getExampleCasesDataById(problemId: number) {
-  const results = await pool.query(
-    "SELECT p.function_name, p.verify_variable, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
-    [problemId]
-  );
-  const exampleCasesData = z.array(TestCasesDataSchema).parse(results[0]);
-  if (exampleCasesData.length === 0) return null;
-
-  const runExampleDataParsed = {
-    functionName: exampleCasesData[0]?.function_name,
-    verifyVariable: exampleCasesData[0]?.verify_variable,
-    exampleCases: exampleCasesData.map((exampleCase) => {
-      return {
-        input: JSON.parse(exampleCase.input),
-        output: JSON.parse(exampleCase.output),
-      };
-    }),
-  };
-
-  return runExampleDataParsed;
 }
 
 export async function getAllProblems() {

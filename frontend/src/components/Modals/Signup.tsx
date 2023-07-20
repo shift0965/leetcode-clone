@@ -90,6 +90,7 @@ const Signup = () => {
           <label className="block mb-1 text-dark-gray-8">Your Name</label>
           <input
             type="name"
+            name="name"
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
@@ -101,6 +102,7 @@ const Signup = () => {
           <label className="block mb-1 text-dark-gray-8">Your Email</label>
           <input
             type="text"
+            name="email"
             value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
@@ -112,6 +114,7 @@ const Signup = () => {
           <label className="block mb-1 text-dark-gray-8">Your Password</label>
           <input
             type="password"
+            name="password"
             value={userPassword}
             onChange={(e) => setUserPassword(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
@@ -125,6 +128,7 @@ const Signup = () => {
           </label>
           <input
             type="password"
+            name="confirmPassword"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="outline-none sm:text-sm rounded-lg p-2.5 bg-dark-layer-1
