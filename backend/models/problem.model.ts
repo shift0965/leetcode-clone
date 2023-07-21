@@ -5,16 +5,16 @@ export async function getTestCasesByProblemIdAndType(
   problemId: number,
   type: string
 ) {
-  const results =
-    type === "example"
-      ? await pool.query(
-          "SELECT p.function_name, p.verify_variable, pt.input, pt.output FROM problem AS p LEFT JOIN problem_testcase AS pt ON p.id = pt.problem_id WHERE problem_id = ? ORDER BY pt.id",
-          [problemId]
-        )
-      : await pool.query(
-          "SELECT p.function_name, p.verify_variable, pe.input, pe.output FROM problem AS p LEFT JOIN problem_example AS pe ON p.id = pe.problem_id WHERE problem_id = ? ORDER BY pe.id;",
-          [problemId]
-        );
+  const results = await pool.query(
+    `
+    SELECT p.function_name, p.verify_variable, pt.input, pt.output 
+    FROM problem AS p 
+    LEFT JOIN ${type === "example" ? "problem_example" : "problem_testcase"} 
+    AS pt ON p.id = pt.problem_id 
+    WHERE problem_id = ? 
+    ORDER BY pt.id`,
+    [problemId]
+  );
 
   const testCasesData = z.array(TestCasesDataSchema).parse(results[0]);
   if (testCasesData.length === 0) return null;
@@ -34,7 +34,11 @@ export async function getTestCasesByProblemIdAndType(
 
 export async function getAllProblems() {
   const results = await pool.query(
-    "SELECT p.id, p.title, p.difficulty, p.solution_video, t.id AS tag_id, t.title AS tag FROM problem AS p LEFT JOIN problem_to_tag AS pt ON p.id = pt.problem_id LEFT JOIN tag AS t ON t.id = pt.tag_id"
+    ` 
+    SELECT p.id, p.title, p.difficulty, p.solution_video, t.id AS tag_id, t.title AS tag 
+    FROM problem AS p 
+    LEFT JOIN problem_to_tag AS pt ON p.id = pt.problem_id 
+    LEFT JOIN tag AS t ON t.id = pt.tag_id`
   );
   const problems = z.array(ProblemSchema).parse(results[0]);
   const problemMap = new Map();
@@ -55,16 +59,23 @@ export async function getAllProblems() {
 
 export async function getProblemDetailsById(problemId: number) {
   const problemResults = await pool.query(
-    "SELECT p.id, p.title, p.description, p.difficulty, p.constraints, p.solution_video, p.input_keys, p.boilerplate FROM problem AS p WHERE p.id = (?)",
+    `
+    SELECT p.id, p.title, p.description, p.difficulty, p.constraints, p.solution_video, p.input_keys, p.boilerplate 
+    FROM problem AS p WHERE p.id = (?)`,
     [problemId]
   );
 
   const exampleCaseResults = await pool.query(
-    "SELECT pe.input, pe.output, pe.explanation, pe.image FROM problem_example AS pe WHERE pe.problem_id = (?) ORDER BY pe.id;",
+    `
+    SELECT pe.input, pe.output, pe.explanation, pe.image 
+    FROM problem_example AS pe WHERE pe.problem_id = (?) ORDER BY pe.id`,
     problemId
   );
   const tagResults = await pool.query(
-    "SELECT t.id, t.title FROM problem_to_tag AS pt LEFT JOIN tag AS t on t.id = pt.tag_id WHERE pt.problem_id = (?)",
+    `
+    SELECT t.id, t.title 
+    FROM problem_to_tag AS pt LEFT JOIN tag AS t on t.id = pt.tag_id 
+    WHERE pt.problem_id = (?)`,
     [problemId]
   );
 

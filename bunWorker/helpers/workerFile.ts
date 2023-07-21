@@ -154,9 +154,6 @@ async function runJavaScript(
         const message = split[0];
         reject(new ExecutionError("Reference Error", message, line));
       } else if (error.name === "SyntaxError") {
-        // let split = error.stack.split("\n");
-        // const line = split[0].split(":")[split[0].split(":").length - 1];
-        // const message = split[4];
         reject(
           new ExecutionError(
             "Syntax Error",
