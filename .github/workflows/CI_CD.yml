@@ -52,7 +52,8 @@ jobs:
             # docker container rm mysql
 
             # Clear Redis
-            docker run -it redis redis-cli -h cache-leetclone.1nyq2c.ng.0001.apn3.cache.amazonaws.com -p 6379 flushall
+            docker run --name redis -p 6379 -d redis
+            docker run -it redis redis-cli -h cache-leetclone.1nyq2c.ng.0001.apn3.cache.amazonaws.com flushall
 
             # Compose
             docker-compose -f docker-compose-main.yml build --no-cache
