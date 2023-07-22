@@ -9,8 +9,8 @@
     "start": "NODE_ENV=production node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"node --watch dist/index.js\"",
     "reloaddb": "node devFolder/devFuncs.js",
-    "dev_intg_test": "jest ./__test__/*.intg.js",
-    "prod_intg_test": "NODE_ENV=production jest ./__test__/*.intg.js"
+    "dev_intg_test": "jest ./__test__/*.intg.test.js",
+    "prod_intg_test": "NODE_ENV=production jest ./__test__/*.intg.test.js"
   },
   "keywords": [],
   "author": "",
