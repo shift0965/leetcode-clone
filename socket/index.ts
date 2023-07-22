@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
       const playerCodeJSON = await redisClient.get(key);
 
       if (!playerCodeJSON) {
-        redisClient.set(
+        await redisClient.set(
           key,
           JSON.stringify({
             id: msg.playerId,
@@ -64,9 +64,9 @@ io.on("connection", (socket) => {
         } else {
           playerCode.problems[problemIndex].code = msg.code;
         }
-        redisClient.set(key, JSON.stringify(playerCode));
+        await redisClient.set(key, JSON.stringify(playerCode));
       }
-      redisClient.expire(key, 3600, "GT");
+      await redisClient.expire(key, 3600, "GT");
 
       socket.to(String(msg.gameId)).emit("ws-host-playerUpdateCode", {
         id: msg.playerId,
