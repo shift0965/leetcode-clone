@@ -5,8 +5,17 @@ on:
     branches: [main]
 
 jobs:
+  worker_server_unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Bun Runtime
+        uses: antongolub/action-setup-bun@v1
+        with:
+          bun-version: 0.1.2
+      - name: Run bun test
+        run: bun test
+
   build_express_and_socket:
-    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Deploy express and socket server
@@ -40,6 +49,19 @@ jobs:
             docker-compose -f docker-compose-main.yml build --no-cache
             docker-compose -f docker-compose-main.yml up -d
 
+      - name: Test express server
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.HOST_DNS_MAIN }}
+          username: ${{ secrets.EC2_USERNAME }}
+          script: |
+            # Test
+            docker exec express_server /bin/bash -c "cd backend && npm run prod_intg_test"
+
+  build_worker_server:
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy worker server
         uses: appleboy/ssh-action@master
         with:
@@ -61,13 +83,3 @@ jobs:
             #Compose
             docker-compose -f docker-compose-worker.yml build --no-cache
             docker-compose -f docker-compose-worker.yml up -d
-
-      - name: Test express server
-        uses: appleboy/ssh-action@master
-        with:
-          key: ${{ secrets.EC2_SSH_KEY }}
-          host: ${{ secrets.HOST_DNS_MAIN }}
-          username: ${{ secrets.EC2_USERNAME }}
-          script: |
-            # Test
-            docker exec express_server /bin/bash -c "cd backend && npm run productionTest"
