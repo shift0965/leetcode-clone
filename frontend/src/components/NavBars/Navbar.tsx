@@ -41,7 +41,7 @@ const Navbar = ({ isWorkspace = false }) => {
         }`}
       >
         <div className="flex-1 flex items-center text-white text-lg">
-          <Link to="/" className=" block w-[100px]" aria-label="letscode">
+          <Link to="/" className=" block w-[100px]" id="letscode-btn">
             <img src="/logo-full.png" alt="Logo" className=" w-full" />
           </Link>
         </div>
@@ -52,7 +52,7 @@ const Navbar = ({ isWorkspace = false }) => {
             <>
               <div
                 className=" relative flex items-center text-2xl py-1 cursor-pointer"
-                aria-label="profile"
+                id="profile-btn"
                 onClick={() =>
                   setAuthModal((prev) => ({
                     ...prev,
@@ -64,7 +64,7 @@ const Navbar = ({ isWorkspace = false }) => {
                 <FaUserCircle />
               </div>
               <button
-                aria-label="log out"
+                id="log-out-btn"
                 className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2 transition-all"
                 onClick={handleLogout}
               >
@@ -74,7 +74,7 @@ const Navbar = ({ isWorkspace = false }) => {
           ) : (
             <button
               className=" bg-dark-fill-3 py-1 px-2 cursor-pointer rounded"
-              aria-label="sign in"
+              id="sign-in-btn"
               onClick={handleSignInBtn}
             >
               Sign In

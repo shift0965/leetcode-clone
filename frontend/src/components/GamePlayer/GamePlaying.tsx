@@ -245,6 +245,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
               <div
                 className="w-full h-[56px] flex items-center px-[12px] mt-[8px]"
                 key={id}
+                attr-player={player.name}
               >
                 <div
                   className={`text-xl font-semibold ${

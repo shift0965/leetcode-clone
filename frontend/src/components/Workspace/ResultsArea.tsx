@@ -53,7 +53,7 @@ const ResultsArea = ({
       )}
       {runResults && (
         <>
-          <h1 className="font-semibold text-xl ml-1">
+          <h1 className="font-semibold text-xl ml-1" id="result-title">
             {accepted ? (
               <span className="text-dark-green-s">Accepted</span>
             ) : (

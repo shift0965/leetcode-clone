@@ -137,7 +137,7 @@ const Signup = () => {
           />
         </div>
         <button
-          aria-label="submit"
+          id="signup-btn"
           disabled={loading}
           className=" mt-5 w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s disabled:opacity-60"
           type="submit"
@@ -149,7 +149,7 @@ const Signup = () => {
       <div className=" text-sm text-dark-gray-8 mt-3">
         Already have an account
         <button
-          aria-label="to sign in"
+          id="to-sign-in"
           className="text-blue-300 hover:underline ml-3"
           onClick={() => {
             setAuthModal((prev) => ({ ...prev, type: "login" }));

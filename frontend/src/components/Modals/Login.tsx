@@ -99,7 +99,7 @@ const Login = () => {
           />
         </div>
         <button
-          aria-label="submit"
+          id="login-btn"
           disabled={loading}
           className="w-full text-white rounded-lg px-5 py-2.5 bg-brand-orange hover:bg-brand-orange-s mt-6 disabled:opacity-60"
           type="submit"
@@ -111,7 +111,7 @@ const Login = () => {
       <div className=" text-sm text-dark-gray-8 mt-5">
         Not Registered?
         <button
-          aria-label="to create account"
+          id="to-create-account"
           onClick={() => {
             setAuthModal((prev) => ({ ...prev, type: "register" }));
           }}

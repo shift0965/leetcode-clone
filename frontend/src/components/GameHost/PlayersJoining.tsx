@@ -62,7 +62,10 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
     >
       <div className="py-12">
         <h1 className="text-4xl text-center">
-          Game Id - <strong className=" text-dark-pink">{gameId}</strong>
+          Game Id -{" "}
+          <strong className=" text-dark-pink" id="game-id">
+            {gameId}
+          </strong>
         </h1>
         <h1 className="blink text-xl text-center text-dark-gray-7 mt-6">
           Waiting For Players To Join...

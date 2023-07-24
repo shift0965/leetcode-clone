@@ -89,6 +89,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
           <div className="text-lg">Game Id</div>
           <input
             type="text"
+            name="game-id"
             className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
             value={gameId}
             onChange={(e) => setGameId(e.target.value)}
@@ -98,12 +99,14 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
           <div className="text-lg">Name </div>
           <input
             type="text"
+            name="name"
             className="bg-dark-fill-2 py-1.5 px-2 rounded-lg outline-none mt-1 w-52 text-lg"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
           />
         </div>
         <button
+          id="join-game-btn"
           disabled={loading}
           className="mt-8 bg-dark-green-s hover:bg-opacity-60 transition-all px-5 py-2 rounded-lg text-white font-semibold"
         >

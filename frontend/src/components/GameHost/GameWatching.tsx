@@ -282,6 +282,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
         transition={{ duration: 0.5 }}
       >
         <div
+          id="open-players-bar-btn"
           className={`transform transition-all duration-500 ease-in-out flex items-center justify-center h-20 w-5
              absolute rounded-r-lg  bg-slate-700 hover:bg-slate-500 bg-opacity-80 cursor-pointer z-10 top-[50%] -translate-y-1/2
              left-[0px] ${
@@ -304,6 +305,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
               Game Id - <strong className=" text-dark-pink">{gameId}</strong>
             </h1>
             <div
+              id="turn-off-player-bar"
               className="ml-1 transform transition-all duration-500 ease-in-out flex items-center justify-center h-9 w-9
              absolute rounded-lg bg-dark-fill-3 hover:bg-dark-fill-2 cursor-pointer z-10 top-[14px]
              right-[8px]"
@@ -321,13 +323,14 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
               );
               return (
                 <div
-                  className={`h-[72px] border-b-[1px] border-dark-fill-2 flex items-center  px-3 cursor-pointer 
+                  className={`player-rank h-[72px] border-b-[1px] border-dark-fill-2 flex items-center  px-3 cursor-pointer 
                           hover:bg-dark-fill-3 ${
                             focusedPlayerId === player.id
                               ? "bg-dark-fill-3"
                               : "bg-dark-layer-1"
                           }`}
                   key={id}
+                  attr-player={player.name}
                   onClick={() => {
                     if (focusedPlayerId === player.id) {
                       setFocusedPlayerId(undefined);
@@ -367,7 +370,8 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
                 return (
                   <div
                     className="h-[300px] w-[calc(50%-10px)] relative rounded-lg bg-dark-layer-1 overflow-hidden cursor-pointer"
-                    key={`player ${id}`}
+                    key={id}
+                    attr-player={playerCode.name}
                     onClick={() => setFocusedPlayerId(playerCode.id)}
                   >
                     <div className=" absolute bottom-0">

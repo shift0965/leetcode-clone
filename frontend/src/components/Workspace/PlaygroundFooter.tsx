@@ -25,7 +25,7 @@ const PlaygroundFooter = ({
             </div>
           ) : (
             <button
-              aria-label="toggle result area"
+              id="toggle-result-area-btn"
               className="px-3 py-1.5 font-medium items-center transition-all inline-flex bg-dark-fill-3 text-sm hover:bg-dark-fill-2 text-dark-label-2 rounded-lg pl-3 pr-2"
               onClick={() => {
                 setSplitRatio((prev) => {
@@ -46,7 +46,7 @@ const PlaygroundFooter = ({
         </div>
         <div className="ml-auto flex items-center space-x-4">
           <button
-            aria-label="run"
+            id="run-btn"
             className="px-3 py-1.5 text-sm font-medium items-center whitespace-nowrap transition-all focus:outline-none inline-flex bg-dark-fill-3 hover:bg-dark-fill-2 text-dark-label-2 rounded-lg 
                        disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleRun}
@@ -55,7 +55,7 @@ const PlaygroundFooter = ({
             Run
           </button>
           <button
-            aria-label="submit"
+            id="submit-btn"
             className="px-3 py-1.5 font-medium items-center transition-all focus:outline-none inline-flex text-sm text-white bg-dark-green-s hover:bg-green-3 rounded-lg
                        disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSubmit}

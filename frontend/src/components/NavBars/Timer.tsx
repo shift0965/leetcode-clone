@@ -30,7 +30,7 @@ const Timer = () => {
       {showTimer ? (
         <button
           className="flex items-center space-x-2 bg-dark-fill-3 p-1.5 cursor-pointer rounded hover:bg-dark-fill-2"
-          aria-label="stop timer"
+          id="stop-timer-btn"
           onClick={() => {
             setShowTimer(false);
             setTime(0);
@@ -42,7 +42,7 @@ const Timer = () => {
       ) : (
         <button
           className="flex items-center p-1 h-8 hover:bg-dark-fill-3 rounded cursor-pointer"
-          aria-label="start timer"
+          id="start-timer-btn"
           onClick={() => setShowTimer(true)}
         >
           <svg

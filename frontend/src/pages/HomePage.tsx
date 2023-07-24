@@ -37,7 +37,7 @@ const HomePage = () => {
               Let's Code!
             </h1>
             <div className=" flex mt-5">
-              <button onClick={handleCreateGame} aria-label="create game">
+              <button onClick={handleCreateGame} id="create-game-btn">
                 <div className="h-32 w-48 rounded-xl text-white relative bg-dark-fill-3 transition-all hover:bg-dark-fill-2 hover:scale-105 flex items-end justify-center">
                   <img src="createGame.svg" className="h-24 object-contain" />
                   <div className="absolute top-[20%] left-[50%] translate-x-[-50%] translate-y-[-50%] whitespace-pre text-xl opacity-70">
@@ -48,7 +48,7 @@ const HomePage = () => {
               <button
                 onClick={handleJoinGame}
                 className="ml-8"
-                aria-label="join game"
+                id="join-game-btn"
               >
                 <div className="h-32 w-48 rounded-xl text-white relative bg-dark-fill-3 transition-all hover:bg-dark-fill-2 hover:scale-105">
                   <img

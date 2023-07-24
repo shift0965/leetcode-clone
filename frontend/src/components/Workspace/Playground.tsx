@@ -239,7 +239,7 @@ const Playground = ({
             <div className="flex items-center m-2">
               <button
                 className="editor-nav-btn group"
-                aria-label="reset code"
+                id="reset-code-btn"
                 title="reset code"
                 onClick={resetUserCode}
               >
@@ -250,7 +250,7 @@ const Playground = ({
 
               <button
                 className="editor-nav-btn group"
-                aria-label="full screen"
+                id="full-screen-btn"
                 title="full screen"
                 onClick={handleFullScreen}
               >
@@ -283,7 +283,7 @@ const Playground = ({
                 <div className="w-full px-5 overflow-auto relative">
                   <div className="flex h-11 sticky top-0 bg-dark-layer-1 z-10">
                     <button
-                      aria-label="show testcases"
+                      id="testcases-btn"
                       className={`flex h-full items-center text-white mx-2 border-b-2 cursor-pointer ${
                         showTestcases ? "border-white" : "border-transparent"
                       }`}
@@ -292,7 +292,7 @@ const Playground = ({
                       Testcases
                     </button>
                     <button
-                      aria-label="show result"
+                      id="result-btn"
                       className={`flex h-full  items-center text-white mx-2 border-b-2 cursor-pointer ${
                         showTestcases ? "border-transparent" : "border-white"
                       }`}

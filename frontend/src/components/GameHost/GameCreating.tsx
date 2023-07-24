@@ -185,6 +185,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
                       </td>
                       <td>
                         <button
+                          id={`remove-${index}`}
                           className="mx-auto flex items-center text-3xl cursor-pointer rounded hover:text-dark-pink transition-all"
                           onClick={() => handleRemoveProblem(index)}
                         >
@@ -199,6 +200,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
 
             <div className="flex justify-center">
               <button
+                id="add-question-btn"
                 className="mt-5 py-1 px-3 cursor-pointer rounded  font-medium bg-dark-gray-8 hover:bg-dark-gray-7 transition-all text-dark-layer-2"
                 onClick={handleAddProblem}
               >
@@ -225,6 +227,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
           </div>
           <div className="mt-10 flex justify-center">
             <button
+              id="create-game-btn"
               onClick={handleCreateRoom}
               className="bg-dark-green-s hover:bg-opacity-60 transition-all px-5 py-2 rounded-lg text-white font-semibold"
             >

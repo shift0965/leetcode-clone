@@ -127,7 +127,7 @@ const FocusedPlayer = ({
                 <div className="flex px-3 mt-3">
                   <button
                     type="submit"
-                    aria-label="send message"
+                    id="send-message-btn"
                     name="sendMessage"
                     className=" px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-green-s hover:bg-opacity-80 rounded-lg"
                   >
@@ -135,7 +135,7 @@ const FocusedPlayer = ({
                   </button>
                   <button
                     type="submit"
-                    aria-label="send group message"
+                    id="send-group-message-btn"
                     name="sendGroupMessage"
                     className="ml-auto px-3 py-1.5 font-medium items-center transition-all flex text-sm text-white bg-dark-gray-6 hover:bg-opacity-80 rounded-lg"
                   >
@@ -147,7 +147,7 @@ const FocusedPlayer = ({
           </div>
 
           <div
-            aria-label="close focus"
+            id="close-focus-btn"
             className=" absolute text-[24px] rounded-full border-[1.5px] border-white p-1 left-1/2 -translate-x-1/2 top-[30px] opacity-30 hover:opacity-90 transition-all cursor-pointer"
             onClick={() => setFocusedPlayerId(undefined)}
           >

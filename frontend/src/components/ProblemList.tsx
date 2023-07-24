@@ -40,7 +40,6 @@ const ProblemList = () => {
     const totalPages = Math.floor(problems.length / PROBLEM_PER_PAGE);
     const pagesDiv = [];
     for (let i = 0; i <= totalPages; i++) {
-      console.log(currentPage, i);
       pagesDiv.push(
         <div
           onClick={() => {
@@ -130,7 +129,6 @@ const ProblemList = () => {
                           <td className="px-3 py-4">
                             <Link
                               className="hover:text-blue-600"
-                              aria-label={problem.title}
                               to={`/problem?id=${problem.id}`}
                             >
                               {problem.title}
@@ -155,9 +153,9 @@ const ProblemList = () => {
                           <td className={"px-3 py-4"}>
                             {problem.solutionVideo ? (
                               <AiFillYoutube
-                                fontSize={"28"}
+                                fontSize="28"
                                 className="cursor-pointer hover:text-red-600"
-                                aria-label={`${problem.title} solution`}
+                                title="solution"
                                 onClick={() =>
                                   setYoutubePlayer({
                                     isOpen: true,
