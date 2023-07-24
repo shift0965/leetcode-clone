@@ -75,7 +75,7 @@ const HostNavbar = ({
     }
   };
 
-  const handleShotDown = () => {
+  const handleShutDown = () => {
     const userDataJSON = localStorage.getItem("userData");
     if (userDataJSON && gameId) {
       const userToken = JSON.parse(userDataJSON).access_token;
@@ -136,7 +136,7 @@ const HostNavbar = ({
     >
       <div className="flex w-full items-center justify-between">
         <div className="flex-1 flex items-center text-white text-lg">
-          <Link to="/" className=" block w-[100px]">
+          <Link to="/" className=" block w-[100px]" aria-label="letscode">
             <img src="/logo-full.png" alt="Logo" className=" w-full" />
           </Link>
         </div>
@@ -153,6 +153,7 @@ const HostNavbar = ({
           )}
           {currentState === "PlayersJoining" && (
             <div
+              aria-label="start game"
               className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-green-s font-medium hover:bg-dark-fill-2 transition-all shrink-0 whitespace-nowrap"
               onClick={handleStartGame}
             >
@@ -162,6 +163,7 @@ const HostNavbar = ({
           )}
           {currentState === "GameWatching" && (
             <button
+              aria-label="close game"
               className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-yellow font-medium hover:bg-dark-fill-2 transition-all shrink-0 whitespace-nowrap"
               onClick={handleCloseGame}
             >
@@ -171,8 +173,9 @@ const HostNavbar = ({
           )}
           {currentState === "PlayersJoining" && (
             <button
+              aria-label="shut down"
               className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink font-medium hover:bg-dark-fill-2 transition-all shrink-0 whitespace-nowrap"
-              onClick={handleShotDown}
+              onClick={handleShutDown}
             >
               <div className="mr-2">Shut Down</div>
               <FiTriangle />
@@ -180,8 +183,9 @@ const HostNavbar = ({
           )}
           {currentState === "GameResult" && (
             <button
+              aria-label="leave"
               className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink font-medium hover:bg-dark-fill-2 transition-all shrink-0 whitespace-nowrap"
-              onClick={handleShotDown}
+              onClick={handleShutDown}
             >
               <div className="mr-2">Leave</div>
               <FiTriangle />

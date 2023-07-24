@@ -15,7 +15,7 @@ const TestCasesArea = ({ problem, showTestcases }: TestCasesAreaProps) => {
         {problem.exampleCases.map((_, index) => (
           <div
             className="mr-2 items-start mt-2 "
-            key={index}
+            key={`case ${index}`}
             onClick={() => setActiveTestCaseId(index)}
           >
             <div className="flex flex-wrap items-center">

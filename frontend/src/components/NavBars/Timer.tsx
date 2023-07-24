@@ -28,18 +28,21 @@ const Timer = () => {
   return (
     <div>
       {showTimer ? (
-        <div className="flex items-center space-x-2 bg-dark-fill-3 p-1.5 cursor-pointer rounded hover:bg-dark-fill-2">
+        <button
+          className="flex items-center space-x-2 bg-dark-fill-3 p-1.5 cursor-pointer rounded hover:bg-dark-fill-2"
+          aria-label="stop timer"
+          onClick={() => {
+            setShowTimer(false);
+            setTime(0);
+          }}
+        >
           <div>{formatTime(time)}</div>
-          <FiRefreshCcw
-            onClick={() => {
-              setShowTimer(false);
-              setTime(0);
-            }}
-          />
-        </div>
+          <FiRefreshCcw />
+        </button>
       ) : (
-        <div
+        <button
           className="flex items-center p-1 h-8 hover:bg-dark-fill-3 rounded cursor-pointer"
+          aria-label="start timer"
           onClick={() => setShowTimer(true)}
         >
           <svg
@@ -56,7 +59,7 @@ const Timer = () => {
               clipRule="evenodd"
             ></path>
           </svg>
-        </div>
+        </button>
       )}
     </div>
   );

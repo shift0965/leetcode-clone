@@ -71,7 +71,7 @@ const ProblemList = () => {
           transition={{ duration: 0.5 }}
         >
           {problems.length > 0 && (
-            <table className="w-full mx-auto">
+            <table className="w-full mx-auto" id="problem-table">
               <thead className=" text-gray-300 border-b text-left">
                 <tr>
                   <th className="px-3 py-3 w-[10%] font-semibold">Status</th>
@@ -130,6 +130,7 @@ const ProblemList = () => {
                           <td className="px-3 py-4">
                             <Link
                               className="hover:text-blue-600"
+                              aria-label={problem.title}
                               to={`/problem?id=${problem.id}`}
                             >
                               {problem.title}
@@ -156,6 +157,7 @@ const ProblemList = () => {
                               <AiFillYoutube
                                 fontSize={"28"}
                                 className="cursor-pointer hover:text-red-600"
+                                aria-label={`${problem.title} solution`}
                                 onClick={() =>
                                   setYoutubePlayer({
                                     isOpen: true,

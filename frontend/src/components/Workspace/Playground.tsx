@@ -237,7 +237,12 @@ const Playground = ({
               </button>
             </div>
             <div className="flex items-center m-2">
-              <button className="editor-nav-btn group" onClick={resetUserCode}>
+              <button
+                className="editor-nav-btn group"
+                aria-label="reset code"
+                title="reset code"
+                onClick={resetUserCode}
+              >
                 <div className="text-dark-gray-6 font-bold text-lg">
                   <IoRefreshOutline />
                 </div>
@@ -245,6 +250,8 @@ const Playground = ({
 
               <button
                 className="editor-nav-btn group"
+                aria-label="full screen"
+                title="full screen"
                 onClick={handleFullScreen}
               >
                 <div className="text-dark-gray-6 font-bold text-lg">
@@ -275,22 +282,24 @@ const Playground = ({
                 {/* Console area */}
                 <div className="w-full px-5 overflow-auto relative">
                   <div className="flex h-11 sticky top-0 bg-dark-layer-1 z-10">
-                    <div
+                    <button
+                      aria-label="show testcases"
                       className={`flex h-full items-center text-white mx-2 border-b-2 cursor-pointer ${
                         showTestcases ? "border-white" : "border-transparent"
                       }`}
                       onClick={() => setShowTestcases(true)}
                     >
                       Testcases
-                    </div>
-                    <div
+                    </button>
+                    <button
+                      aria-label="show result"
                       className={`flex h-full  items-center text-white mx-2 border-b-2 cursor-pointer ${
                         showTestcases ? "border-transparent" : "border-white"
                       }`}
                       onClick={() => setShowTestcases(false)}
                     >
                       Result
-                    </div>
+                    </button>
                   </div>
 
                   <TestCasesArea

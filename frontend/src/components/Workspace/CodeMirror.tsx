@@ -19,6 +19,7 @@ const CodeMirror = ({
   return (
     <div className="w-full overflow-y-auto h-full flex flex-col">
       <ReactCodeMirror
+        id="code editor"
         className={`codeMirror ${textLarge ? "text-[16px]" : "text-[14px]"}`}
         value={userCode}
         onChange={(value: string) => onChangeCode && onChangeCode(value)}

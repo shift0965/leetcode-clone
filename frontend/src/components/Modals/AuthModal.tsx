@@ -22,7 +22,7 @@ const AuthModal = () => {
       <div
         className={`w-fit absolute left-[50%] translate-y-[-50%] translate-x-[-50%] flex justify-center z-50 rounded-lg overflow-hidden
         transition-all duration-500 ${
-          authModal.isOpen ? "top-[50%] opacity-100" : "top-[-60%] opacity-0"
+          authModal.isOpen ? "top-[40%] opacity-100" : "top-[-60%] opacity-0"
         } `}
       >
         <button className="absolute bg-transparent rounded-lg text-sm p-1.5 ml-auto inline-flex items-center text-white right-[5px] top-[5px]">

@@ -83,7 +83,7 @@ const PlayerNavbar = ({
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
       <div className="flex w-full items-center justify-between">
         <div className="flex-1 flex items-center text-white text-lg">
-          <Link to="/" className=" block w-[100px]">
+          <Link to="/" className=" block w-[100px]" aria-label="letscode">
             <img src="/logo-full.png" alt="Logo" className=" w-full" />
           </Link>
         </div>
@@ -102,7 +102,8 @@ const PlayerNavbar = ({
             </div>
             <div className="flex items-center space-x-4 flex-1 justify-end">
               {currentState === "GamePlaying" && (
-                <div
+                <button
+                  aria-label="toggle bullet screen"
                   className="text-xl relative cursor-pointer flex h-9 w-9  justify-center items-center"
                   title={`${
                     bulletSwitch ? "Turn off bullets" : "Turn on bullets"
@@ -120,13 +121,14 @@ const PlayerNavbar = ({
                     <BsSlashLg />
                   </div>
                   <GiBulletBill />
-                </div>
+                </button>
               )}
               {currentState === "GamePlaying" && timeLeft && (
                 <CountDown timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
               )}
 
               <button
+                aria-label="exit game"
                 className="flex items-center bg-dark-fill-3 py-1 px-3 cursor-pointer rounded text-dark-pink hover:bg-dark-fill-2 transition-all"
                 onClick={handleExitGame}
               >
