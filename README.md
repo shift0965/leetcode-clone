@@ -15,7 +15,6 @@
 
 ## How to Play?
 
-
 ### 👑 Game Host:
 
 1. **Login** first, then click "Create Game."
@@ -66,7 +65,6 @@
 
 ![structure](https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018)
 
-
 ## Features
 
 - Enabled real-time code updates through **Redis pub-sub** and **Socket.IO**.
@@ -90,7 +88,6 @@ The original load test for the run code API revealed the following metrics:
 
 ![test_original](https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442)
 
-
 The bottleneck appears to be occurring specifically during the execution and validation of user code.
 
 ### Improvement
@@ -110,7 +107,6 @@ To address the bottleneck, several important improvements have been implemented:
 
 ![test_with_Bun](https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61)
 
-
 **Load Test Results:**
 
 - Maximum virtual users: **100**
@@ -118,11 +114,7 @@ To address the bottleneck, several important improvements have been implemented:
 
 ## Selenium test for game
 
-
-
 https://github.com/shift0965/leetcode-clone/assets/53403797/3d1c8d9b-bf96-46ea-97de-f309cccfaa4c
-
-
 
 ## Acknowledgements
 
