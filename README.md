@@ -63,7 +63,9 @@
 
 ## Structure
 
-![structure](https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018)
+<div align="center">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018" width="80%">
+</div>
 
 ## Features
 
@@ -86,7 +88,9 @@ The original load test for the run code API revealed the following metrics:
 - Maximum virtual users: **30**
 - Request rate: **6** requests per second
 
-![test_original](https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442)
+<div align="center">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442" width="80%">
+</div>
 
 The bottleneck appears to be occurring specifically during the execution and validation of user code.
 
@@ -105,7 +109,9 @@ To address the bottleneck, several important improvements have been implemented:
 3. Utilizing Bun JS for Faster Performance:
    - Switched to Bun from Node.js to significantly improved the execution speed.
 
-![test_with_Bun](https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61)
+<div align="center">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61" width="80%">
+</div>
 
 **Load Test Results:**
 
@@ -114,7 +120,7 @@ To address the bottleneck, several important improvements have been implemented:
 
 ## Selenium test for game
 
-https://github.com/shift0965/leetcode-clone/assets/53403797/3d1c8d9b-bf96-46ea-97de-f309cccfaa4c
+![video](https://github.com/shift0965/leetcode-clone/assets/53403797/3d1c8d9b-bf96-46ea-97de-f309cccfaa4c)
 
 ## Acknowledgements
 
