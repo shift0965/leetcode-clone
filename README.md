@@ -64,7 +64,8 @@
 
 ## Structure
 
-![letscode](https://github.com/shift0965/leetcode-clone/assets/structure.png)
+![structure](https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018)
+
 
 ## Features
 
