@@ -1,3 +1,4 @@
+
 <div align="center">
   <br>
   <h1>LetsCode</h1>
@@ -13,75 +14,94 @@
 </div>
 <br>
 
-## How to Play?
+
+Welcome to our dynamic coding contest platform, where you can practice algorithms, compete with friends, and enjoy coding challenges. Join us to enhance your coding skills and experience the excitement of real-time contests!
+
+##  Outline
+- [How to Play?](#how-to-play)
+- [Tech Stack](#tech-stack)
+- [Structure](#structure)
+- [Features](#features)
+- [Load Test](#load-test)
+- [End-to-End Game Test](#end-to-end-game-test)
+- [Acknowledgements](#acknowledgements)
+
+## How to Play? <a name="how-to-play"></a>
 
 ### 👑 Game Host:
 
-1. **Login** first, then click "Create Game."
+1. Login first, then click "*Create Game*".
 2. Choose the **problems** for the game and set the **time limit**.
-3. Click "Create Game" to enter the game lobby, where players can join using the **Game-Id**.
-4. Click "Start Game" to observe all players' real-time code.
-5. Select any player to view their code for all problems and send them messages!
-6. When you're ready, click "Close Game" to reveal the winner!
+3. Click "*Create Game*" to enter the game lobby, where players can join using the **Game-Id**.
+4. Click "*Start Game*" to observe all players' **real-time code**.
+5. Select any player to view their code for all problems and **send them messages**!
+6. When you're ready, click "*Close Game*" to reveal the winner!
 
 ### 🥳 Game Player:
 
-1. Click "Join Game" and enter the **Game Id** and your **Player Name**.
-2. Write down your **solution**, then click "Run" and "Submit" to see the leaderboard update!
-3. Once the time is up or the host closes the game, the final game results will be displayed.
+1. Click "Join Game" and enter the Game Id and your Player Name.
+2. Write down your solution, then click "Run" to execute example cases.
+3. Review the input, output, expected output, and console logs. You will also be notified if any errors are detected.
+4. Click "Submit" to execute all the hidden cases. If passed, see the leaderboard update!
+5. Once the time is up or the host closes the game, the final game results will be displayed.
 
 | Testing Account |               |
 | --------------- | ------------- |
 | Email           | jackie@ee.com |
 | Password        | jackie        |
 
-## Tech Used
+## Tech Stack
 
 ### Server
-
-![Nodejs](https://img.shields.io/badge/Nodejs-3C873A?style=for-the-badge&labelColor=black&logo=node.js&logoColor=3C873A)
-![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)
-![SocketIo](https://img.shields.io/badge/Socket.io-010101?&style=for-the-badge&logo=Socket.io&logoColor=white)
-![Typescript](https://img.shields.io/badge/Typescript-007acc?style=for-the-badge&labelColor=black&logo=typescript&logoColor=007acc)<br/>
-
+![Nodejs](https://img.shields.io/badge/Node.js-343434?style=for-the-badge&logo=node.js&logoColor=3C873A)
+![Express.js](https://img.shields.io/badge/Express.js-343434?style=for-the-badge&logo=express)
+![SocketIo](https://img.shields.io/badge/Socket.io-343434?&style=for-the-badge&logo=Socket.io)
+![Typescript](https://img.shields.io/badge/Typescript-343434?style=for-the-badge&logo=typescript&logoColor=007acc)
 ### Client
 
-![React](https://img.shields.io/badge/-React-61DBFB?style=for-the-badge&labelColor=black&logo=react&logoColor=61DBFB)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-092749?style=for-the-badge&logo=tailwindcss&logoColor=06B6D4&labelColor=000000)
-![Typescript](https://img.shields.io/badge/Typescript-007acc?style=for-the-badge&labelColor=black&logo=typescript&logoColor=007acc)
+![React](https://img.shields.io/badge/-React-343434?style=for-the-badge&logo=react)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-343434?style=for-the-badge&logo=tailwindcss)
+![Typescript](https://img.shields.io/badge/Typescript-343434?style=for-the-badge&logo=typescript)
 
 ### DataBase
 
-![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?&style=for-the-badge&logo=redis&logoColor=white)
-![Mysql](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-343434?&style=for-the-badge&logo=redis&logoColor=RED)
+![Mysql](https://img.shields.io/badge/MySQL-343434?style=for-the-badge&logo=mysql)
 
 ### Deployment And Test
 
-![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=jest&logoColor=white)
-![Github Action](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-343434?style=for-the-badge&logo=jest&logoColor=C21325)
+![Github Action](https://img.shields.io/badge/GitHub_Actions-343434?style=for-the-badge&logo=github-actions)
+![Docker](https://img.shields.io/badge/Docker-343434?style=for-the-badge&logo=docker)
 
 ## Structure
 
 <div align="center">
-    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018" width="80%">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/89487b94-eb4c-4caf-977c-74b9b5a6f018" width="800">
 </div>
 
 ## Features
 
-- Enabled real-time code updates through **Redis pub-sub** and **Socket.IO**.
+### Code Execution
+- Applied **VM** and **child processes** to securely execute user code and validate its output.
 - Implemented a separate worker server to handle heavy tasks, preventing overload on the express server.
 - Utilized a worker queue to efficiently manage traffic from the express server.
 - Built the worker server with **Bun** instead of Node.js, resulting in a three-fold increase in user capacity.
-- Applied **VM** and **child processes** to securely execute user code and validate its output.
-- Automated deployment and testing using **GitHub Actions** CI/CD and **Docker** on AWS.
+- Implemented code error detection to notify users of any errors in their code, including excessively large output and potential infinite loops.
+
+### Contest
+- Enabled real-time code updates through **Redis pub-sub** and **Socket.IO**.
 - Stored game states in the database, providing players and hosts with a seamless experience by allowing them to refresh and reconnect effortlessly.
+- The host can watch the progress of every player's contest and interact with them through **Bullet Screen**.
+
+### CICD
+- Automated deployment and testing using **GitHub Actions** CI/CD and **Docker** on AWS.
 
 ## Load Test
 
 ### Identified Critical Area
 
-After conducting load tests on APIs, Socket.IO, and other functionalities, a bottleneck was discovered in the process of executing users' code and validating the output.
+After conducting load tests on APIs and Socket.IO with K6, a bottleneck was discovered in the process of executing users' code and validating the output.
 
 The original load test for the run code API revealed the following metrics:
 
@@ -89,7 +109,7 @@ The original load test for the run code API revealed the following metrics:
 - Request rate: **6** requests per second
 
 <div align="center">
-    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442" width="80%">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442" width="800">
 </div>
 
 The bottleneck appears to be occurring specifically during the execution and validation of user code.
@@ -110,7 +130,7 @@ To address the bottleneck, several important improvements have been implemented:
    - Switched to Bun from Node.js to significantly improved the execution speed.
 
 <div align="center">
-    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61" width="80%">
+    <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61" width="800">
 </div>
 
 **Load Test Results:**
@@ -118,12 +138,22 @@ To address the bottleneck, several important improvements have been implemented:
 - Maximum virtual users: **100**
 - Request rate: **20**
 
-## Selenium test for game
+## End-to-End Game Test
 
-![video](https://github.com/shift0965/leetcode-clone/assets/53403797/3d1c8d9b-bf96-46ea-97de-f309cccfaa4c)
+**Selenium Test:**
+
+1. Host login and start a game.
+2. Player joins the game and submits a solution.
+3. Host observes real-time updates and sends messages.
+4. Close the game and verify results.
+
+
+https://github.com/shift0965/leetcode-clone/assets/53403797/4e0944e0-aff2-4ebe-b7cc-c5eb30da1ff7
+
+
 
 ## Acknowledgements
 
 Give credit here.
 
-- This project is inspired by [Leetcode](https://leetcode.com/problemset/all/).
+- This project is inspired by [Leetcode](https://leetcode.com/problemset/all/) and [Kahoot](https://kahoot.com/).
