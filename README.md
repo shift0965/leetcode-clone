@@ -8,12 +8,13 @@
     <a href="https://shift0965.github.io/portfolio/">About Me</a>
     <br>
     <br>
-    <img src="https://github.com/shift0965/leetcode-clone/assets/letscode.png" alt="drawing" width="500"/>
+    <img width="500" alt="letscode" src="https://github.com/shift0965/leetcode-clone/assets/53403797/b32f6601-5003-491a-8a67-3cf1f4f34db4">
 </div>
 </div>
 <br>
 
 ## How to Play?
+
 
 ### 👑 Game Host:
 
@@ -85,7 +86,9 @@ The original load test for the run code API revealed the following metrics:
 
 - Maximum virtual users: **30**
 - Request rate: **6** requests per second
-  ![Original k6 load test](https://github.com/shift0965/leetcode-clone/assets/test_original.png)
+
+![test_original](https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442)
+
 
 The bottleneck appears to be occurring specifically during the execution and validation of user code.
 
@@ -104,7 +107,8 @@ To address the bottleneck, several important improvements have been implemented:
 3. Utilizing Bun JS for Faster Performance:
    - Switched to Bun from Node.js to significantly improved the execution speed.
 
-![Original k6 load test](https://github.com/shift0965/leetcode-clone/assets/test_with_Bun.png)
+![test_with_Bun](https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61)
+
 
 **Load Test Results:**
 
@@ -113,7 +117,11 @@ To address the bottleneck, several important improvements have been implemented:
 
 ## Selenium test for game
 
-![End to end video](https://github.com/shift0965/leetcode-clone/assets/selenium_test.mp4)
+
+
+https://github.com/shift0965/leetcode-clone/assets/53403797/3d1c8d9b-bf96-46ea-97de-f309cccfaa4c
+
+
 
 ## Acknowledgements
 
