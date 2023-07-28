@@ -17,8 +17,8 @@ const Login = () => {
     }
   }, [authModal]);
   const resetForm = () => {
-    setUserEmail("");
-    setUserPassword("");
+    setUserEmail("test@test.com");
+    setUserPassword("test");
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
