@@ -47,8 +47,8 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 
 | Testing Account |               |
 | --------------- | ------------- |
-| Email           | jackie@ee.com |
-| Password        | jackie        |
+| Email           | test@test.com |
+| Password        | test          |
 
 ## Tech Stack
 
