@@ -115,7 +115,7 @@ const FocusedPlayer = ({
               <div className="h-14 flex items-center px-3 text-dark-gray-8 text-lg border-t-[1px] border-dark-fill-2">
                 Send Message
               </div>
-              <form onSubmit={handleSendMessage}>
+              <form onSubmit={handleSendMessage} autoComplete="off">
                 <div className="px-2">
                   <input
                     name="message"

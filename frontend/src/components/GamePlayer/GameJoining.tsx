@@ -84,6 +84,7 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
       <form
         onSubmit={handleJoinRoom}
         className="flex flex-col items-center justify-center "
+        autoComplete="off"
       >
         <div className="mt-8">
           <div className="text-lg">Game Id</div>
