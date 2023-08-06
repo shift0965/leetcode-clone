@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sentry/node": "^7.61.1",
     "amqplib": "^0.10.3",
     "argon2": "^0.30.3",
     "child_process": "^1.0.2",
