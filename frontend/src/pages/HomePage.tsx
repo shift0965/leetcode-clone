@@ -1,7 +1,6 @@
 import ProblemList from "../components/ProblemList";
 import Navbar from "../components/NavBars/Navbar";
 import { motion as m } from "framer-motion";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { authModalState } from "../atoms/stateAtoms";
@@ -14,9 +13,7 @@ const HomePage = () => {
   const handleCreateGame = () => {
     if (authModal.isLogin) {
       navigate("/gameHost");
-    } else {
-      toast.error("Please Sign In");
-    }
+    }  
   };
 
   const handleJoinGame = () => {

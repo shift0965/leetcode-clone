@@ -26,12 +26,17 @@ const ProblemList = () => {
   );
   useEffect(() => {
     setLoading(true);
+    console.log('set load')
     fetch(GET_ALL_PROBLEMS, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((results) => {
         setProblems(results);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Fetch failed:", error);
         setLoading(false);
       });
   }, []);

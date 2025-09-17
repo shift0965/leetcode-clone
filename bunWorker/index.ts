@@ -1,7 +1,7 @@
 import { runWorker } from "./helpers/runWorker.js";
 
 const server = Bun.serve({
-  port: process.env.PORT,
+  port: 3002,
   fetch(req) {
     return new Response(`Bun!`);
   },

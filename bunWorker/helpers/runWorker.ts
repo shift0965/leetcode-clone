@@ -1,14 +1,12 @@
 import { Redis } from "ioredis";
 import { fileURLToPath } from "url";
 import path from "path";
-import dotenv from "dotenv";
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const redisClient = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: Number(process.env.REDIS_PORT) || 6379,
+  host: "redis",
+  port: 6379,
 });
 const waitms = async (ms: number) => {
   return new Promise((resolve, reject) => {
@@ -18,8 +16,7 @@ const waitms = async (ms: number) => {
   });
 };
 
-const MAX_CONCURRENT_PROCESSES =
-  Number(process.env.MAX_CONCURRENT_PROCESSES) || 8;
+const MAX_CONCURRENT_PROCESSES = 8;
 let runningProcess = 0;
 
 export async function runWorker() {

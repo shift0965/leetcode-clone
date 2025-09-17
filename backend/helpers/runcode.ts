@@ -1,10 +1,7 @@
 import { redisSub, redisClient } from "../models/redis.model.js";
 import { randomUUID } from "crypto";
-import dotenv from "dotenv";
-dotenv.config();
 
-const WORKER_QUEUE_LENGTH_LIMIT =
-  Number(process.env.WORKER_QUEUE_LENGTH_LIMIT) || 100;
+const WORKER_QUEUE_LENGTH_LIMIT = 100;
 
 export function runCodeByWorker(
   runExample: boolean,

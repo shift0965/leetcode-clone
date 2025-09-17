@@ -17,7 +17,7 @@ const Login = () => {
     }
   }, [authModal]);
   const resetForm = () => {
-    setUserEmail("test@test.com");
+    setUserEmail("test1@test.com");
     setUserPassword("test");
   };
 

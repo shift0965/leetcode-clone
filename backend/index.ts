@@ -8,34 +8,10 @@ import path from "path";
 import cors from "cors";
 import { errorHandler } from "./helpers/errorHandler.js";
 import { rateLimit } from "./middleware/rateLimit.js";
-import "dotenv/config.js";
-
-import * as Sentry from "@sentry/node";
 
 const app: Express = express();
-const port = process.env.PORT;
-const REQUEST_PER_SEC = Number(process.env.REQUEST_PER_SEC) || 100;
-
-//Sentry
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-  integrations: [
-    // enable HTTP calls tracing
-    new Sentry.Integrations.Http({
-      tracing: true,
-    }),
-    // enable Express.js middleware tracing
-    new Sentry.Integrations.Express({
-      app,
-    }),
-  ],
-  // Performance Monitoring
-  tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!,
-});
-
-// Trace incoming requests
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
+const port = 3000;
+const REQUEST_PER_SEC = 100;
 
 app.use(cors());
 app.use(express.json());
@@ -57,7 +33,6 @@ app.get("*", rateLimit(REQUEST_PER_SEC), (req, res) => {
   res.sendFile(path.resolve("../frontend/dist/index.html"));
 });
 
-app.use(Sentry.Handlers.errorHandler());
 app.use(errorHandler);
 
 app.listen(port, () => {

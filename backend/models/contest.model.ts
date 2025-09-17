@@ -2,9 +2,8 @@ import pool from "./databasePool.js";
 import { z } from "zod";
 import { ResultSetHeader } from "mysql2";
 import { OkPacket } from "mysql2";
-import "dotenv/config.js";
 
-const MAX_PLAYER_NUMBER = Number(process.env.MAX_PLAYER_NUMBER) || 0;
+const MAX_PLAYER_NUMBER = 12;
 
 function instanceOfSetHeader(object: any): object is ResultSetHeader {
   return "insertId" in object;
