@@ -80,7 +80,6 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
 
       setGameId(result.gameId);
       setCurrentState("PlayersJoining");
-      toast.success("Game created successfully!");
     } catch (error) {
       console.error("Error creating game:", error);
       toast.error(error instanceof Error ? error.message : "Failed to create game");

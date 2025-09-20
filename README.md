@@ -5,7 +5,6 @@
   <strong>Code Together, Code for Fun!</strong>
   <div align="center">
     <a href="https://letscode.courater.com/">Home Page</a> |
-    <a href="https://drive.google.com/file/d/1mEXF2dGyqi4U4Kx2WkBKsURcxzXcRzSY/view?usp=sharing">Video Intro</a> |
     <a href="https://shift0965.github.io/portfolio/">About Me</a>
     <br>
     <br>
@@ -30,25 +29,22 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 
 ### 👑 Game Host:
 
-1. Login first, then click "*Create Game*".
+1. Click "*Create Game*" to get started as a guest host.
 2. Choose the **problems** for the game and set the **time limit**.
 3. Click "*Create Game*" to enter the game lobby, where players can join using the **Game-Id**.
-4. Click "*Start Game*" to observe all players' **real-time code**.
+4. Click "*Start Game*" to observe all players' **real-time code** (requires at least one player).
 5. Select any player to view their code for all problems and **send them messages**!
 6. When you're ready, click "*Close Game*" to reveal the winner!
 
 ### 🥳 Game Player:
 
-1. Click "Join Game" and enter the Game Id and your Player Name.
+1. Click "Join Game" and enter the Game Id and your Player Name (no sign-up required).
 2. Write down your solution, then click "Run" to execute example cases.
 3. Review the input, output, expected output, and console logs. You will also be notified if any errors are detected.
 4. Click "Submit" to execute all the hidden cases. If passed, see the leaderboard update!
 5. Once the time is up or the host closes the game, the final game results will be displayed.
 
-| Testing Account |               |
-| --------------- | ------------- |
-| Email           | test@test.com |
-| Password        | test          |
+**Note:** No registration or login required - start playing immediately as a guest!
 
 ## Tech Stack
 
@@ -83,7 +79,7 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 ## Features
 
 ### Code Execution
-- Applied **VM** and **child processes** to securely execute user code and validate its output.
+- Applied a worker instance and child processes to securely execute user code and validate its output.
 - Implemented a separate worker server to handle heavy tasks, preventing overload on the express server.
 - Utilized a worker queue to efficiently manage traffic from the express server.
 - Built the worker server with **Bun** instead of Node.js, resulting in a three-fold increase in user capacity.
@@ -95,7 +91,7 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 - The host can watch the progress of every player's contest and interact with them through **Bullet Screen**.
 
 ### CICD
-- Automated deployment and testing using **GitHub Actions** CI/CD and **Docker** on AWS.
+- Automated deployment and testing using GitHub Actions CI/CD and Docker on AWS.
 
 ## Load Test
 
@@ -142,7 +138,7 @@ To address the bottleneck, several important improvements have been implemented:
 
 **Selenium Test:**
 
-1. Host login and start a game.
+1. Host creates and starts a game as a guest.
 2. Player joins the game and submits a solution.
 3. Host observes real-time updates and sends messages.
 4. Close the game and verify results.
