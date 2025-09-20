@@ -5,7 +5,6 @@ export async function getAuthToken(): Promise<string> {
   // Check if token already exists in localStorage
   // localStorage.removeItem("userToken")
   const existingToken = localStorage.getItem("userToken");
-  console.log(existingToken)
 
   if (existingToken) {
     const payload = parseJwt(existingToken)

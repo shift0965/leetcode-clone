@@ -144,7 +144,7 @@ export async function hostTerminateContest(
     const contestId = req.body.gameId;
     await endContestByIdAndUserId(contestId, userId);
     publishHostTerminateContest(contestId);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
@@ -188,7 +188,7 @@ export async function playerExitContest(
     const playerId = req.body.playerId;
     await ExitContestByIdAndPlayerId(contestId, playerId);
     publishPlayerExitContest(contestId, playerId);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
@@ -204,7 +204,7 @@ export async function hostStartContest(
     const contestId = req.body.gameId;
     await startContestByIdAndUserId(contestId, userId);
     publishHostStartContest(contestId);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
@@ -247,11 +247,11 @@ export async function playerSubmit(
   res: Response,
   next: NextFunction
 ) {
-  const { problemId, language, code, gameId, playerId, progress, finishedAt } =
+  const { problemId, code, gameId, playerId, progress, finishedAt } =
     req.body;
 
   //check if contest is started
-  const contest = await checkContestStateById(gameId); //insertPlayerIntoContest(contestId, name);
+  const contest = await checkContestStateById(gameId);
   if (!contest || contest.state !== "started")
     return res.status(404).send({ errors: "Game is not available" });
 
@@ -360,7 +360,7 @@ export async function hostSendMessage(
     const playerId = req.body.playerId;
     const message = req.body.message;
     publishHostMessageToPlayer(contestId, playerId, message);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
@@ -435,7 +435,7 @@ export async function hostCloseContest(
       return res.status(400).send({ errors: "Game room not found" });
     }
     publishHostCloseContest(contestId);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }
@@ -463,7 +463,7 @@ export async function hostClearHistory(
   try {
     const userId = res.locals.userId;
     await clearContestHistoryByUser(userId);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
     next(err);
   }

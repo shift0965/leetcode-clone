@@ -21,10 +21,16 @@ async function apiRequest(url: string, options: RequestInit = {}) {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.errors || `HTTP ${response.status}: ${response.statusText}`);
-  }
+    const errorMessage = errorData.errors || `HTTP ${response.status}: ${response.statusText}`;
+    console.error(errorMessage);
+    throw new Error(errorMessage);
+  }  
 
-  return response.json();
+  if (response.status === 204) {
+    return null;
+  } else {
+    return response.json();
+  }
 }
 
 // Helper function for requests that don't need authentication
@@ -85,23 +91,32 @@ export const hostApi = {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  terminateGame: () => apiRequest("/api/1.0/contest/hostTerminateGame", { method: "POST" }),
-  startGame: (data: { gameId: number }) => apiRequest("/api/1.0/contest/hostStartGame", {
-    method: "POST",
-    body: JSON.stringify(data),
-  }),
-  getPlayersCode: () => apiRequest("/api/1.0/contest/hostGetPlayersCode", { method: "POST" }),
+  terminateGame: (data: { gameId: number }) =>
+    apiRequest("/api/1.0/contest/hostTerminateGame", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  startGame: (data: { gameId: number }) =>
+    apiRequest("/api/1.0/contest/hostStartGame", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  getPlayersCode: () =>
+    apiRequest("/api/1.0/contest/hostGetPlayersCode", { method: "POST" }),
   sendMessage: (data: { gameId: number; playerId: number; message: string }) =>
     apiRequest("/api/1.0/contest/hostSendMessage", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  closeGame: (data: { gameId: number }) => apiRequest("/api/1.0/contest/hostCloseGame", {
-    method: "POST",
-    body: JSON.stringify(data),
-  }),
-  getHistory: () => apiRequest("/api/1.0/contest/hostGetHistory", { method: "POST" }),
-  clearHistory: () => apiRequest("/api/1.0/contest/hostClearHistory", { method: "POST" }),
+  closeGame: (data: { gameId: number }) =>
+    apiRequest("/api/1.0/contest/hostCloseGame", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  getHistory: () =>
+    apiRequest("/api/1.0/contest/hostGetHistory", { method: "POST" }),
+  clearHistory: () =>
+    apiRequest("/api/1.0/contest/hostClearHistory", { method: "POST" }),
 };
 
 // Player API (no authentication needed)

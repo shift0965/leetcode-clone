@@ -7,7 +7,6 @@ import { CiCircleRemove } from "react-icons/ci";
 import { motion as m } from "framer-motion";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../../atoms/stateAtoms";
-import { useNavigate } from "react-router-dom";
 
 interface GameCreatingProps {
   setCurrentState: React.Dispatch<React.SetStateAction<GameHostState>>;
@@ -19,7 +18,6 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
   const [selectedProblemIds, setSelectedProblemIds] = useState<number[]>([]);
   const [timeLimit, setTimeLimit] = useState<number>(60);
   const [loading, setLoading] = useRecoilState(loadingState);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);

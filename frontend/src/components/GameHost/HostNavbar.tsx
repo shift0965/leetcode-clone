@@ -39,27 +39,39 @@ const HostNavbar = ({
     }
   }, [currentState, gameId]);
 
-  const handleStartGame = () => {
+  const handleStartGame = async () => {
     if (gameId) {
-      hostApi.startGame({ gameId: gameId })
-        .then(() => {
-          toast("🔥 Game Started !");
-          setCurrentState("GameWatching");
-        })
-        .catch(() => {
-          toast.error("Start Game failed");
-        });
+      try {
+        // Check if there are players in the game
+        const playersData = await contestApi.getPlayers({ gameId: gameId });
+
+        if (!playersData.players || playersData.players.length === 0) {
+          toast.error("At least one player must join before starting");
+          return;
+        }
+
+        await hostApi.startGame({ gameId: gameId });
+        toast("🔥 Game Started !");
+        setCurrentState("GameWatching");
+      } catch (err) {
+        console.error(err);
+        toast.error("Start Game failed");
+      }
     }
   };
 
   const handleShutDown = () => {
-    hostApi.terminateGame()
-      .then(() => {
-        navigate("/");
-      })
-      .catch(() => {
-        toast.error("Shot down failed");
-      });
+    if (gameId) {
+      hostApi
+        .terminateGame({ gameId: gameId })
+        .then(() => {
+          navigate("/");
+        })
+        .catch((err) => {
+          console.error(err)
+          toast.error("Shot down failed");
+        });
+    }
   };
 
   const handleCloseGame = () => {

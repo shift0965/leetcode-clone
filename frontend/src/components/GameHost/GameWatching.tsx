@@ -65,16 +65,12 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
   };
 
   useEffect(() => {
-    fetch(GET_CONTEST_PROBLEMS, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        gameId: gameId,
-      }),
-    })
-      .then((response) => response.json())
+    contestApi.getProblems({ gameId: gameId })
       .then((data) => {
         setProblems(data.problems);
+      })
+      .catch((error) => {
+        console.error("Error fetching contest problems:", error);
       });
 
     socket.emit("ws-host-joinGame", { gameId: gameId });
@@ -83,14 +79,7 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
   useEffect(() => {
     if (problems.length > 0) {
       setLoading(true);
-      fetch(GET_PLAYER_PROGRESS, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      })
-        .then((response) => response.json())
+      contestApi.getPlayersProgress({ gameId: gameId })
         .then((results) => {
           setPlayersProgress(
             results.progress.map(
@@ -111,30 +100,17 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           );
           sortProgress();
         })
+        .catch((error) => {
+          console.error("Error fetching player progress:", error);
+        })
         .finally(() => {
           setLoading(false);
         });
 
       const loadPlayersCode = async () => {
         try {
-          const userToken = await getAuthToken();
           setLoading(true);
-
-          const response = await fetch(HOST_GET_PLAYERS_CODE, {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-          });
-
-          if (response.status === 401 || response.status === 403) {
-            toast.error("Authentication failed");
-            navigate("/");
-            return;
-          }
-
-          const results = await response.json();
+          const results = await hostApi.getPlayersCode();
 
           setPlayersCode(
             results.playersCode.map((player: PlayerCode) => ({
