@@ -12,7 +12,7 @@ const Navbar = ({ isWorkspace = false }) => {
   };
 
   return (
-    <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
+    <nav className="sticky top-0 z-30 flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7 ">
       <div
         className={`flex w-full items-center justify-between ${
           !isWorkspace ? "max-w-[1200px] mx-auto" : ""

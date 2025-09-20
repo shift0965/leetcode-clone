@@ -18,7 +18,7 @@ const HomePage = () => {
     <div>
       <Navbar />
       <m.div
-        className="block pb-10 min-h-[calc(100vh-104px)]"
+        className="block h-screen"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -61,8 +61,8 @@ const HomePage = () => {
             <ProblemList />
           </div>
         </div>
+        <Footer />
       </m.div>
-      <Footer />
     </div>
   );
 };
