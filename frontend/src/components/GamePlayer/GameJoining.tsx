@@ -1,5 +1,5 @@
 import { playerApi } from "../../api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GamePlayerState, hasWhiteSpace } from "../../types.const";
 import { toast } from "react-toastify";
 import { Player } from "../../types.const";
@@ -17,7 +17,10 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
   const [gameId, setGameId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const setBulletSwitch = useSetRecoilState(bulletSwitchState);
-  setBulletSwitch(true);
+
+  useEffect(() => {
+    setBulletSwitch(true);
+  }, [setBulletSwitch]);
 
   const handleJoinRoom = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
