@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import verifyJWT from "../helpers/verifyJWT.js";
+import { findUser } from "../models/user.model.js";
+import { verifyJWT } from "../helpers/jwt.js";
 
 async function authentication(req: Request, res: Response, next: NextFunction) {
   try {
@@ -12,14 +13,11 @@ async function authentication(req: Request, res: Response, next: NextFunction) {
       return;
     }
     const decoded = await verifyJWT(token);
-    res.locals.userId = decoded.userId;
+    const user = await findUser(decoded.userPublicId);
+    res.locals.userId = user.id;
     next();
   } catch (err) {
-    if (err instanceof Error) {
-      res.status(401).json({ errors: err.message });
-      return;
-    }
-    res.status(403).json({ errors: "authenticate failed or expired" });
+    res.status(403).json({ errors: err.message });
   }
 }
 

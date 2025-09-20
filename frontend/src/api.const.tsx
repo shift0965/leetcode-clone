@@ -6,8 +6,7 @@ export const RUN_EXAMPLE_CASES = "/api/1.0/workspace/run/example";
 export const RUN_HIDDEN_CASES = "/api/1.0/workspace/run/hidden";
 
 //user authentication
-export const USER_SIGNIN = "/api/1.0/user/signin";
-export const USER_SIGNUP = "/api/1.0/user/signup";
+export const USER_CREATE = "/api/1.0/user/create";
 
 //contest
 export const HOST_CHECK_GAME = "/api/1.0/contest/hostCheckGame";

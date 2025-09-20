@@ -1,56 +1,40 @@
-import { ResultSetHeader } from "mysql2";
-import { z } from "zod";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "./databasePool.js";
-
-function instanceOfSetHeader(object: any): object is ResultSetHeader {
-  return "insertId" in object;
-}
+import { z } from "zod";
 
 export async function createUser(
-  email: string,
-  name: string,
-  picture: string = ""
+  public_id: string,
 ) {
-  const results = await pool.query(
+  const [rows] = await pool.query<ResultSetHeader>(
     `
-    INSERT INTO user (email, name, picture)
-    VALUES(?, ?, ?)
+    INSERT INTO guest_user (public_id)
+    VALUES(?)
   `,
-    [email, name, picture]
+    [public_id]
   );
-  if (Array.isArray(results) && instanceOfSetHeader(results[0])) {
-    return results[0].insertId;
+  if (rows.affectedRows != 1) {
+    throw new Error("create user failed");
   }
-  throw new Error("create user failed");
 }
 
-const UserSchema = z.object({
+const UserRow = z.object({
   id: z.number(),
-  email: z.string(),
-  name: z.string(),
-  picture: z.string().nullish(),
 });
+type UserRow = z.infer<typeof UserRow>;
 
-export async function findUser(email: string) {
-  const results = await pool.query(
+export async function findUser(public_id: string): Promise<UserRow> {
+  const [rows] = await pool.query<RowDataPacket[]>(
     `
-    SELECT * FROM user
-    WHERE email = ?
-  `,
-    [email]
+    SELECT id
+    FROM guest_user
+    WHERE public_id = ?
+    `,
+    [public_id]
   );
-  const users = z.array(UserSchema).parse(results[0]);
-  return users[0];
-}
 
-export async function findUserById(id: string) {
-  const results = await pool.query(
-    `
-    SELECT * FROM user
-    WHERE id = ?
-  `,
-    [id]
-  );
-  const users = z.array(UserSchema).parse(results[0]);
+  const users = z.array(UserRow).parse(rows);
+  if (users.length === 0) {
+    throw new Error("User not found");
+  }
   return users[0];
 }
