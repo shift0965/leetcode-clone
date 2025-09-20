@@ -2,18 +2,13 @@ import ProblemList from "../components/ProblemList";
 import Navbar from "../components/NavBars/Navbar";
 import { motion as m } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { authModalState } from "../atoms/stateAtoms";
 import Footer from "../components/Footer";
 
 const HomePage = () => {
-  const authModal = useRecoilValue(authModalState);
   const navigate = useNavigate();
 
   const handleCreateGame = () => {
-    if (authModal.isLogin) {
-      navigate("/gameHost");
-    }  
+    navigate("/gameHost");
   };
 
   const handleJoinGame = () => {

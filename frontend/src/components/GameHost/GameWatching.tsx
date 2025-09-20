@@ -13,9 +13,10 @@ import {
 import FocusedPlayer from "./FocusedPlayer";
 import { motion as m } from "framer-motion";
 import { useSetRecoilState } from "recoil";
-import { authModalState, loadingState } from "../../atoms/stateAtoms";
+import { loadingState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { getAuthToken } from "../../utils/userUtils";
 
 interface GameWatchingProps {
   gameId: number;
@@ -33,8 +34,6 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
     undefined
   );
   const setLoading = useSetRecoilState(loadingState);
-
-  const setAuthModal = useSetRecoilState(authModalState);
   const navigate = useNavigate();
 
   const sortProgress = () => {
@@ -117,36 +116,27 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
           setLoading(false);
         });
 
-      const userData = localStorage.getItem("userData");
-      if (!userData) {
-        setAuthModal((prev) => ({ ...prev, isLogin: false }));
-        navigate("/");
-        toast.error("Login Timeout");
-        return;
-      }
-      const userToken = JSON.parse(userData).access_token;
+      const loadPlayersCode = async () => {
+        try {
+          const userToken = await getAuthToken();
+          setLoading(true);
 
-      setLoading(true);
-      fetch(HOST_GET_PLAYERS_CODE, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
-      })
-        .then(async (response) => {
+          const response = await fetch(HOST_GET_PLAYERS_CODE, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          });
+
           if (response.status === 401 || response.status === 403) {
-            toast.error("Login timeout");
-            localStorage.removeItem("userData");
-            setAuthModal((prev) => ({ ...prev, isLogin: false }));
+            toast.error("Authentication failed");
             navigate("/");
-            return response.json().then((error) => {
-              throw error;
-            });
+            return;
           }
-          return response.json();
-        })
-        .then((results) => {
+
+          const results = await response.json();
+
           setPlayersCode(
             results.playersCode.map((player: PlayerCode) => ({
               id: player.id,
@@ -169,13 +159,15 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
               }),
             }))
           );
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error(err);
-        })
-        .finally(() => {
+          toast.error("Failed to load player codes");
+        } finally {
           setLoading(false);
-        });
+        }
+      };
+
+      loadPlayersCode();
 
       socket.on(
         "ws-host-updateProgress",

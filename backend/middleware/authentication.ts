@@ -4,9 +4,12 @@ import { verifyJWT } from "../helpers/jwt.js";
 
 async function authentication(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log('start auth')
+    console.log('X-Custom-Auth:', req.get('X-Custom-Auth'));
+    console.log('Authorization:', req.get('Authorization'));
     const tokenInHeaders = req.get("Authorization");
-    const token =
-      tokenInHeaders?.replace("Bearer ", "") || req.cookies.jwtToken;
+    const token = tokenInHeaders?.replace("Bearer ", "")
+    console.log(token)
 
     if (!token) {
       res.status(401).json({ errors: "invalid token" });

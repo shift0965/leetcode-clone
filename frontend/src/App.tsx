@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import GameHost from "./pages/GameHost";
 import GamePlayer from "./pages/GamePlayer";
 import HomePage from "./pages/HomePage";
-import AuthModal from "./components/Modals/AuthModal";
+import ProfileModal from "./components/Modals/ProfileModal";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -24,7 +24,7 @@ function App() {
           pauseOnHover
           theme="dark"
         />
-        <AuthModal />
+        <ProfileModal />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="problem" element={<Workspace />} />

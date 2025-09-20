@@ -4,50 +4,37 @@ import GameCreating from "../components/GameHost/GameCreating";
 import PlayerJoining from "../components/GameHost/PlayersJoining";
 import { GameHostState } from "../types.const";
 import GameWatching from "../components/GameHost/GameWatching";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { HOST_CHECK_GAME } from "../api.const";
+import { hostApi } from "../api";
 import HostNavbar from "../components/GameHost/HostNavbar";
 import GameResult from "../components/GameResult/GameResult";
 
 const GameHost = () => {
-  const navigate = useNavigate();
   const [gameId, setGameId] = useState<number>();
   const [currentState, setCurrentState] = useState<GameHostState>("Loading");
 
   useEffect(() => {
-    const userDataJSON = localStorage.getItem("userData");
-    if (!userDataJSON) {
-      navigate("/");
-      toast.error("Sign In Time Out");
-    } else {
-      const userToken = JSON.parse(userDataJSON).access_token;
+    const checkExistingGame = async () => {
+      try {
+        const result = await hostApi.checkGame();
 
-      fetch(HOST_CHECK_GAME, {
-        method: "GET",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.founded) {
-            setGameId(result.contestId);
-            setCurrentState(() => {
-              if (result.state === "created") return "PlayersJoining";
-              else if (result.state === "started") return "GameWatching";
-              else if (result.state === "closed") return "GameResult";
-              return "GameCreating";
-            });
-          } else {
-            setCurrentState("GameCreating");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+        if (result.founded) {
+          setGameId(result.contestId);
+          setCurrentState(() => {
+            if (result.state === "created") return "PlayersJoining";
+            else if (result.state === "started") return "GameWatching";
+            else if (result.state === "closed") return "GameResult";
+            return "GameCreating";
+          });
+        } else {
+          setCurrentState("GameCreating");
+        }
+      } catch (err) {
+        console.error("Error checking existing game:", err);
+        setCurrentState("GameCreating");
+      }
+    };
+
+    checkExistingGame();
   }, []);
 
   return (

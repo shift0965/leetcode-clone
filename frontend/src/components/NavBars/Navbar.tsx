@@ -1,37 +1,15 @@
-import { useEffect } from "react";
-import { FiLogOut } from "react-icons/fi";
-import { FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";
 import Timer from "./Timer";
 import { useRecoilState } from "recoil";
-import { authModalState } from "../../atoms/stateAtoms";
-import { toast } from "react-toastify";
+import { profileModalState } from "../../atoms/stateAtoms";
 
 const Navbar = ({ isWorkspace = false }) => {
-  const handleLogout = () => {
-    localStorage.removeItem("userData");
-    setAuthModal((prev) => ({ ...prev, isLogin: false }));
-    toast.success("Sign Out Successfully ");
-  };
-  const [authModal, setAuthModal] = useRecoilState(authModalState);
-  const handleSignInBtn = () => {
-    setAuthModal((prev) => ({ ...prev, isOpen: true, type: "login" }));
-  };
+  const [isProfileOpen, setIsProfileOpen] = useRecoilState(profileModalState);
 
-  useEffect(() => {
-    const userDataJson = localStorage.getItem("userData");
-    if (userDataJson) {
-      const userData = JSON.parse(userDataJson);
-      if (userData.access_expired > new Date().getTime() / 1000) {
-        setAuthModal((prev) => ({ ...prev, isLogin: true }));
-      } else {
-        localStorage.removeItem("userData");
-        setAuthModal((prev) => ({ ...prev, isLogin: false }));
-      }
-    } else {
-      setAuthModal((prev) => ({ ...prev, isLogin: false }));
-    }
-  }, []);
+  const handleProfileClick = () => {
+    setIsProfileOpen(true);
+  };
 
   return (
     <nav className="relative flex h-12 w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7">
@@ -48,38 +26,13 @@ const Navbar = ({ isWorkspace = false }) => {
 
         <div className="flex items-center space-x-4 flex-1 justify-end">
           {isWorkspace && <Timer />}
-          {authModal.isLogin ? (
-            <>
-              <div
-                className=" relative flex items-center text-2xl py-1 cursor-pointer"
-                id="profile-btn"
-                onClick={() =>
-                  setAuthModal((prev) => ({
-                    ...prev,
-                    isOpen: true,
-                    type: "profile",
-                  }))
-                }
-              >
-                <FaUserCircle />
-              </div>
-              <button
-                id="log-out-btn"
-                className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2 transition-all"
-                onClick={handleLogout}
-              >
-                <FiLogOut />
-              </button>
-            </>
-          ) : (
-            <button
-              className=" bg-dark-fill-3 py-1 px-2 cursor-pointer rounded"
-              id="sign-in-btn"
-              onClick={handleSignInBtn}
-            >
-              Sign In
-            </button>
-          )}
+          <div
+            className=" relative flex items-center text-2xl py-1 cursor-pointer"
+            id="profile-btn"
+            onClick={handleProfileClick}
+          >
+            <FaUserCircle />
+          </div>
         </div>
       </div>
     </nav>

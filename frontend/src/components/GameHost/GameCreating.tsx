@@ -1,12 +1,12 @@
 import { Problem } from "../../types.const";
 import { useEffect, useState } from "react";
-import { HOST_CREATE_GAME, GET_ALL_PROBLEMS } from "../../api.const";
+import { problemsApi, hostApi } from "../../api";
 import { GameHostState } from "../../types.const";
 import { toast } from "react-toastify";
 import { CiCircleRemove } from "react-icons/ci";
 import { motion as m } from "framer-motion";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { authModalState, loadingState } from "../../atoms/stateAtoms";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../../atoms/stateAtoms";
 import { useNavigate } from "react-router-dom";
 
 interface GameCreatingProps {
@@ -15,7 +15,6 @@ interface GameCreatingProps {
 }
 
 const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
-  const setAuthModal = useSetRecoilState(authModalState);
   const [allProblems, setAllProblems] = useState<Problem[]>([]);
   const [selectedProblemIds, setSelectedProblemIds] = useState<number[]>([]);
   const [timeLimit, setTimeLimit] = useState<number>(60);
@@ -24,12 +23,13 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(GET_ALL_PROBLEMS, {
-      method: "GET",
-    })
-      .then((response) => response.json())
+    problemsApi.getAll()
       .then((results) => {
         setAllProblems(results);
+      })
+      .catch((error) => {
+        console.error("Error loading problems:", error);
+        toast.error("Failed to load problems");
       })
       .finally(() => {
         setLoading(false);
@@ -60,7 +60,7 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
     });
   };
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = async () => {
     if (selectedProblemIds.length === 0)
       return toast.error("No question is selected");
 
@@ -74,41 +74,22 @@ const GameCreating = ({ setGameId, setCurrentState }: GameCreatingProps) => {
       return toast.error("Time limit should be more than 3 mins");
     }
 
-    const userData = localStorage.getItem("userData");
-    if (!userData) {
-      setAuthModal((prev) => ({ ...prev, isLogin: false }));
-      return toast.error("Please Log In");
-    }
-    const userToken = JSON.parse(userData).access_token;
-
-    fetch(`${HOST_CREATE_GAME}`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${userToken}`,
-      },
-      body: JSON.stringify({
+    try {
+      const result = await hostApi.createGame({
         timeLimit: timeLimit,
         problemList: selectedProblemIds.map((id) => allProblems[id].id),
-      }),
-    }).then((response) => {
-      if (response.status === 401 || response.status === 403) {
-        toast.error("Login timeout");
-        localStorage.removeItem("userData");
-        setAuthModal((prev) => ({ ...prev, isLogin: false }));
+      });
+
+      setGameId(result.gameId);
+      setCurrentState("PlayersJoining");
+      toast.success("Game created successfully!");
+    } catch (error) {
+      console.error("Error creating game:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to create game");
+      if (error instanceof Error && error.message.includes("401")) {
         setCurrentState("GameCreating");
-      } else if (response.status !== 200) {
-        response.json().then((result) => {
-          console.error(result);
-          toast.error(result.errors || "Create game failed");
-          navigate("/");
-        });
-      } else
-        response.json().then((result) => {
-          setGameId(result.gameId);
-          setCurrentState("PlayersJoining");
-        });
-    });
+      }
+    }
   };
 
   return (
