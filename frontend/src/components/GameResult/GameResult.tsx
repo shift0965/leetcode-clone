@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { GET_GAME_RESULT } from "../../api.const";
+import { contestApi } from "../../api";
 import PlayerAvatar from "./PlayerAvatar";
 import { BsCheckCircle, BsXCircle } from "react-icons/bs";
 import Confetti from "react-confetti";
@@ -29,14 +29,7 @@ const GameResult = ({ gameId }: GameResultProps) => {
   const [loading, setLoading] = useRecoilState(loadingState);
   useEffect(() => {
     setLoading(true);
-    fetch(GET_GAME_RESULT, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        gameId: gameId,
-      }),
-    })
-      .then((response) => response.json())
+    contestApi.getGameResult({ gameId: gameId })
       .then((data) => {
         //data.players.progress = data.players.progress.slice(0, 2);
         setPlayers(data.players);

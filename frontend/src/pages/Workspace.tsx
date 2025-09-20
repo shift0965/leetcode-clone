@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { GET_PROBLEM_DETAILS } from "../api.const";
+import { problemsApi } from "../api";
 import Navbar from "../components/NavBars/Navbar";
 import Split from "react-split";
 import Playground from "../components/Workspace/Playground";
@@ -20,23 +20,17 @@ const Workspace = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${GET_PROBLEM_DETAILS}?id=${id}`)
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return response.json().then((error) => {
-            throw error;
-          });
-        }
-        return response.json();
-      })
+    problemsApi.getDetails(id)
       .then((result) => {
         setProblem(result);
-        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
         toast.error("Problem not found");
         navigate("/");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [id]);
 

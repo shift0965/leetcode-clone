@@ -1,4 +1,4 @@
-import { PLAYER_JOIN_GAME } from "../../api.const";
+import { playerApi } from "../../api";
 import { useState } from "react";
 import { GamePlayerState, hasWhiteSpace } from "../../types.const";
 import { toast } from "react-toastify";
@@ -31,23 +31,10 @@ const GameJoining = ({ setCurrentState, setPlayer }: GameJoiningProps) => {
       return toast.error("Invalid game id");
     setLoading(true);
 
-    fetch(PLAYER_JOIN_GAME, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        gameId: gameId,
-        playerName: playerName,
-      }),
+    playerApi.joinGame({
+      gameId: Number(gameId),
+      playerName: playerName,
     })
-      .then(async (response) => {
-        if (response.status !== 200)
-          return response.json().then((error) => {
-            throw error;
-          });
-        else {
-          return response.json();
-        }
-      })
       .then((result) => {
         const playerData: Player = {
           id: result.playerId,

@@ -1,10 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from "react";
-import {
-  GET_CONTEST_PROBLEMS,
-  GET_PLAYER_PROGRESS,
-  WEB_SOCKET_URL,
-  PLAYER_AVATAR_URL,
-} from "../../api.const";
+import { contestApi, WEB_SOCKET_URL, PLAYER_AVATAR_URL } from "../../api";
 import {
   GamePlayerState,
   Player,
@@ -68,14 +63,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
   };
 
   useEffect(() => {
-    fetch(GET_CONTEST_PROBLEMS, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        gameId: player?.gameId,
-      }),
-    })
-      .then((response) => response.json())
+    contestApi.getProblems({ gameId: player?.gameId })
       .then((data) => {
         setProblems(data.problems);
       });
@@ -132,14 +120,7 @@ const GamePlaying = ({ player, setCurrentState }: GamePlayingProps) => {
 
   useEffect(() => {
     if (problems.length > 0 && player) {
-      fetch(GET_PLAYER_PROGRESS, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player?.gameId,
-        }),
-      })
-        .then((response) => response.json())
+      contestApi.getPlayersProgress({ gameId: player?.gameId })
         .then((results) => {
           setPlayersProgress([]);
           results.progress.forEach(

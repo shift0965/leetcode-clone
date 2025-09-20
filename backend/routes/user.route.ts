@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { createUser } from "../controllers/user.ctrl.js";
+import { createUser, updateAuthToken } from "../controllers/user.ctrl.js";
 
 const router = Router();
 
 router
   .route("/user/create")
   .post(createUser);
+
+router
+  .route("/user/update-token")
+  .post(updateAuthToken);
 
 export default router;

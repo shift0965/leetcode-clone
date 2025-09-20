@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { uniqueId } from "lodash";
 import { Bullet, Player } from "../../types.const";
 import { io } from "socket.io-client";
-import { WEB_SOCKET_URL } from "../../api.const";
+import { WEB_SOCKET_URL } from "../../api";
 
 interface BulletScreenProps {
   player: Player;

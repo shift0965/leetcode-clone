@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
-import { GET_CONTEST_PLAYERS, WEB_SOCKET_URL } from "../../api.const";
+import { contestApi, WEB_SOCKET_URL } from "../../api";
 import { Player } from "../../types.const";
 import PlayersLobby from "./PlayersLobby";
 import { motion as m } from "framer-motion";
@@ -15,14 +15,7 @@ const PlayersJoining = ({ gameId }: PlayersJoiningProps) => {
 
   useEffect(() => {
     if (gameId) {
-      fetch(GET_CONTEST_PLAYERS, {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      })
-        .then((response) => response.json())
+      contestApi.getPlayers({ gameId: gameId })
         .then((results) => {
           setPlayers(results.players);
         });

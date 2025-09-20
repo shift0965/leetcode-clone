@@ -5,7 +5,7 @@ import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import YouTube from "react-youtube";
 import { Link } from "react-router-dom";
-import { GET_ALL_PROBLEMS } from "../api.const";
+import { problemsApi } from "../api";
 import { Problem } from "../types.const";
 import { useRecoilState } from "recoil";
 import { loadingState } from "../atoms/stateAtoms";
@@ -26,17 +26,14 @@ const ProblemList = () => {
   );
   useEffect(() => {
     setLoading(true);
-    console.log('set load')
-    fetch(GET_ALL_PROBLEMS, {
-      method: "GET",
-    })
-      .then((response) => response.json())
+    problemsApi.getAll()
       .then((results) => {
         setProblems(results);
-        setLoading(false);
       })
       .catch((error) => {
         console.error("Fetch failed:", error);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -50,6 +47,7 @@ const ProblemList = () => {
           onClick={() => {
             setCurrentPage(i);
           }}
+          key={i}
           className={`${
             currentPage === i ? "bg-dark-fill-2" : "bg-dark-layer-1"
           }  h-[32px] w-[32px] flex items-center justify-center cursor-pointer rounded text-white hover:bg-dark-fill-2 transition-all mx-1`}
@@ -203,7 +201,7 @@ const ProblemList = () => {
             </table>
           )}
 
-          <div className=" flex items-center justify-center mt-8">
+          <div className="flex items-center justify-center mt-8">
             <button
               disabled={currentPage === 0}
               onClick={() => setCurrentPage((prev) => prev - 1)}

@@ -1,12 +1,7 @@
 import { FiTriangle, FiCircle } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {
-  HOST_SHOT_DOWN,
-  HOST_START_GAME,
-  GET_TIME_LIMIT,
-  HOST_CLOSE_GAME,
-} from "../../api.const";
+import { hostApi, contestApi } from "../../api";
 import { toast } from "react-toastify";
 import { GameHostState } from "../../types.const";
 import { useEffect, useState } from "react";
@@ -30,14 +25,7 @@ const HostNavbar = ({
   useEffect(() => {
     if (currentState === "GameWatching" && gameId) {
       const fetchTime = () => {
-        fetch(GET_TIME_LIMIT, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            gameId: gameId,
-          }),
-        })
-          .then((response) => response.json())
+        contestApi.getTimeLimit({ gameId: gameId })
           .then((result) => {
             const msLeft = result.endedAt - new Date().getTime();
             setTimeLeft(Math.floor(msLeft / 1000));
@@ -52,72 +40,37 @@ const HostNavbar = ({
   }, [currentState, gameId]);
 
   const handleStartGame = () => {
-    const userDataJSON = localStorage.getItem("userData");
-    if (userDataJSON && gameId) {
-      const userToken = JSON.parse(userDataJSON).access_token;
-      fetch(HOST_START_GAME, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      }).then((response) => {
-        if (response.status === 200) {
+    if (gameId) {
+      hostApi.startGame({ gameId: gameId })
+        .then(() => {
           toast("🔥 Game Started !");
           setCurrentState("GameWatching");
-        } else {
+        })
+        .catch(() => {
           toast.error("Start Game failed");
-        }
-      });
+        });
     }
   };
 
   const handleShutDown = () => {
-    const userDataJSON = localStorage.getItem("userData");
-    if (userDataJSON && gameId) {
-      const userToken = JSON.parse(userDataJSON).access_token;
-      fetch(HOST_SHOT_DOWN, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      }).then((response) => {
-        if (response.status === 200) {
-          navigate("/");
-        } else {
-          toast.error("Shot down failed");
-        }
+    hostApi.terminateGame()
+      .then(() => {
+        navigate("/");
+      })
+      .catch(() => {
+        toast.error("Shot down failed");
       });
-    }
   };
 
   const handleCloseGame = () => {
-    const userDataJSON = localStorage.getItem("userData");
-    if (userDataJSON && gameId) {
-      const userToken = JSON.parse(userDataJSON).access_token;
-      fetch(HOST_CLOSE_GAME, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${userToken}`,
-        },
-        body: JSON.stringify({
-          gameId: gameId,
-        }),
-      }).then((response) => {
-        if (response.status === 200) {
+    if (gameId) {
+      hostApi.closeGame({ gameId: gameId })
+        .then(() => {
           setCurrentState("GameResult");
-        } else {
+        })
+        .catch(() => {
           navigate("/");
-        }
-      });
+        });
     }
   };
 

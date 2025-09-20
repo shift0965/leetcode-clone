@@ -1,4 +1,4 @@
-import { PLAYER_AVATAR_URL } from "../../api.const";
+import { PLAYER_AVATAR_URL } from "../../api";
 import { Player } from "../../types.const";
 
 interface PlayerLobbyProps {

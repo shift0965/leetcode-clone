@@ -3,7 +3,7 @@ import Navbar from "../components/NavBars/Navbar";
 import { GamePlayerState, Player } from "../types.const";
 import GameJoining from "../components/GamePlayer/GameJoining";
 import GameWaiting from "../components/GamePlayer/GameWaiting";
-import { PLAYER_CHECK_GAME } from "../api.const";
+import { playerApi } from "../api";
 import PlayerNavbar from "../components/GamePlayer/PlayerNavbar";
 import GamePlaying from "../components/GamePlayer/GamePlaying";
 import GameResult from "../components/GameResult/GameResult";
@@ -18,15 +18,10 @@ const GamePlayer = () => {
       setCurrentState("GameJoining");
     } else {
       const playerData: Player = JSON.parse(playerDataJSON);
-      fetch(PLAYER_CHECK_GAME, {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          playerId: playerData.id,
-          gameId: playerData.gameId,
-        }),
+      playerApi.checkGame({
+        playerId: playerData.id,
+        gameId: playerData.gameId,
       })
-        .then((response) => response.json())
         .then((result) => {
           setPlayer(playerData);
           if (result.founded) {

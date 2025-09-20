@@ -2,9 +2,8 @@ import { FiLogOut } from "react-icons/fi";
 import { GiBulletBill } from "react-icons/gi";
 import { BsSlashLg } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import { GET_TIME_LIMIT, PLAYER_AVATAR_URL } from "../../api.const";
+import { contestApi, playerApi, PLAYER_AVATAR_URL } from "../../api";
 import { GamePlayerState, Player } from "../../types.const";
-import { PLAYER_EXIT_GAME } from "../../api.const";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CountDown from "../NavBars/CountDown";
@@ -30,19 +29,13 @@ const PlayerNavbar = ({
   const handleExitGame = () => {
     if (currentState === "GamePlaying" || currentState === "GameWaiting") {
       if (player) {
-        fetch(PLAYER_EXIT_GAME, {
-          method: "post",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            gameId: player.gameId,
-            playerId: player.id,
-          }),
-        }).then((response) => {
-          if (response.status === 200) {
-            localStorage.removeItem("playerData");
-          } else {
-            toast.error("Failed to exit game");
-          }
+        playerApi.exitGame({
+          gameId: player.gameId,
+          playerId: player.id,
+        }).then(() => {
+          localStorage.removeItem("playerData");
+        }).catch(() => {
+          toast.error("Failed to exit game");
         });
       }
     }
@@ -52,14 +45,7 @@ const PlayerNavbar = ({
   useEffect(() => {
     if (currentState === "GamePlaying" && player) {
       const fetchTime = () => {
-        fetch(GET_TIME_LIMIT, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            gameId: player.gameId,
-          }),
-        })
-          .then((response) => response.json())
+        contestApi.getTimeLimit({ gameId: player.gameId })
           .then((result) => {
             const msLeft = result.endedAt - new Date().getTime();
             setTimeLeft(Math.floor(msLeft / 1000));

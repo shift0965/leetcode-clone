@@ -1,9 +1,5 @@
 import { Player, GamePlayerState, ProblemDetails } from "../../types.const";
-import {
-  GET_CONTEST_PLAYERS,
-  WEB_SOCKET_URL,
-  GET_CONTEST_PROBLEMS,
-} from "../../api.const";
+import { contestApi, WEB_SOCKET_URL } from "../../api";
 import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
@@ -23,27 +19,13 @@ const GameWaiting = ({ player, setCurrentState, gameId }: GameWaitingProps) => {
 
   useEffect(() => {
     if (player) {
-      fetch(GET_CONTEST_PLAYERS, {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player.gameId,
-        }),
-      })
-        .then((response) => response.json())
+      contestApi.getPlayers({ gameId: player.gameId })
         .then((results) => {
           setPlayers(results.players);
         });
 
       //clean local storage
-      fetch(GET_CONTEST_PROBLEMS, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: player.gameId,
-        }),
-      })
-        .then((response) => response.json())
+      contestApi.getProblems({ gameId: player.gameId })
         .then((data) => {
           data.problems.forEach((problem: ProblemDetails) => {
             localStorage.removeItem(`code?problem_id=${problem?.id}&gameMode`);

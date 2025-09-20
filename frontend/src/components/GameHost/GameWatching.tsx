@@ -4,12 +4,11 @@ import { BsChevronUp } from "react-icons/bs";
 import { io } from "socket.io-client";
 import CodeMirror from "../Workspace/CodeMirror";
 import {
-  GET_CONTEST_PROBLEMS,
-  GET_PLAYER_PROGRESS,
-  HOST_GET_PLAYERS_CODE,
+  contestApi,
+  hostApi,
   PLAYER_AVATAR_URL,
   WEB_SOCKET_URL,
-} from "../../api.const";
+} from "../../api";
 import FocusedPlayer from "./FocusedPlayer";
 import { motion as m } from "framer-motion";
 import { useSetRecoilState } from "recoil";

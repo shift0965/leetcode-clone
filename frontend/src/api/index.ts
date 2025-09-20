@@ -52,10 +52,7 @@ async function publicRequest(url: string, options: RequestInit = {}) {
 // Problems API
 export const problemsApi = {
   getAll: () => publicRequest("/api/1.0/problems/"),
-  getDetails: (data: any) => publicRequest("/api/1.0/problems/details", {
-    method: "POST",
-    body: JSON.stringify(data),
-  }),
+  getDetails: (id: string | number) => publicRequest(`/api/1.0/problems/details?id=${id}`),
 };
 
 // Workspace API
@@ -73,6 +70,11 @@ export const workspaceApi = {
 // User API
 export const userApi = {
   create: () => publicRequest("/api/1.0/user/create", { method: "POST" }),
+  updateToken: (token: string) =>
+    publicRequest("/api/1.0/user/update-token", {
+      method: "POST",
+      body: JSON.stringify({ userToken: token }),
+    }),
 };
 
 // Host API (requires authentication)

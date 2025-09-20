@@ -3,7 +3,7 @@ import { PlayerCode, PlayerProgress } from "../../types.const";
 import CodeMirror from "../Workspace/CodeMirror";
 import { BsCheck2Circle } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
-import { HOST_SEND_MESSAGE } from "../../api.const";
+import { hostApi } from "../../api";
 import { toast } from "react-toastify";
 
 interface FocusedPlayerProps {
@@ -41,24 +41,16 @@ const FocusedPlayer = ({
     setMessage("");
 
     if (e.nativeEvent.submitter.name === "sendMessage" && player) {
-      fetch(HOST_SEND_MESSAGE, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: gameId,
-          playerId: player.id,
-          message: message,
-        }),
+      hostApi.sendMessage({
+        gameId: gameId,
+        playerId: player.id,
+        message: message,
       });
     } else if (e.nativeEvent.submitter.name === "sendGroupMessage") {
-      fetch(HOST_SEND_MESSAGE, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          gameId: gameId,
-          playerId: -1,
-          message: message,
-        }),
+      hostApi.sendMessage({
+        gameId: gameId,
+        playerId: -1,
+        message: message,
       });
     }
   };

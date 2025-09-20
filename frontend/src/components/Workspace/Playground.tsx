@@ -14,11 +14,7 @@ import {
   PlayerProgress,
   Player,
 } from "../../types.const";
-import {
-  RUN_EXAMPLE_CASES,
-  RUN_HIDDEN_CASES,
-  PLAYER_SUBMIT,
-} from "../../api.const";
+import { workspaceApi, playerApi } from "../../api";
 import { toast } from "react-toastify";
 
 type PlaygroundProps = {
@@ -83,20 +79,11 @@ const Playground = ({
     }
 
     pendingStart();
-    fetch(RUN_EXAMPLE_CASES, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        problemId: problem.id || 0,
-        language: "js",
-        code: userCode,
-      }),
+    workspaceApi.runExampleCases({
+      problemId: problem.id || 0,
+      language: "js",
+      code: userCode,
     })
-      .then((response) => {
-        return response.json();
-      })
       .then((result) => {
         if (result.errors) throw new Error(result.errors);
         if (result.type === "error") {
@@ -119,33 +106,22 @@ const Playground = ({
     }
 
     pendingStart();
-    const endPoint = gameMode ? PLAYER_SUBMIT : RUN_HIDDEN_CASES;
-    fetch(endPoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(
-        gameMode
-          ? {
-              problemId: problem.id || 0,
-              language: "js",
-              code: userCode,
-              playerId: gameData?.player.id,
-              gameId: gameData?.player.gameId,
-              progress: gameData?.myProgress.progress,
-              finishedAt: gameData?.myProgress.finishedAt,
-            }
-          : {
-              problemId: problem.id || 0,
-              language: "js",
-              code: userCode,
-            }
-      ),
-    })
-      .then((response) => {
-        return response.json();
-      })
+    const apiCall = gameMode
+      ? playerApi.submit({
+          problemId: problem.id || 0,
+          language: "js",
+          code: userCode,
+          playerId: gameData?.player.id,
+          gameId: gameData?.player.gameId,
+          progress: gameData?.myProgress.progress,
+        })
+      : workspaceApi.runHiddenCases({
+          problemId: problem.id || 0,
+          language: "js",
+          code: userCode,
+        });
+
+    apiCall
       .then((result) => {
         if (result.errors) throw new Error(result.errors);
         if (result.type === "error") {
