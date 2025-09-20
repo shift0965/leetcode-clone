@@ -432,7 +432,7 @@ export async function hostCloseContest(
     const players = await getPlayersByContestId(contestId);
     if (players.length === 0) {
       await endContestByIdAndUserId(contestId, userId);
-      return res.status(400).send({ errors: "Game room not found" });
+      return res.status(200).send({ message: "no player" });
     }
     publishHostCloseContest(contestId);
     res.sendStatus(204);

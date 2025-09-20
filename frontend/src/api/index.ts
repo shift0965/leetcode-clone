@@ -52,7 +52,11 @@ async function publicRequest(url: string, options: RequestInit = {}) {
     throw new Error(errorData.errors || `HTTP ${response.status}: ${response.statusText}`);
   }
 
-  return response.json();
+  if (response.status === 204) {
+    return null;
+  } else {
+    return response.json();
+  }
 }
 
 // Problems API

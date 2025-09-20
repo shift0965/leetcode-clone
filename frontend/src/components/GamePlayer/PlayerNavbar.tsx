@@ -34,7 +34,8 @@ const PlayerNavbar = ({
           playerId: player.id,
         }).then(() => {
           localStorage.removeItem("playerData");
-        }).catch(() => {
+        }).catch((err) => {
+          console.log(err)
           toast.error("Failed to exit game");
         });
       }

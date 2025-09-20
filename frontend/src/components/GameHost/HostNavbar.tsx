@@ -77,8 +77,12 @@ const HostNavbar = ({
   const handleCloseGame = () => {
     if (gameId) {
       hostApi.closeGame({ gameId: gameId })
-        .then(() => {
-          setCurrentState("GameResult");
+        .then((data: any) => {
+          if (data?.message == "no player") {
+            navigate("/");
+          } else {
+            setCurrentState("GameResult");
+          }
         })
         .catch(() => {
           navigate("/");

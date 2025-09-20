@@ -15,7 +15,6 @@ import { useSetRecoilState } from "recoil";
 import { loadingState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { getAuthToken } from "../../utils/userUtils";
 
 interface GameWatchingProps {
   gameId: number;
