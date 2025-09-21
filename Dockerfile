@@ -19,6 +19,4 @@ RUN cd frontend && npm install && npm run build
 COPY backend/ backend/
 RUN cd backend && npm install && npm run build
 
-COPY frontend/dist frontend/dist
-
 CMD cd backend && npm run start

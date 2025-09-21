@@ -36,5 +36,5 @@ app.get("*", rateLimit(REQUEST_PER_SEC), (req, res) => {
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at port ${port}`);
 });
