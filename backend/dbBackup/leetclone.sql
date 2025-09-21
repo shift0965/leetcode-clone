@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.32, for macos13 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.43, for Linux (aarch64)
 --
 -- Host: localhost    Database: leetclone
 -- ------------------------------------------------------
--- Server version	8.0.32
+-- Server version	8.0.43
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,14 +14,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Current Database: `leetclone`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `leetclone` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-
-USE `leetclone`;
 
 --
 -- Table structure for table `contest`
@@ -37,7 +29,7 @@ CREATE TABLE `contest` (
   `state` enum('created','started','closed','ended','cleared') DEFAULT NULL,
   `started_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,6 +38,7 @@ CREATE TABLE `contest` (
 
 LOCK TABLES `contest` WRITE;
 /*!40000 ALTER TABLE `contest` DISABLE KEYS */;
+INSERT INTO `contest` VALUES (75,18,60,'created',NULL),(76,18,60,'ended',NULL),(77,19,60,'created',NULL),(78,21,60,'created',NULL),(79,54,60,'ended',NULL),(80,54,60,'ended',NULL),(81,54,60,'ended',NULL),(82,54,60,'ended',NULL),(83,54,60,'ended',NULL),(84,54,60,'ended',NULL),(85,54,60,'ended',NULL),(86,54,60,'ended',NULL),(87,54,60,'ended',NULL),(88,54,60,'ended',NULL),(89,54,60,'ended',NULL),(90,54,60,'ended','2025-09-20 23:13:29'),(91,54,60,'ended','2025-09-20 23:25:19'),(92,54,60,'ended','2025-09-20 23:25:29'),(93,54,60,'ended','2025-09-20 23:32:25'),(94,55,60,'ended','2025-09-20 23:51:48'),(95,55,60,'ended','2025-09-20 23:56:28'),(96,55,60,'ended','2025-09-21 00:00:21'),(97,55,60,'ended','2025-09-21 00:01:44'),(98,55,60,'ended',NULL);
 /*!40000 ALTER TABLE `contest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,7 +57,7 @@ CREATE TABLE `contest_player` (
   `progress` varchar(255) DEFAULT NULL,
   `finished_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,6 +66,7 @@ CREATE TABLE `contest_player` (
 
 LOCK TABLES `contest_player` WRITE;
 /*!40000 ALTER TABLE `contest_player` DISABLE KEYS */;
+INSERT INTO `contest_player` VALUES (136,93,'Jackie','joined',NULL,NULL),(137,94,'Jackie','exited',NULL,NULL),(138,95,'Jackie','joined',NULL,NULL),(139,96,'Jackie','exited',NULL,NULL),(140,97,'Jackie','exited',NULL,NULL),(141,97,'Jackie','exited',NULL,NULL),(142,97,'Jackie','exited',NULL,NULL),(143,97,'Ken','joined',NULL,NULL);
 /*!40000 ALTER TABLE `contest_player` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +82,7 @@ CREATE TABLE `contest_problem` (
   `contest_id` int DEFAULT NULL,
   `problem_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=306 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=331 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +91,34 @@ CREATE TABLE `contest_problem` (
 
 LOCK TABLES `contest_problem` WRITE;
 /*!40000 ALTER TABLE `contest_problem` DISABLE KEYS */;
+INSERT INTO `contest_problem` VALUES (306,75,101),(307,76,101),(308,77,101),(309,78,101),(310,79,101),(311,79,103),(312,80,101),(313,81,101),(314,82,101),(315,83,101),(316,84,101),(317,85,101),(318,86,101),(319,87,101),(320,88,101),(321,89,101),(322,90,101),(323,91,101),(324,92,101),(325,93,101),(326,94,101),(327,95,101),(328,96,101),(329,97,101),(330,98,101);
 /*!40000 ALTER TABLE `contest_problem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `guest_user`
+--
+
+DROP TABLE IF EXISTS `guest_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `guest_user` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `public_id` char(36) NOT NULL,
+  `create_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `public_id` (`public_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guest_user`
+--
+
+LOCK TABLES `guest_user` WRITE;
+/*!40000 ALTER TABLE `guest_user` DISABLE KEYS */;
+INSERT INTO `guest_user` VALUES (1,'_xMZyI5Ny_n8sM3KYvP0bQ8yZnBD0Ogn','2025-09-20 04:46:20'),(2,'nksUx5SDNTT4NFAVv-XS2n7wxsi0unSG','2025-09-20 04:46:23'),(3,'uL_5aTxO3vbszVdvilmTVSUBI6iMKSPm','2025-09-20 04:46:38'),(4,'NZeNmNxDUaOCUFHhSDL_ua-c9d27g3v5','2025-09-20 04:46:42'),(5,'OsKFH8_edDkuQtbqM8-sqPgULU3hknBw','2025-09-20 04:49:20'),(6,'pmbFjIA8JYOyTaxi3lgwOMqIa8Zruwdh','2025-09-20 04:49:22'),(7,'LMF6_Ks9DJhS-iHubeifswGVnj6Z8dqS','2025-09-20 04:49:57'),(8,'5UfwgyYjtuANPOKMJAnw_lrhk2GiQ69I','2025-09-20 04:50:50'),(9,'01i_XMXLjzp-DxB7TottJevDb0FVd_If','2025-09-20 04:52:30'),(10,'wlx68nYQZakWEkzpSqx4dAdFQyMZp5rI','2025-09-20 04:52:32'),(11,'2ftdLE1zb-xUDTvTHrCGfAYcFCyJ6pra','2025-09-20 04:52:42'),(12,'paQepNn3kG4e0ePkflHEzJGLLx-oxPdB','2025-09-20 04:54:41'),(13,'J3sm8xEoZ7HDvfgi7so99-2Zrdh8kVY2','2025-09-20 04:54:43'),(14,'c_2Gcqmiln7yVuM9u5wKi390xDxcylbi','2025-09-20 04:56:57'),(15,'SZItpWqrQsSS2SQRRzev1uMwPwWBSSHx','2025-09-20 04:57:16'),(16,'2HoUjp-16Jr9KAScUnV8OHbLr6XksijJ','2025-09-20 04:57:19'),(17,'8DjoqziCUUoeje5btDAD2VG2ax0TTaDI','2025-09-20 04:57:37'),(18,'0aMHA7AqlKpI5t1aiQiy4GW-gLDCAeam','2025-09-20 05:05:44'),(19,'OlWnXFOCV_4BirZiLwu9K7978uc2daKC','2025-09-20 05:36:13'),(20,'yDJBHEw6skxgGRv_iZQdmfIjpClDCvqQ','2025-09-20 08:26:36'),(21,'dXoqWikJlIYq3-2192_tB7PT3mr7grb9','2025-09-20 08:26:54'),(22,'_PbHJ7XZ2SK3uIw8Dl3qwPJntrV3S1xg','2025-09-20 08:51:36'),(23,'OwsICz8Mh5AO70jy0jGabJSdHyMSOEDV','2025-09-20 08:51:36'),(24,'GT-dFzFxCHA0kfMeCE2-wUC0xh0IhssQ','2025-09-20 08:51:48'),(25,'BeYF88Onmw1HLyd0b7VRYrAO5f9qh6yQ','2025-09-20 08:51:48'),(26,'OzWHahfuR6JzNr1JVBsOGRArJkjv5ctT','2025-09-20 09:09:04'),(27,'p0xZusJ81R2I88X4Y-Drx9wFILcOqIpk','2025-09-20 09:09:04'),(28,'Z5O2spzpjx0Dz9xDtP28GKCMhZtnphx-','2025-09-20 09:09:08'),(29,'cxPTwJ7xZ51CJ1pHAnmlAPiZSLiiEPOL','2025-09-20 09:09:10'),(30,'sv9AnHkjCilIc43T4DUcTwcz7wQJtXbj','2025-09-20 09:09:11'),(31,'oPajzB5DGTgi5WgeadsgHnsQoluM-hLi','2025-09-20 09:09:12'),(32,'zm6AmZjoWCoofqlZvLILVXfcgY6QVoZ7','2025-09-20 09:09:13'),(33,'q_URV05x5RMdt_BculE_TYZFY-2QwDQQ','2025-09-20 09:09:17'),(34,'kWSzxoUJ0GhRRsHf_chAel9VjlzxUhSO','2025-09-20 09:09:18'),(35,'O8ql7M2HHWzlyRZFbDcsOZOiCt8mktkf','2025-09-20 09:09:19'),(36,'SZrmvwmjWCuAj_iRET9WdCz6g5M0jY-8','2025-09-20 09:09:20'),(37,'K7HpvuHzez2DjDE551LaCdQbilhjR-Lb','2025-09-20 09:09:28'),(38,'UaJQJKmubPP-zUofgFjA0LQLDGu52RJY','2025-09-20 09:09:28'),(39,'Y7NaIwnMGJUNNq21IEiZDaE2W5n3tk1L','2025-09-20 09:09:29'),(40,'O1o5Vg72FaWAY25eqX79AO5RisaQr-r-','2025-09-20 09:09:31'),(41,'sogmBZL8HsPpqw3ruryPn_VBakpzDf5p','2025-09-20 09:09:32'),(42,'VVpJLhMKVhEuEs8JP7he_BwBDeW0o5Rd','2025-09-20 09:16:14'),(43,'xb3ENmbMB9uW6xHvRZS_s_ZVNL_MCo06','2025-09-20 09:16:14'),(44,'S8INTyeH6O9pdJ-cL5pf2oGDDcQ4SOkm','2025-09-20 09:16:23'),(45,'ianXFkaONiz3PSSeFjC-PmKO2yC8gVCK','2025-09-20 09:16:23'),(46,'Kj-dtcDOC78zVEOa4DeBq0ZzoIKkbC2p','2025-09-20 09:17:52'),(47,'5FerFlgNedrPz2t8Inqc9ANdKn87F6d5','2025-09-20 09:17:52'),(48,'h5ieXvTXHAxubWzSQ4NMoAxAQUxNJ6qT','2025-09-20 09:17:54'),(49,'oaoSybOhmOAxJbEQ-7cGe9Lr7W73zUo_','2025-09-20 09:17:55'),(50,'vPFXzx4RiB4U7IYxS3uqY3cF0wSYKBwg','2025-09-20 09:23:16'),(51,'fCoIf6MsfTE1nIDUdlYX1R_TwaurPscQ','2025-09-20 09:23:16'),(52,'PWmrAfE92g-OksKRcGbm7CfC0grRqQWR','2025-09-20 09:23:18'),(53,'0ifgpL1_Ve3dOb4TrhobIWsxkHlVDskd','2025-09-20 09:23:24'),(54,'QJwS3hwGUm8NosTBz5yDSD1ebgb4SpP-','2025-09-20 09:23:25'),(55,'lWdXG9WA8Gfdl3xw-lyshXbNRe-nYIUU','2025-09-20 15:35:11'),(56,'8j2G7_20fZsYlAX6jVQEi_AoQuoBNsjd','2025-09-20 15:51:34');
+/*!40000 ALTER TABLE `guest_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -234,63 +255,6 @@ LOCK TABLES `tag` WRITE;
 INSERT INTO `tag` VALUES (171,'HashMap'),(172,'BFS'),(173,'Sorting'),(174,'DFS'),(175,'Backtracking'),(176,'Stack'),(177,'Graph'),(178,'DP'),(179,'Two Pointers');
 /*!40000 ALTER TABLE `tag` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(127) NOT NULL,
-  `name` varchar(127) NOT NULL,
-  `picture` varchar(255) DEFAULT NULL,
-  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (4,'jackie@ee.com','Jackie','','2023-06-22 04:09:24','2023-06-22 04:09:24'),(10,'test1@test.com','test1','','2023-06-22 13:41:03','2023-06-22 13:41:03'),(12,'tommy@gmail.com','Tommy','','2023-07-12 08:11:14','2023-07-12 08:11:14'),(15,'test2@test.com','test1','','2023-07-12 08:13:20','2023-07-12 08:13:20'),(16,'test3@test.com','test3','','2023-07-12 08:14:58','2023-07-12 08:14:58'),(17,'leo@ee.com','Leo','','2023-07-13 07:42:21','2023-07-13 07:42:21');
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_provider`
---
-
-DROP TABLE IF EXISTS `user_provider`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_provider` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `name` enum('native','facebook','google') NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_provider`
---
-
-LOCK TABLES `user_provider` WRITE;
-/*!40000 ALTER TABLE `user_provider` DISABLE KEYS */;
-INSERT INTO `user_provider` VALUES (1,4,'native','$argon2id$v=19$m=65536,t=3,p=4$b3/FsujDddklGka3izwHxg$nzGa21XcE2Vi0lFpB2O+KUJJBtNsqRl8VYVhRZnb/8M','2023-06-22 04:09:24','2023-06-22 04:09:24'),(2,10,'native','$argon2id$v=19$m=65536,t=3,p=4$LwIl7TYBHuOxCoGY17VZ+A$s/iyws3cB23RyJstQYgGurh6QmOgQFD15m3UXgV9Cr0','2023-06-22 13:41:03','2023-06-22 13:41:03'),(3,12,'native','$argon2id$v=19$m=65536,t=3,p=4$noTnTqqCk4itgrP5ifzFWQ$nBnjC91Wr1pMTs6FZcNozou2qcgZdxA1qtOlrW9biTc','2023-07-12 08:11:14','2023-07-12 08:11:14'),(4,15,'native','$argon2id$v=19$m=65536,t=3,p=4$nb9IA1297yfr6/kq8V/I4w$AAZ1aEXXSa1R/tA27Ck8QyKBNqoKv/GKXL91gx1JwUU','2023-07-12 08:13:20','2023-07-12 08:13:20'),(5,16,'native','$argon2id$v=19$m=65536,t=3,p=4$SkenicUgiksmV8QzZxgOwQ$wtEdrFuxxdDYTW+7YtXzs0qiixrokEfRbkvym8PSLh8','2023-07-12 08:14:58','2023-07-12 08:14:58'),(6,17,'native','$argon2id$v=19$m=65536,t=3,p=4$cBS/xprzfSy6/WnYGUf8Ng$LHio5klGbTTrgPU5cTr7LqGHA73NoYl73O3+mwlw86A','2023-07-13 07:42:21','2023-07-13 07:42:21');
-/*!40000 ALTER TABLE `user_provider` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -301,4 +265,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-17 17:57:11
+-- Dump completed on 2025-09-21  3:18:13

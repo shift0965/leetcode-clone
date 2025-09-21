@@ -5,6 +5,28 @@ networks:
     driver: bridge
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-server
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: leetclone
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/dbBackup/leetclone.sql:/docker-entrypoint-initdb.d/01-leetclone.sql
+    networks:
+      - my-net
+
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - my-net
+
   express:
     build:
       context: .
@@ -25,32 +47,11 @@ services:
     networks:
       - my-net
 
-  redis:
-    image: redis:latest
-    container_name: redis-server
-    ports:
-      - "6379:6379"
-    networks:
-      - my-net
-
   worker:
     build:
       context: ./bunWorker/
       dockerfile: Dockerfile
     ports:
       - 3002:3002
-    networks:
-      - my-net
-
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-server
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./backend/dbBackup/leetclone.sql:/docker-entrypoint-initdb.d/01-leetclone.sql
     networks:
       - my-net
