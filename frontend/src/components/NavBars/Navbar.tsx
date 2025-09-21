@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import Timer from "./Timer";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { profileModalState } from "../../atoms/stateAtoms";
 
 const Navbar = ({ isWorkspace = false }) => {
-  const [isProfileOpen, setIsProfileOpen] = useRecoilState(profileModalState);
+  const setIsProfileOpen = useSetRecoilState(profileModalState);
 
   const handleProfileClick = () => {
     setIsProfileOpen(true);

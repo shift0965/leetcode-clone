@@ -1,11 +1,11 @@
 import { Redis } from "ioredis";
 
 export const redisSub = new Redis({
-  host: "localhost",
+  host: "redis",
   port: 6379,
 });
 export const redisClient = new Redis({
-  host: "localhost",
+  host: "redis",
   port: 6379,
 });
 

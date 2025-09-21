@@ -14,7 +14,6 @@ import { motion as m } from "framer-motion";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "../../atoms/stateAtoms";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
 interface GameWatchingProps {
   gameId: number;
@@ -32,7 +31,6 @@ const GameWatching = ({ gameId }: GameWatchingProps) => {
     undefined
   );
   const setLoading = useSetRecoilState(loadingState);
-  const navigate = useNavigate();
 
   const sortProgress = () => {
     setPlayersProgress((prev) => {

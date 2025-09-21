@@ -106,17 +106,17 @@ const Playground = ({
     }
 
     pendingStart();
-    const apiCall = gameMode
+    const apiCall = (gameMode && gameData)
       ? playerApi.submit({
-          problemId: problem.id || 0,
+          problemId: problem.id,
           language: "js",
           code: userCode,
-          playerId: gameData?.player.id,
-          gameId: gameData?.player.gameId,
-          progress: gameData?.myProgress.progress,
+          playerId: gameData.player.id,
+          gameId: gameData.player.gameId,
+          progress: gameData.myProgress.progress,
         })
       : workspaceApi.runHiddenCases({
-          problemId: problem.id || 0,
+          problemId: problem.id,
           language: "js",
           code: userCode,
         });
