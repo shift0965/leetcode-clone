@@ -1,6 +1,7 @@
 import { getAuthToken } from "../utils/userUtils";
 
-const socketBase = import.meta.env.VITE_SCOKET_URL;
+// Dynamic socket URL based on current location
+export const WEB_SOCKET_URL = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.hostname}:3001`;
 
 // Helper function for authenticated requests
 async function apiRequest(url: string, options: RequestInit = {}) {
@@ -180,4 +181,3 @@ export const contestApi = {
 
 // Constants (keep these as they are)
 export const PLAYER_AVATAR_URL = "https://api.dicebear.com/6.x/avataaars/svg?size=64";
-export const WEB_SOCKET_URL = socketBase;

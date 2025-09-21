@@ -26,8 +26,6 @@ const BulletScreen = ({ player }: BulletScreenProps) => {
       "ws-player-sendMessageToPlayer",
       function (item: { id: number; message: string }) {
         if (item.id === -1 || item.id === player.id) {
-          console.log(new Date().toLocaleString());
-          console.log("Host message", item.message);
           sendBullet(item.message);
         }
       }
