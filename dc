@@ -4,14 +4,15 @@
 
 case "$1" in
   "services")
-    echo "🚀 Starting production services (mysql, redis, socket, worker, express)..."
-    docker compose up -d mysql redis socket worker express
+    echo "🚀 Starting production services (mysql, redis, socket, worker, express, nginx)..."
+    docker compose up -d mysql redis socket worker express nginx
     echo "✅ Services started:"
     echo "   📦 MySQL Database (port 3306)"
     echo "   🔴 Redis Cache (port 6379)"
     echo "   🔌 Socket Server (port 3001)"
     echo "   ⚙️  Worker Server (port 3002)"
-    echo "   🌐 Express Production Server (ports 80, 443, 3000)"
+    echo "   🌐 Express Production Server (port 3000)"
+    echo "   🔒 Nginx Reverse Proxy (ports 80, 443)"
     ;;
 
   "dev")
