@@ -3,7 +3,20 @@
 # Docker services management script
 
 case "$1" in
-  "services")
+  "configure_cert")
+    echo "🔧 Generate SSL certificates..."
+    certbot certonly --standalone --non-interactive --agree-tos \
+      --email shift0965@gmail.com \
+      -d letscode.hungweb.com
+
+    # Copy certificates
+    mkdir -p nginx/ssl
+    cp /etc/letsencrypt/live/letscode.hungweb.com/fullchain.pem nginx/ssl/cert.pem
+    cp /etc/letsencrypt/live/letscode.hungweb.com/privkey.pem nginx/ssl/key.pem
+    chown -R root:root nginx/ssl
+    ;;
+
+  "run_services")
     echo "🚀 Starting production services (mysql, redis, socket, worker, express, nginx)..."
     docker compose up -d --build mysql redis socket worker express nginx
     echo "✅ Services started:"
@@ -15,7 +28,7 @@ case "$1" in
     echo "   🔒 Nginx Reverse Proxy (ports 80, 443)"
     ;;
 
-  "dev")
+  "run_dev")
     echo "🔧 Starting development mode..."
     echo "🚀 Starting backend services first..."
     docker compose up -d mysql redis socket worker
