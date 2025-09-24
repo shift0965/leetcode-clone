@@ -4,7 +4,7 @@
 
 case "$1" in
   "generate_cert")
-    echo "🔧 Generate SSL certificates..."
+    echo "Generate SSL certificates..."
     certbot certonly --standalone --non-interactive --agree-tos \
       --email shift0965@gmail.com \
       -d letscode.hungweb.com
@@ -18,49 +18,49 @@ case "$1" in
     ;;
 
   "run_services")
-    echo "🚀 Starting production services sequentially..."
-    echo "📦 Starting backend services (mysql, redis, socket, worker)..."
-    docker compose up -d --build mysql redis socket worker
+    echo "Starting production services sequentially..."
+    echo "Starting backend services (mysql, redis, socket, worker)..."
+    docker compose up -d mysql redis socket worker
 
-    echo "⏳ Starting express server..."
-    docker compose up -d --build express
+    echo "Starting express server..."
+    docker compose up -d express
 
     # Wait for express to be healthy
-    echo "⏳ Waiting for express server to be ready..."
+    echo "Waiting for express server to be ready..."
     max_attempts=30
     attempt=0
     until curl -f http://localhost:3000/health 2>/dev/null; do
       sleep 2
       attempt=$((attempt + 1))
       if [ $attempt -ge $max_attempts ]; then
-        echo "❌ Express server failed to start after $max_attempts attempts"
+        echo "Express server failed to start after $max_attempts attempts"
         exit 1
       fi
       echo "Still waiting for express... (attempt $attempt/$max_attempts)"
     done
 
-    echo "✅ Express ready! Starting nginx..."
+    echo "Express ready! Starting nginx..."
     docker compose up -d nginx
 
-    echo "✅ All services started successfully:"
-    echo "   📦 MySQL Database (port 3306)"
-    echo "   🔴 Redis Cache (port 6379)"
-    echo "   🔌 Socket Server (port 3001)"
-    echo "   ⚙️  Worker Server (port 3002)"
-    echo "   🌐 Express Production Server (port 3000)"
-    echo "   🔒 Nginx Reverse Proxy (ports 80, 443)"
+    echo "All services started successfully:"
+    echo "   MySQL Database (port 3306)"
+    echo "   Redis Cache (port 6379)"
+    echo "   Socket Server (port 3001)"
+    echo "   Worker Server (port 3002)"
+    echo "   Express Production Server (port 3000)"
+    echo "   Nginx Reverse Proxy (ports 80, 443)"
     ;;
 
   "run_dev")
-    echo "🔧 Starting development mode..."
-    echo "🚀 Starting backend services first..."
+    echo "Starting development mode..."
+    echo "Starting backend services first..."
     docker compose up -d mysql redis socket worker
-    echo "🚀 Starting frontend and backend development servers..."
+    echo "Starting frontend and backend development servers..."
     docker compose up frontend-dev backend-dev
     ;;
 
   *)
-    echo "🐳 Docker Services Manager"
+    echo "Docker Services Manager"
     echo ""
     echo "Usage: ./docker-scripts.sh [command]"
     echo ""
