@@ -29,22 +29,17 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 
 ### 👑 Game Host:
 
-1. Click "*Create Game*" to get started as a guest host.
-2. Choose the **problems** for the game and set the **time limit**.
-3. Click "*Create Game*" to enter the game lobby, where players can join using the **Game-Id**.
-4. Click "*Start Game*" to observe all players' **real-time code** (requires at least one player).
-5. Select any player to view their code for all problems and **send them messages**!
-6. When you're ready, click "*Close Game*" to reveal the winner!
+1. Click "*Create Game*", choose the **problems** and click "*Create Game*" to enter the game lobby.
+2. Observe all players' **real-time code** and the leaderboard.
+3. Select any player to view their code for all problems and **send them messages**!
+4. When you're ready, click "*Close Game*" to reveal the winner!
 
 ### 🥳 Game Player:
 
-1. Click "Join Game" and enter the Game Id and your Player Name (no sign-up required).
+1. Click "Join Game" and enter the **Game Id** and your Player Name (no sign-up required).
 2. Write down your solution, then click "Run" to execute example cases.
-3. Review the input, output, expected output, and console logs. You will also be notified if any errors are detected.
+3. Review the input, output, expected output, console logs or errors.
 4. Click "Submit" to execute all the hidden cases. If passed, see the leaderboard update!
-5. Once the time is up or the host closes the game, the final game results will be displayed.
-
-**Note:** No registration or login required - start playing immediately as a guest!
 
 ## Tech Stack
 
@@ -82,16 +77,15 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 - Applied a worker instance and child processes to securely execute user code and validate its output.
 - Implemented a separate worker server to handle heavy tasks, preventing overload on the express server.
 - Utilized a worker queue to efficiently manage traffic from the express server.
-- Built the worker server with **Bun** instead of Node.js, resulting in a three-fold increase in user capacity.
+- Built the worker server with Bun instead of Node.js, resulting in a three-fold increase in user capacity.
 - Implemented code error detection to notify users of any errors in their code, including excessively large output and potential infinite loops.
 
 ### Contest
 - Enabled real-time code updates through **Redis pub-sub** and **Socket.IO**.
 - Stored game states in the database, providing players and hosts with a seamless experience by allowing them to refresh and reconnect effortlessly.
-- The host can watch the progress of every player's contest and interact with them through **Bullet Screen**.
+- The host can watch the progress of every player's contest and interact with them through Bullet Screen.
 
-### CICD
-- Automated deployment and testing using GitHub Actions CI/CD and Docker on AWS.
+
 
 ## Load Test
 
