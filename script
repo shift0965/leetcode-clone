@@ -18,9 +18,31 @@ case "$1" in
     ;;
 
   "run_services")
-    echo "🚀 Starting production services (mysql, redis, socket, worker, express, nginx)..."
-    docker compose up -d --build mysql redis socket worker express nginx
-    echo "✅ Services started:"
+    echo "🚀 Starting production services sequentially..."
+    echo "📦 Starting backend services (mysql, redis, socket, worker)..."
+    docker compose up -d --build mysql redis socket worker
+
+    echo "⏳ Starting express server..."
+    docker compose up -d --build express
+
+    # Wait for express to be healthy
+    echo "⏳ Waiting for express server to be ready..."
+    max_attempts=30
+    attempt=0
+    until curl -f http://localhost:3000/health 2>/dev/null; do
+      sleep 2
+      attempt=$((attempt + 1))
+      if [ $attempt -ge $max_attempts ]; then
+        echo "❌ Express server failed to start after $max_attempts attempts"
+        exit 1
+      fi
+      echo "Still waiting for express... (attempt $attempt/$max_attempts)"
+    done
+
+    echo "✅ Express ready! Starting nginx..."
+    docker compose up -d nginx
+
+    echo "✅ All services started successfully:"
     echo "   📦 MySQL Database (port 3306)"
     echo "   🔴 Redis Cache (port 6379)"
     echo "   🔌 Socket Server (port 3001)"
