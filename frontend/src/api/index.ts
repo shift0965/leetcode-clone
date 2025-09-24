@@ -1,7 +1,10 @@
 import { getAuthToken } from "../utils/userUtils";
 
 // Dynamic socket URL based on current location
-export const WEB_SOCKET_URL = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.hostname}:3001`;
+export const WEB_SOCKET_URL =
+  process.env.NODE_ENV === "development"
+    ? `ws://${window.location.hostname}:3001`
+    : window.location.hostname;
 
 // Helper function for authenticated requests
 async function apiRequest(url: string, options: RequestInit = {}) {
