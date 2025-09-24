@@ -3,12 +3,13 @@
 # Docker services management script
 
 case "$1" in
-  "configure_cert")
+  "generate_cert")
     echo "🔧 Generate SSL certificates..."
     certbot certonly --standalone --non-interactive --agree-tos \
       --email shift0965@gmail.com \
       -d letscode.hungweb.com
 
+  "copy_cert")
     # Copy certificates
     mkdir -p nginx/ssl
     cp /etc/letsencrypt/live/letscode.hungweb.com/fullchain.pem nginx/ssl/cert.pem
@@ -42,11 +43,9 @@ case "$1" in
     echo "Usage: ./docker-scripts.sh [command]"
     echo ""
     echo "Commands:"
-    echo "  services  - Start production services (mysql, redis, socket, worker, express)"
-    echo "  dev       - Start development mode (services + frontend-dev + backend-dev)"
-    echo "  stop      - Stop all services"
-    echo "  logs      - Show logs for all services"
-    echo "  logs [service] - Show logs for specific service"
+    echo "  configure_cert - Generate SSL certificates"
+    echo "  run_services  - Start production services (mysql, redis, socket, worker, express)"
+    echo "  run_dev       - Start development mode (services + frontend-dev + backend-dev)"
     echo ""
     echo "Examples:"
     echo "  ./docker-scripts.sh services"
