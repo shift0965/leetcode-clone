@@ -5,7 +5,7 @@
 case "$1" in
   "services")
     echo "🚀 Starting production services (mysql, redis, socket, worker, express, nginx)..."
-    docker compose up -d mysql redis socket worker express nginx
+    docker compose up -d --build mysql redis socket worker express nginx
     echo "✅ Services started:"
     echo "   📦 MySQL Database (port 3306)"
     echo "   🔴 Redis Cache (port 6379)"
