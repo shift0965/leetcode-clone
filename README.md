@@ -4,7 +4,7 @@
   <h1>LetsCode</h1>
   <strong>Code Together, Code for Fun!</strong>
   <div align="center">
-    <a href="https://letscode.courater.com/">Home Page</a> |
+    <a href="https://letscode.hungweb.com/">Project Page</a> |
     <a href="https://shift0965.github.io/portfolio/">About Me</a>
     <br>
     <br>
@@ -14,16 +14,7 @@
 <br>
 
 
-Welcome to our dynamic coding contest platform, where you can practice algorithms, compete with friends, and enjoy coding challenges. Join us to enhance your coding skills and experience the excitement of real-time contests!
-
-##  Outline
-- [How to Play?](#how-to-play)
-- [Tech Stack](#tech-stack)
-- [Structure](#structure)
-- [Features](#features)
-- [Load Test](#load-test)
-- [End-to-End Game Test](#end-to-end-game-test)
-- [Acknowledgements](#acknowledgements)
+A dynamic coding contest platform where you can practice algorithms, compete with friends, and enjoy coding challenges.
 
 ## How to Play? <a name="how-to-play"></a>
 
@@ -40,30 +31,6 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 2. Write down your solution, then click "Run" to execute example cases.
 3. Review the input, output, expected output, console logs or errors.
 4. Click "Submit" to execute all the hidden cases. If passed, see the leaderboard update!
-
-## Tech Stack
-
-### Server
-![Nodejs](https://img.shields.io/badge/Node.js-343434?style=for-the-badge&logo=node.js&logoColor=3C873A)
-![Express.js](https://img.shields.io/badge/Express.js-343434?style=for-the-badge&logo=express)
-![SocketIo](https://img.shields.io/badge/Socket.io-343434?&style=for-the-badge&logo=Socket.io)
-![Typescript](https://img.shields.io/badge/Typescript-343434?style=for-the-badge&logo=typescript&logoColor=007acc)
-### Client
-
-![React](https://img.shields.io/badge/-React-343434?style=for-the-badge&logo=react)
-![Tailwind](https://img.shields.io/badge/Tailwind_CSS-343434?style=for-the-badge&logo=tailwindcss)
-![Typescript](https://img.shields.io/badge/Typescript-343434?style=for-the-badge&logo=typescript)
-
-### DataBase
-
-![Redis](https://img.shields.io/badge/redis-343434?&style=for-the-badge&logo=redis&logoColor=RED)
-![Mysql](https://img.shields.io/badge/MySQL-343434?style=for-the-badge&logo=mysql)
-
-### Deployment And Test
-
-![Jest](https://img.shields.io/badge/Jest-343434?style=for-the-badge&logo=jest&logoColor=C21325)
-![Github Action](https://img.shields.io/badge/GitHub_Actions-343434?style=for-the-badge&logo=github-actions)
-![Docker](https://img.shields.io/badge/Docker-343434?style=for-the-badge&logo=docker)
 
 ## Structure
 
@@ -85,6 +52,9 @@ Welcome to our dynamic coding contest platform, where you can practice algorithm
 - Stored game states in the database, providing players and hosts with a seamless experience by allowing them to refresh and reconnect effortlessly.
 - The host can watch the progress of every player's contest and interact with them through Bullet Screen.
 
+<div align="center">
+  <img width="800" alt="letscode_images" src="https://github.com/user-attachments/assets/22b306af-b1e7-4b18-86cc-7e1c5ea8824c" />
+</div>
 
 
 ## Load Test
@@ -95,8 +65,6 @@ After conducting load tests on APIs and Socket.IO with K6, a bottleneck was disc
 
 The original load test for the run code API revealed the following metrics:
 
-- Maximum virtual users: **30**
-- Request rate: **6** requests per second
 
 <div align="center">
     <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/efb8061f-3a2c-4459-b2df-972039b42442" width="800">
@@ -122,24 +90,6 @@ To address the bottleneck, several important improvements have been implemented:
 <div align="center">
     <img src="https://github.com/shift0965/leetcode-clone/assets/53403797/1019e697-a4a1-4970-8fc0-9df84324fe61" width="800">
 </div>
-
-**Load Test Results:**
-
-- Maximum virtual users: **100**
-- Request rate: **20**
-
-## End-to-End Game Test
-
-**Selenium Test:**
-
-1. Host creates and starts a game as a guest.
-2. Player joins the game and submits a solution.
-3. Host observes real-time updates and sends messages.
-4. Close the game and verify results.
-
-
-https://github.com/shift0965/leetcode-clone/assets/53403797/4e0944e0-aff2-4ebe-b7cc-c5eb30da1ff7
-
 
 
 ## Acknowledgements
